@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    dir="{{ config('app.available_locales.'.app()->getLocale().'.dir', 'ltr') }}"
+>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>{{ $title ?? config('app.name') }}</title>
+
+        @include('partials.theme-script')
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=barlow:400,500,700|barlow-condensed:400,600" rel="stylesheet">
@@ -13,6 +18,10 @@
         @livewireStyles
     </head>
     <body class="antialiased">
+        <div style="position: absolute; top: 18px; inset-inline-end: 20px; z-index: 10; display: flex; gap: 8px;">
+            @include('partials.locale-switcher')
+            @include('partials.theme-toggle')
+        </div>
         <div class="auth-split">
             <div class="auth-hero hatch">
                 <div class="auth-hero-tint"></div>

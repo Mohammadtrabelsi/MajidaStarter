@@ -5,6 +5,10 @@
    Fonts are bundled locally through the Vite bunny plugin (see vite.config.js). */
 
 :root {
+    /* "ink" is the base foreground colour as an R,G,B triplet so it can be
+       used with variable alpha — flipped to a light value in dark mode. */
+    --ink: 29, 31, 32;
+
     --color-bg: #f2f2f3;
     --color-surface: #e9e9ea;
     --color-text: #1d1f20;
@@ -14,7 +18,7 @@
     --color-accent-700: #416180;
     --color-accent-800: #2c455d;
     --color-accent-900: #1d2d3d;
-    --color-divider: rgba(29, 31, 32, 0.16);
+    --color-divider: rgba(var(--ink), 0.16);
     --color-neutral-100: #f5f5f8;
     --color-neutral-800: #424244;
 
@@ -66,7 +70,7 @@ a:hover { color: var(--color-accent-600); }
     background: var(--color-bg); position: sticky; top: 0; z-index: 20;
 }
 .shell-content { padding: 28px 32px; overflow: auto; }
-.shell-overlay { position: fixed; inset: 0; background: rgba(29, 31, 32, 0.4); z-index: 30; }
+.shell-overlay { position: fixed; inset: 0; background: rgba(var(--ink), 0.4); z-index: 30; }
 .topbar-burger {
     display: none; align-items: center; justify-content: center;
     width: 34px; height: 34px; flex: none; border: 1px solid var(--color-divider);
@@ -108,14 +112,14 @@ a:hover { color: var(--color-accent-600); }
 .side-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; }
 .side-nav-label {
     font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(29, 31, 32, 0.5); padding: 16px 12px 6px;
+    color: rgba(var(--ink), 0.5); padding: 16px 12px 6px;
 }
 .side-nav a {
     display: flex; align-items: center; gap: 10px; padding: 9px 10px;
     font-size: 14px; color: var(--color-text); text-decoration: none;
     border-left: 2px solid transparent;
 }
-.side-nav a:hover { background: rgba(29, 31, 32, 0.06); }
+.side-nav a:hover { background: rgba(var(--ink), 0.06); }
 .side-nav a.active { background: var(--color-accent-100); color: var(--color-accent-800); border-left-color: var(--color-accent); }
 .side-nav svg { width: 17px; height: 17px; flex: none; }
 
@@ -132,7 +136,7 @@ a:hover { color: var(--color-accent-600); }
     padding: 10px 18px; border: 1px solid var(--color-divider); color: var(--color-text);
     background: transparent;
 }
-.btn:hover { background: rgba(29, 31, 32, 0.07); color: var(--color-text); }
+.btn:hover { background: rgba(var(--ink), 0.07); color: var(--color-text); }
 .btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-bg); }
 .btn-primary:hover { background: var(--color-accent-600); color: var(--color-bg); }
 .btn-ghost { border-color: transparent; color: var(--color-accent); }
@@ -142,7 +146,7 @@ a:hover { color: var(--color-accent-600); }
 
 /* — forms — */
 .field { margin-bottom: 16px; }
-.ds-label, .field label { display: block; font-size: 12px; margin-bottom: 5px; color: rgba(29, 31, 32, 0.7); }
+.ds-label, .field label { display: block; font-size: 12px; margin-bottom: 5px; color: rgba(var(--ink), 0.7); }
 .input, .textarea {
     width: 100%; min-height: 38px; padding: 6px 10px; font: inherit; font-size: 14px;
     color: var(--color-text); background: var(--color-surface);
@@ -150,14 +154,14 @@ a:hover { color: var(--color-accent-600); }
 }
 .textarea { min-height: auto; resize: vertical; }
 .input:focus-visible, .textarea:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
-.input::placeholder, .textarea::placeholder { color: rgba(29, 31, 32, 0.4); }
+.input::placeholder, .textarea::placeholder { color: rgba(var(--ink), 0.4); }
 .input.input-error, .input-error { border-color: var(--color-accent-700); }
 .ds-error { color: var(--color-accent-700); font-size: 12px; margin-top: 4px; }
 .checkbox { accent-color: var(--color-accent); width: 15px; height: 15px; }
 
 /* — blueprint frame (cards, figures) — */
 .blueprint { position: relative; border: 1px solid var(--color-divider); }
-.blueprint > .corner { position: absolute; width: 11px; height: 11px; color: rgba(29, 31, 32, 0.55); pointer-events: none; }
+.blueprint > .corner { position: absolute; width: 11px; height: 11px; color: rgba(var(--ink), 0.55); pointer-events: none; }
 .blueprint > .corner::before, .blueprint > .corner::after { content: ""; position: absolute; background: currentColor; }
 .blueprint > .corner::before { left: 5px; top: 0; width: 1px; height: 100%; }
 .blueprint > .corner::after { top: 5px; left: 0; width: 100%; height: 1px; }
@@ -183,10 +187,10 @@ a:hover { color: var(--color-accent-600); }
 .table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .table th {
     text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: rgba(29, 31, 32, 0.6); padding: 10px 16px; border-bottom: 1px solid var(--color-divider);
+    color: rgba(var(--ink), 0.6); padding: 10px 16px; border-bottom: 1px solid var(--color-divider);
 }
-.table td { padding: 10px 16px; border-bottom: 1px solid rgba(29, 31, 32, 0.08); }
-.table tbody tr:hover { background: rgba(29, 31, 32, 0.04); }
+.table td { padding: 10px 16px; border-bottom: 1px solid rgba(var(--ink), 0.08); }
+.table tbody tr:hover { background: rgba(var(--ink), 0.04); }
 .table-wrap { overflow-x: auto; }
 
 /* — avatar — */
@@ -202,7 +206,7 @@ a:hover { color: var(--color-accent-600); }
 .stat-band .stat-label { font-size: 13px; opacity: 0.65; margin-top: 6px; }
 
 /* — helpers — */
-.text-muted { color: rgba(29, 31, 32, 0.6); }
+.text-muted { color: rgba(var(--ink), 0.6); }
 .container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
 .hatch {
     background: repeating-linear-gradient(135deg, #e9e9ea 0px, #e9e9ea 10px, #dfe4e8 10px, #dfe4e8 20px);
@@ -215,3 +219,51 @@ a:hover { color: var(--color-accent-600); }
     .nav { padding: 16px 24px; gap: 18px; }
     .stat-band { padding: 44px 24px; }
 }
+
+/* — dark theme —
+   Applied when <html> carries the `.dark` class (toggled by the theme switch
+   and set pre-paint by the no-flash script in the layout head). The base ink
+   triplet flips to a light value so every rgba(var(--ink), a) usage inverts. */
+html.dark {
+    --ink: 233, 233, 234;
+
+    --color-bg: #17191a;
+    --color-surface: #202325;
+    --color-text: #e9e9ea;
+    --color-accent: #6f97bd;
+    --color-accent-100: rgba(111, 151, 189, 0.16);
+    --color-accent-600: #7ea6cb;
+    --color-accent-700: #9cbfdd;
+    --color-accent-800: #c2d7e9;
+    --color-accent-900: #d7e4f0;
+    --color-neutral-100: rgba(233, 233, 234, 0.08);
+    --color-neutral-800: #cfcfd2;
+}
+html.dark .hatch {
+    background: repeating-linear-gradient(135deg, #202325 0px, #202325 10px, #262b2f 10px, #262b2f 20px);
+}
+html.dark .brand-mark { background: var(--color-accent); color: #12262f; }
+
+/* smooth the switch without animating every paint */
+html.theme-ready body { transition: background-color 0.2s ease, color 0.2s ease; }
+
+/* — topbar icon buttons (theme toggle, language) — */
+.icon-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 34px; min-width: 34px; padding: 0 8px; flex: none;
+    border: 1px solid var(--color-divider); background: transparent;
+    color: var(--color-text); cursor: pointer; font: inherit; font-size: 13px;
+}
+.icon-btn:hover { background: rgba(var(--ink), 0.07); }
+.icon-btn svg { width: 17px; height: 17px; }
+.menu-pop {
+    position: absolute; right: 0; top: 40px; z-index: 50; min-width: 150px;
+    background: var(--color-bg); border: 1px solid var(--color-divider);
+}
+.menu-pop a, .menu-pop button {
+    display: flex; width: 100%; align-items: center; gap: 8px; padding: 9px 14px;
+    background: transparent; border: none; cursor: pointer; text-align: left;
+    font: inherit; font-size: 13px; color: var(--color-text); text-decoration: none;
+}
+.menu-pop a:hover, .menu-pop button:hover { background: rgba(var(--ink), 0.07); color: var(--color-text); }
+.menu-pop a.active { color: var(--color-accent-800); background: var(--color-accent-100); }
