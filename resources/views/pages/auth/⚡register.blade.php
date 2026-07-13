@@ -38,13 +38,11 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
 ?>
 
 <div>
-    <div class="mb-6 text-center">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Create your account</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Start your journey with us today</p>
-    </div>
+    <h1>Create your account</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">Start building with {{ config('app.name') }} today.</p>
 
-    <form wire:submit="register" class="space-y-5">
-        <div>
+    <form wire:submit="register">
+        <div class="field">
             <x-input-label for="name" value="Full name" />
             <x-text-input
                 wire:model="name"
@@ -58,20 +56,20 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
             <x-input-error :message="$errors->first('name')" />
         </div>
 
-        <div>
-            <x-input-label for="email" value="Email address" />
+        <div class="field">
+            <x-input-label for="email" value="Email" />
             <x-text-input
                 wire:model="email"
                 id="email"
                 type="email"
                 autocomplete="username"
-                placeholder="you@example.com"
+                placeholder="you@company.com"
                 :error="$errors->first('email')"
             />
             <x-input-error :message="$errors->first('email')" />
         </div>
 
-        <div>
+        <div class="field">
             <x-input-label for="password" value="Password" />
             <x-text-input
                 wire:model="password"
@@ -84,7 +82,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <div>
+        <div class="field" style="margin-bottom: 22px;">
             <x-input-label for="password_confirmation" value="Confirm password" />
             <x-text-input
                 wire:model="password_confirmation"
@@ -101,8 +99,8 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
         </x-primary-button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
         Already have an account?
-        <a href="{{ route('login') }}" wire:navigate class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Log in</a>
+        <a href="{{ route('login') }}" wire:navigate>Sign in</a>
     </p>
 </div>

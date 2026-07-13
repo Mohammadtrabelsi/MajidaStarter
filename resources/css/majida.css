@@ -1,0 +1,217 @@
+/* MajidaStarter — design tokens + component classes.
+   "Industry" wireframe system from the MajidaStarter design:
+   light steel-blue ground, Barlow Condensed headings, square corners,
+   hairline borders, "+" registration marks on framed (blueprint) elements.
+   Fonts are bundled locally through the Vite bunny plugin (see vite.config.js). */
+
+:root {
+    --color-bg: #f2f2f3;
+    --color-surface: #e9e9ea;
+    --color-text: #1d1f20;
+    --color-accent: #5980a6;
+    --color-accent-100: #eef6ff;
+    --color-accent-600: #597ea3;
+    --color-accent-700: #416180;
+    --color-accent-800: #2c455d;
+    --color-accent-900: #1d2d3d;
+    --color-divider: rgba(29, 31, 32, 0.16);
+    --color-neutral-100: #f5f5f8;
+    --color-neutral-800: #424244;
+
+    --font-heading: 'Barlow Condensed', system-ui, sans-serif;
+    --font-body: 'Barlow', system-ui, sans-serif;
+
+    --space-2: 7px;
+    --space-3: 10px;
+    --space-4: 14px;
+    --space-6: 20px;
+    --space-8: 27px;
+}
+
+body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    margin: 0 0 var(--space-2);
+}
+h1 { font-size: 44px; }
+h2 { font-size: 30px; }
+h3 { font-size: 22px; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { color: var(--color-accent-600); }
+::selection { background: rgba(89, 128, 166, 0.3); }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* — layout shells — */
+.shell { display: flex; min-height: 100vh; }
+.shell-sidebar {
+    width: 236px; flex: none; background: var(--color-surface);
+    border-right: 1px solid var(--color-divider);
+    display: flex; flex-direction: column; padding: 20px 0;
+}
+.shell-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.shell-topbar {
+    height: 60px; flex: none; border-bottom: 1px solid var(--color-divider);
+    display: flex; align-items: center; gap: 16px; padding: 0 24px;
+    background: var(--color-bg); position: sticky; top: 0; z-index: 20;
+}
+.shell-content { padding: 28px 32px; overflow: auto; }
+.shell-overlay { position: fixed; inset: 0; background: rgba(29, 31, 32, 0.4); z-index: 30; }
+.topbar-burger {
+    display: none; align-items: center; justify-content: center;
+    width: 34px; height: 34px; flex: none; border: 1px solid var(--color-divider);
+    background: transparent; cursor: pointer; color: var(--color-text);
+}
+
+@media (max-width: 1023px) {
+    .shell-sidebar {
+        position: fixed; inset: 0 auto 0 0; z-index: 40;
+        transform: translateX(-100%); transition: transform 0.2s ease-in-out;
+    }
+    .shell-sidebar.open { transform: translateX(0); }
+    .topbar-burger { display: inline-flex; }
+    .shell-content { padding: 20px; }
+}
+@media (min-width: 1024px) {
+    .shell-overlay { display: none !important; }
+}
+
+/* — brand mark — */
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.brand-mark {
+    width: 20px; height: 20px; background: var(--color-accent-900);
+    color: var(--color-bg); display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading); font-weight: 600; font-size: 12px; flex: none;
+}
+.brand-name { font-family: var(--font-heading); font-weight: 600; font-size: 16px; }
+
+/* — nav (marketing) — */
+.nav {
+    display: flex; align-items: center; gap: 32px;
+    padding: 18px 48px; border-bottom: 1px solid var(--color-divider);
+}
+.nav .brand { margin-right: auto; }
+.nav a.link { color: var(--color-text); font-size: 14px; }
+.nav a.link:hover { color: var(--color-accent); }
+
+/* — sidebar nav (admin) — */
+.side-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; }
+.side-nav-label {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(29, 31, 32, 0.5); padding: 16px 12px 6px;
+}
+.side-nav a {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+    font-size: 14px; color: var(--color-text); text-decoration: none;
+    border-left: 2px solid transparent;
+}
+.side-nav a:hover { background: rgba(29, 31, 32, 0.06); }
+.side-nav a.active { background: var(--color-accent-100); color: var(--color-accent-800); border-left-color: var(--color-accent); }
+.side-nav svg { width: 17px; height: 17px; flex: none; }
+
+.side-user {
+    margin-top: auto; padding: 14px 20px; border-top: 1px solid var(--color-divider);
+    display: flex; align-items: center; gap: 10px;
+}
+
+/* — buttons — */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer; text-decoration: none; border-radius: 0;
+    font-family: var(--font-heading); font-weight: 600; font-size: 13px;
+    padding: 10px 18px; border: 1px solid var(--color-divider); color: var(--color-text);
+    background: transparent;
+}
+.btn:hover { background: rgba(29, 31, 32, 0.07); color: var(--color-text); }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-accent-600); color: var(--color-bg); }
+.btn-ghost { border-color: transparent; color: var(--color-accent); }
+.btn-ghost:hover { background: rgba(89, 128, 166, 0.1); color: var(--color-accent); }
+.btn-block { width: 100%; }
+.btn:disabled { cursor: not-allowed; opacity: 0.5; }
+
+/* — forms — */
+.field { margin-bottom: 16px; }
+.ds-label, .field label { display: block; font-size: 12px; margin-bottom: 5px; color: rgba(29, 31, 32, 0.7); }
+.input, .textarea {
+    width: 100%; min-height: 38px; padding: 6px 10px; font: inherit; font-size: 14px;
+    color: var(--color-text); background: var(--color-surface);
+    border: 1px solid var(--color-divider); border-radius: 0;
+}
+.textarea { min-height: auto; resize: vertical; }
+.input:focus-visible, .textarea:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+.input::placeholder, .textarea::placeholder { color: rgba(29, 31, 32, 0.4); }
+.input.input-error, .input-error { border-color: var(--color-accent-700); }
+.ds-error { color: var(--color-accent-700); font-size: 12px; margin-top: 4px; }
+.checkbox { accent-color: var(--color-accent); width: 15px; height: 15px; }
+
+/* — blueprint frame (cards, figures) — */
+.blueprint { position: relative; border: 1px solid var(--color-divider); }
+.blueprint > .corner { position: absolute; width: 11px; height: 11px; color: rgba(29, 31, 32, 0.55); pointer-events: none; }
+.blueprint > .corner::before, .blueprint > .corner::after { content: ""; position: absolute; background: currentColor; }
+.blueprint > .corner::before { left: 5px; top: 0; width: 1px; height: 100%; }
+.blueprint > .corner::after { top: 5px; left: 0; width: 100%; height: 1px; }
+.blueprint > .corner.tl { top: -6px; left: -6px; }
+.blueprint > .corner.tr { top: -6px; right: -6px; }
+.blueprint > .corner.bl { bottom: -6px; left: -6px; }
+.blueprint > .corner.br { bottom: -6px; right: -6px; }
+
+/* — cards — */
+.card { border: 1px solid var(--color-divider); padding: var(--space-4); background: transparent; }
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 6px; }
+.card-title { font-family: var(--font-heading); font-weight: 600; font-size: 18px; margin-bottom: 8px; }
+.card-body { font-size: 13px; opacity: 0.75; margin: 0; }
+.stat-value { font-family: var(--font-heading); font-weight: 600; font-size: 28px; }
+
+/* — tags — */
+.tag { display: inline-flex; align-items: center; font-size: 11px; padding: 3px 10px; border-radius: 0; }
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — table — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+    text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(29, 31, 32, 0.6); padding: 10px 16px; border-bottom: 1px solid var(--color-divider);
+}
+.table td { padding: 10px 16px; border-bottom: 1px solid rgba(29, 31, 32, 0.08); }
+.table tbody tr:hover { background: rgba(29, 31, 32, 0.04); }
+.table-wrap { overflow-x: auto; }
+
+/* — avatar — */
+.avatar {
+    width: 30px; height: 30px; flex: none; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading); font-weight: 600; font-size: 12px;
+    background: var(--color-accent-100); color: var(--color-accent-800);
+}
+
+/* — stat band (accent-900 full-bleed section; use sparingly) — */
+.stat-band { background: var(--color-accent-900); color: var(--color-bg); padding: 64px 48px; }
+.stat-band .stat-value { font-family: var(--font-heading); font-weight: 600; font-size: 44px; }
+.stat-band .stat-label { font-size: 13px; opacity: 0.65; margin-top: 6px; }
+
+/* — helpers — */
+.text-muted { color: rgba(29, 31, 32, 0.6); }
+.container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
+.hatch {
+    background: repeating-linear-gradient(135deg, #e9e9ea 0px, #e9e9ea 10px, #dfe4e8 10px, #dfe4e8 20px);
+}
+
+@media (max-width: 767px) {
+    h1 { font-size: 34px; }
+    h2 { font-size: 26px; }
+    .container { padding: 0 24px; }
+    .nav { padding: 16px 24px; gap: 18px; }
+    .stat-band { padding: 44px 24px; }
+}
