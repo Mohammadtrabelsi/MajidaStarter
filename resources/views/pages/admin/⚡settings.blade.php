@@ -81,7 +81,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                     <button
                         type="button"
                         wire:click="$set('activeLocale', '{{ $code }}')"
-                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(29,31,32,.6);' }}"
+                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(var(--ink),.6);' }}"
                     >
                         {{ $label }}
                     </button>

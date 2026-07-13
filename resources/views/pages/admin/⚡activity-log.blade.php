@@ -76,14 +76,14 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
         </div>
 
         <div style="position: relative; margin-left: auto; flex: 1; min-width: 220px; max-width: 300px;">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(29,31,32,.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
             <input wire:model.live.debounce.300ms="search" class="input" placeholder="Search description…" style="padding-left: 32px;">
         </div>
     </div>
 
     <div class="card" style="padding: 0;">
         @forelse ($activities as $activity)
-            <div wire:key="activity-{{ $activity->id }}" style="padding: 16px 20px; border-bottom: 1px solid rgba(29, 31, 32, 0.08);">
+            <div wire:key="activity-{{ $activity->id }}" style="padding: 16px 20px; border-bottom: 1px solid rgba(var(--ink), 0.08);">
                 <button
                     type="button"
                     @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
@@ -109,7 +109,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                     </div>
 
                     @if ($activity->properties->isNotEmpty())
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(29,31,32,.5)" stroke-width="1.75" style="margin-top: 4px; flex: none; transition: transform 0.15s;" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" style="margin-top: 4px; flex: none; transition: transform 0.15s;" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                     @endif
                 </button>
 

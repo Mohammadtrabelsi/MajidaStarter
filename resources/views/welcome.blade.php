@@ -124,7 +124,7 @@
             .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
             .footer-top { padding: 48px 48px 32px; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
             .footer-bottom { border-top: 1px solid var(--color-divider); padding: 20px 48px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-            .footer-heading { color: rgba(29, 31, 32, 0.6); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+            .footer-heading { color: rgba(var(--ink), 0.6); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
             .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
             @media (max-width: 900px) {
                 .hero-grid { grid-template-columns: 1fr; gap: 36px; padding: 56px 24px; }

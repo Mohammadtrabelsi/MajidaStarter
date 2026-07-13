@@ -33,6 +33,19 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
         }
     }
 
+    public function deleteUser(int $userId, UserService $users): void
+    {
+        $this->authorize('manage users');
+
+        $target = \App\Models\User::findOrFail($userId);
+
+        try {
+            $users->delete(auth()->user(), $target);
+        } catch (\DomainException $e) {
+            $this->addError('toggle', $e->getMessage());
+        }
+    }
+
     #[Computed]
     public function stats(): array
     {
@@ -53,10 +66,28 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
 ?>
 
 <div>
-    <div style="margin-bottom: 24px;">
-        <h2>Users</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Overview of your application's accounts and access.</p>
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+        <div>
+            <h2>Users</h2>
+            <p class="text-muted" style="font-size: 13px; margin: 0;">Overview of your application's accounts and access.</p>
+        </div>
+        @can('manage users')
+            <a href="{{ route('admin.users.create') }}" wire:navigate class="btn btn-primary">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" d="M12 5v14M5 12h14"></path></svg>
+                New user
+            </a>
+        @endcan
     </div>
+
+    @if (session('status'))
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 3000)"
+            class="tag tag-accent"
+            style="display: block; margin-bottom: 16px; padding: 8px 12px;"
+        >{{ session('status') }}</div>
+    @endif
 
     <div class="stat-cards">
         @foreach ([
@@ -78,7 +109,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
 
     <div style="display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; flex-wrap: wrap;">
         <div style="position: relative; flex: 1; min-width: 220px; max-width: 320px;">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(29,31,32,.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
             <input wire:model.live.debounce.300ms="search" class="input" placeholder="Search by name or email…" style="padding-left: 32px;">
         </div>
     </div>
@@ -112,16 +143,32 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                             </td>
                             <td style="text-align: right;">
                                 @can('manage users')
-                                    <button
-                                        type="button"
-                                        wire:click="toggleAdmin({{ $user->id }})"
-                                        wire:confirm="Are you sure you want to {{ $user->hasRole('admin') ? 'remove admin access from' : 'grant admin access to' }} {{ $user->name }}?"
-                                        @disabled($user->id === auth()->id())
-                                        class="btn"
-                                        style="padding: 6px 12px; font-size: 12px;"
-                                    >
-                                        {{ $user->hasRole('admin') ? 'Revoke admin' : 'Make admin' }}
-                                    </button>
+                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap;">
+                                        <button
+                                            type="button"
+                                            wire:click="toggleAdmin({{ $user->id }})"
+                                            wire:confirm="Are you sure you want to {{ $user->hasRole('admin') ? 'remove admin access from' : 'grant admin access to' }} {{ $user->name }}?"
+                                            @disabled($user->id === auth()->id())
+                                            class="btn"
+                                            style="padding: 6px 12px; font-size: 12px;"
+                                        >
+                                            {{ $user->hasRole('admin') ? 'Revoke admin' : 'Make admin' }}
+                                        </button>
+                                        <a
+                                            href="{{ route('admin.users.edit', $user) }}"
+                                            wire:navigate
+                                            class="btn"
+                                            style="padding: 6px 12px; font-size: 12px;"
+                                        >Edit</a>
+                                        <button
+                                            type="button"
+                                            wire:click="deleteUser({{ $user->id }})"
+                                            wire:confirm="Permanently delete {{ $user->name }}? This cannot be undone."
+                                            @disabled($user->id === auth()->id())
+                                            class="btn"
+                                            style="padding: 6px 12px; font-size: 12px; border-color: var(--color-accent-700); color: var(--color-accent-700);"
+                                        >Delete</button>
+                                    </div>
                                 @endcan
                             </td>
                         </tr>
