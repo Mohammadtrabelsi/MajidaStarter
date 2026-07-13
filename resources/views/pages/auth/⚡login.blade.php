@@ -53,57 +53,57 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
 ?>
 
 <div>
-    <div class="mb-6 text-center">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Log in to your account to continue</p>
-    </div>
+    <h1>Welcome back</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">Sign in to your account to continue.</p>
 
-    <form wire:submit="login" class="space-y-5">
-        <div>
-            <x-input-label for="email" value="Email address" />
+    @if (session('status'))
+        <div class="tag tag-accent" style="display: block; margin-bottom: 16px; padding: 8px 12px;">{{ session('status') }}</div>
+    @endif
+
+    <form wire:submit="login">
+        <div class="field">
+            <x-input-label for="email" value="Email" />
             <x-text-input
                 wire:model="email"
                 id="email"
                 type="email"
+                placeholder="you@company.com"
                 autofocus
                 autocomplete="username"
-                placeholder="you@example.com"
                 :error="$errors->first('email')"
             />
             <x-input-error :message="$errors->first('email')" />
         </div>
 
-        <div>
-            <div class="flex items-center justify-between">
-                <x-input-label for="password" value="Password" />
-                <a href="{{ route('password.request') }}" wire:navigate class="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                    Forgot password?
-                </a>
+        <div class="field" style="margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <label for="password" class="ds-label" style="margin-bottom: 0;">Password</label>
+                <a href="{{ route('password.request') }}" wire:navigate style="font-size: 12px;">Forgot password?</a>
             </div>
             <x-text-input
                 wire:model="password"
                 id="password"
                 type="password"
-                autocomplete="current-password"
                 placeholder="••••••••"
+                autocomplete="current-password"
+                style="margin-top: 5px;"
                 :error="$errors->first('password')"
             />
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-            <input wire:model="remember" type="checkbox" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-white/20 dark:bg-white/5">
-            Remember me
+        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 22px; cursor: pointer;">
+            <input wire:model="remember" type="checkbox" class="checkbox"> Remember me
         </label>
 
         <x-primary-button wire:loading.attr="disabled" wire:target="login">
             <svg wire:loading wire:target="login" class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
-            Log in
+            Sign in
         </x-primary-button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
         Don't have an account?
-        <a href="{{ route('register') }}" wire:navigate class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Sign up</a>
+        <a href="{{ route('register') }}" wire:navigate>Create one</a>
     </p>
 </div>

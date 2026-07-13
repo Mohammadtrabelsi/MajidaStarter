@@ -57,10 +57,10 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 };
 ?>
 
-<div class="mx-auto max-w-3xl space-y-6">
-    <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage general application and localization settings.</p>
+<div style="max-width: 720px;">
+    <div style="margin-bottom: 24px;">
+        <h2>Settings</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">Manage general application and localization settings.</p>
     </div>
 
     <div
@@ -69,19 +69,19 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         x-show="show"
         x-transition
         style="display: none;"
-        class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400"
+        class="tag tag-accent"
     >
-        Settings saved successfully.
+        <span style="display: block; padding: 8px 12px;">Settings saved successfully.</span>
     </div>
 
-    <form wire:submit="save" class="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-900">
+    <form wire:submit="save" class="card" style="margin-top: 16px; display: flex; flex-direction: column; gap: 24px;">
         <div>
-            <div class="mb-4 flex gap-1 border-b border-slate-200 dark:border-white/10">
+            <div style="display: flex; gap: 2px; border-bottom: 1px solid var(--color-divider); margin-bottom: 18px;">
                 @foreach ($locales as $code => $label)
                     <button
                         type="button"
                         wire:click="$set('activeLocale', '{{ $code }}')"
-                        class="border-b-2 px-3 py-2 text-sm font-medium transition {{ $activeLocale === $code ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"
+                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(29,31,32,.6);' }}"
                     >
                         {{ $label }}
                     </button>
@@ -89,8 +89,8 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
             </div>
 
             @foreach ($locales as $code => $label)
-                <div class="space-y-4" @if ($activeLocale !== $code) style="display: none;" @endif>
-                    <div>
+                <div style="flex-direction: column; gap: 16px; display: {{ $activeLocale === $code ? 'flex' : 'none' }};">
+                    <div class="field" style="margin-bottom: 0;">
                         <x-input-label :for="'siteName-'.$code" :value="'Site name ('.$label.')'" />
                         <x-text-input
                             wire:model="siteName.{{ $code }}"
@@ -100,42 +100,44 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                         />
                     </div>
 
-                    <div>
+                    <div class="field" style="margin-bottom: 0;">
                         <x-input-label :for="'siteDescription-'.$code" :value="'Site description ('.$label.')'" />
                         <textarea
                             wire:model="siteDescription.{{ $code }}"
                             id="siteDescription-{{ $code }}"
                             rows="3"
                             dir="{{ $code === 'ar' ? 'rtl' : 'ltr' }}"
-                            class="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-white/5 dark:text-white"
+                            class="textarea"
                         ></textarea>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <div class="border-t border-slate-200 pt-6 dark:border-white/10">
+        <div class="field" style="margin-bottom: 0; border-top: 1px solid var(--color-divider); padding-top: 20px;">
             <x-input-label for="supportEmail" value="Support email" />
             <x-text-input
                 wire:model="supportEmail"
                 id="supportEmail"
                 type="email"
-                placeholder="support@example.com"
+                placeholder="support@company.com"
                 :error="$errors->first('supportEmail')"
             />
             <x-input-error :message="$errors->first('supportEmail')" />
         </div>
 
-        <label class="flex items-center gap-3 rounded-lg border border-slate-200 p-4 dark:border-white/10">
-            <input wire:model="maintenanceMode" type="checkbox" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-white/20 dark:bg-white/5">
+        <label style="display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--color-divider); padding: 14px; cursor: pointer;">
+            <input wire:model="maintenanceMode" type="checkbox" class="checkbox" style="margin-top: 2px;">
             <span>
-                <span class="block text-sm font-medium text-slate-900 dark:text-white">Maintenance mode</span>
-                <span class="block text-xs text-slate-500 dark:text-slate-400">Temporarily mark the site as under maintenance.</span>
+                <span style="display: block; font-size: 14px; font-weight: 500;">Maintenance mode</span>
+                <span class="text-muted" style="display: block; font-size: 12px;">Temporarily mark the site as under maintenance.</span>
             </span>
         </label>
 
-        <x-primary-button wire:loading.attr="disabled" wire:target="save">
-            Save settings
-        </x-primary-button>
+        <div>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">
+                Save settings
+            </button>
+        </div>
     </form>
 </div>

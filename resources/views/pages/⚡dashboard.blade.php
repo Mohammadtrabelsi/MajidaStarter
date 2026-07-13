@@ -10,57 +10,63 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 };
 ?>
 
-<div class="mx-auto max-w-5xl space-y-6">
-    <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-fuchsia-600 p-8 text-white shadow-lg shadow-indigo-500/20">
-        <h1 class="text-2xl font-bold">Welcome back, {{ Str::of(auth()->user()->name)->before(' ') }} 👋</h1>
-        <p class="mt-2 max-w-xl text-indigo-100">
-            You're logged in as <span class="font-medium text-white">{{ auth()->user()->email }}</span>.
+<div style="max-width: 960px;">
+    <div style="margin-bottom: 24px;">
+        <div class="card-kicker">Signed in</div>
+        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' ') }}</h2>
+        <p class="text-muted" style="font-size: 14px; margin: 0;">
+            You're logged in as {{ auth()->user()->email }}.
             @if (auth()->user()->isAdmin())
                 You have administrator privileges on this account.
             @endif
         </p>
 
         @if (auth()->user()->isAdmin())
-            <a href="{{ route('admin.dashboard') }}" wire:navigate class="mt-5 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/25">
-                Go to Admin Panel
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <a href="{{ route('admin.dashboard') }}" wire:navigate class="btn btn-primary" style="margin-top: 18px;">
+                Go to admin panel
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
         @endif
     </div>
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-900">
-            <h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400">Account</h2>
-            <dl class="mt-3 space-y-2 text-sm">
-                <div class="flex justify-between">
-                    <dt class="text-slate-500 dark:text-slate-400">Name</dt>
-                    <dd class="font-medium text-slate-900 dark:text-white">{{ auth()->user()->name }}</dd>
+    <div class="dash-cards">
+        <div class="card">
+            <div class="card-kicker">Account</div>
+            <dl style="margin: 12px 0 0; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+                <div style="display: flex; justify-content: space-between; gap: 16px;">
+                    <dt class="text-muted">Name</dt>
+                    <dd style="margin: 0; font-weight: 500;">{{ auth()->user()->name }}</dd>
                 </div>
-                <div class="flex justify-between">
-                    <dt class="text-slate-500 dark:text-slate-400">Email</dt>
-                    <dd class="font-medium text-slate-900 dark:text-white">{{ auth()->user()->email }}</dd>
+                <div style="display: flex; justify-content: space-between; gap: 16px;">
+                    <dt class="text-muted">Email</dt>
+                    <dd style="margin: 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->email }}</dd>
                 </div>
-                <div class="flex justify-between">
-                    <dt class="text-slate-500 dark:text-slate-400">Member since</dt>
-                    <dd class="font-medium text-slate-900 dark:text-white">{{ auth()->user()->created_at->format('M j, Y') }}</dd>
+                <div style="display: flex; justify-content: space-between; gap: 16px;">
+                    <dt class="text-muted">Member since</dt>
+                    <dd style="margin: 0; font-weight: 500;">{{ auth()->user()->created_at->format('M j, Y') }}</dd>
                 </div>
             </dl>
         </div>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-900">
-            <h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400">Role</h2>
-            <div class="mt-3 flex items-center gap-2">
-                <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium {{ auth()->user()->isAdmin() ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300' }}">
+        <div class="card">
+            <div class="card-kicker">Role</div>
+            <div style="margin: 12px 0 10px;">
+                <span class="tag {{ auth()->user()->isAdmin() ? 'tag-accent' : 'tag-neutral' }}">
                     {{ auth()->user()->isAdmin() ? 'Administrator' : 'Member' }}
                 </span>
             </div>
-            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
+            <p class="text-muted" style="font-size: 13px; margin: 0;">
                 @if (auth()->user()->isAdmin())
-                    You can manage users from the admin panel.
+                    You can manage users, review the activity log and edit settings from the admin panel.
                 @else
                     Standard account with access to your personal dashboard.
                 @endif
             </p>
         </div>
     </div>
+
+    <style>
+        .dash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        @media (max-width: 640px) { .dash-cards { grid-template-columns: 1fr; } }
+    </style>
 </div>
