@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -10,6 +11,13 @@ use Tests\TestCase;
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(RolesAndPermissionsSeeder::class);
+    }
 
     public function test_login_page_renders(): void
     {
@@ -30,7 +38,6 @@ class AuthTest extends TestCase
     {
         $user = User::factory()->create(['password' => bcrypt('password')]);
 
-
         Livewire::test('pages::auth.login')
             ->set('email', $user->email)
             ->set('password', 'password')
@@ -43,7 +50,6 @@ class AuthTest extends TestCase
     public function test_user_cannot_log_in_with_wrong_password(): void
     {
         $user = User::factory()->create(['password' => bcrypt('password')]);
-
 
         Livewire::test('pages::auth.login')
             ->set('email', $user->email)
@@ -58,7 +64,6 @@ class AuthTest extends TestCase
     {
         $admin = User::factory()->admin()->create(['password' => bcrypt('password')]);
 
-
         Livewire::test('pages::auth.login')
             ->set('email', $admin->email)
             ->set('password', 'password')
@@ -68,7 +73,6 @@ class AuthTest extends TestCase
 
     public function test_user_can_register(): void
     {
-
         Livewire::test('pages::auth.register')
             ->set('name', 'Jane Doe')
             ->set('email', 'jane@example.com')
@@ -121,7 +125,7 @@ class AuthTest extends TestCase
             ->call('toggleAdmin', $user->id)
             ->assertHasNoErrors();
 
-        $this->assertTrue($user->fresh()->is_admin);
+        $this->assertTrue($user->fresh()->hasRole('admin'));
     }
 
     public function test_admin_cannot_revoke_their_own_admin_status(): void
@@ -133,7 +137,20 @@ class AuthTest extends TestCase
             ->call('toggleAdmin', $admin->id)
             ->assertHasErrors('toggle');
 
-        $this->assertTrue($admin->fresh()->is_admin);
+        $this->assertTrue($admin->fresh()->hasRole('admin'));
+    }
+
+    public function test_non_admin_cannot_toggle_admin_status(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+
+        Livewire::actingAs($user)
+            ->test('pages::admin.dashboard')
+            ->call('toggleAdmin', $other->id)
+            ->assertForbidden();
+
+        $this->assertFalse($other->fresh()->hasRole('admin'));
     }
 
     public function test_user_can_log_out(): void

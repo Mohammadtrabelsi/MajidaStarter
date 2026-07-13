@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
+use App\Services\UserService;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -33,7 +33,7 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
             ]);
         }
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (! app(UserService::class)->attempt($this->email, $this->password, $this->remember)) {
             RateLimiter::hit($throttleKey);
 
             throw ValidationException::withMessages([

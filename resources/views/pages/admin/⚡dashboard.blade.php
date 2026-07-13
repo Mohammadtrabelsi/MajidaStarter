@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Services\UserService;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -21,41 +20,29 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
         $this->resetPage();
     }
 
-    public function toggleAdmin(int $userId): void
+    public function toggleAdmin(int $userId, UserService $users): void
     {
-        $user = User::findOrFail($userId);
+        $this->authorize('manage users');
 
-        if ($user->id === Auth::id()) {
-            $this->addError('toggle', 'You cannot change your own admin status.');
+        $target = \App\Models\User::findOrFail($userId);
 
-            return;
+        try {
+            $users->toggleAdminRole(auth()->user(), $target);
+        } catch (\DomainException $e) {
+            $this->addError('toggle', $e->getMessage());
         }
-
-        $user->is_admin = ! $user->is_admin;
-        $user->save();
     }
 
     #[Computed]
     public function stats(): array
     {
-        return [
-            'total' => User::count(),
-            'admins' => User::where('is_admin', true)->count(),
-            'newThisWeek' => User::where('created_at', '>=', now()->subWeek())->count(),
-            'newToday' => User::whereDate('created_at', today())->count(),
-        ];
+        return app(UserService::class)->stats();
     }
 
     #[Computed]
     public function users()
     {
-        return User::query()
-            ->when($this->search, fn ($query) => $query->where(
-                fn ($q) => $q->where('name', 'like', "%{$this->search}%")
-                    ->orWhere('email', 'like', "%{$this->search}%")
-            ))
-            ->latest()
-            ->paginate(8);
+        return app(UserService::class)->searchPaginated($this->search);
     }
 
     public function render()
@@ -137,19 +124,21 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                             </td>
                             <td class="px-5 py-3 whitespace-nowrap text-slate-500 dark:text-slate-400">{{ $user->created_at->format('M j, Y') }}</td>
                             <td class="px-5 py-3">
-                                <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium {{ $user->is_admin ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300' }}">
-                                    {{ $user->is_admin ? 'Admin' : 'Member' }}
+                                <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium {{ $user->hasRole('admin') ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300' }}">
+                                    {{ $user->hasRole('admin') ? 'Admin' : 'Member' }}
                                 </span>
                             </td>
                             <td class="px-5 py-3 text-right">
-                                <button
-                                    wire:click="toggleAdmin({{ $user->id }})"
-                                    wire:confirm="Are you sure you want to {{ $user->is_admin ? 'remove admin access from' : 'grant admin access to' }} {{ $user->name }}?"
-                                    @disabled($user->id === auth()->id())
-                                    class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5"
-                                >
-                                    {{ $user->is_admin ? 'Revoke admin' : 'Make admin' }}
-                                </button>
+                                @can('manage users')
+                                    <button
+                                        wire:click="toggleAdmin({{ $user->id }})"
+                                        wire:confirm="Are you sure you want to {{ $user->hasRole('admin') ? 'remove admin access from' : 'grant admin access to' }} {{ $user->name }}?"
+                                        @disabled($user->id === auth()->id())
+                                        class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5"
+                                    >
+                                        {{ $user->hasRole('admin') ? 'Revoke admin' : 'Make admin' }}
+                                    </button>
+                                @endcan
                             </td>
                         </tr>
                     @empty

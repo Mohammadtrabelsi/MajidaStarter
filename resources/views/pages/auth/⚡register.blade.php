@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -26,13 +24,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
     {
         $validated = $this->validate();
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
-
-        event(new Registered($user));
+        $user = app(UserService::class)->register($validated);
 
         Auth::login($user);
 

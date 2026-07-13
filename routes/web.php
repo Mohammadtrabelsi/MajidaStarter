@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::livewire('/admin/dashboard', 'pages::admin.dashboard')->name('admin.dashboard');
+        Route::livewire('/admin/activity-log', 'pages::admin.activity-log')->name('admin.activity-log');
+        Route::livewire('/admin/settings', 'pages::admin.settings')->name('admin.settings');
     });
 
     Route::post('/logout', LogoutController::class)->name('logout');
