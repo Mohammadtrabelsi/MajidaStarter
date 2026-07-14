@@ -38,12 +38,34 @@ Route::middleware('auth')->group(function () {
             Route::livewire('/admin/dashboard', 'pages::admin.dashboard')
                 ->middleware('can:view admin dashboard')
                 ->name('admin.dashboard');
+
             Route::livewire('/admin/users/create', 'pages::admin.users.create')
                 ->middleware('can:manage users')
                 ->name('admin.users.create');
             Route::livewire('/admin/users/{user}/edit', 'pages::admin.users.edit')
                 ->middleware('can:manage users')
                 ->name('admin.users.edit');
+
+            Route::livewire('/admin/categories', 'pages::admin.categories.index')
+                ->middleware('can:manage categories')
+                ->name('admin.categories.index');
+            Route::livewire('/admin/categories/create', 'pages::admin.categories.create')
+                ->middleware('can:manage categories')
+                ->name('admin.categories.create');
+            Route::livewire('/admin/categories/{category}/edit', 'pages::admin.categories.edit')
+                ->middleware('can:manage categories')
+                ->name('admin.categories.edit');
+
+            Route::livewire('/admin/posts', 'pages::admin.posts.index')
+                ->middleware('can:manage posts')
+                ->name('admin.posts.index');
+            Route::livewire('/admin/posts/create', 'pages::admin.posts.create')
+                ->middleware('can:manage posts')
+                ->name('admin.posts.create');
+            Route::livewire('/admin/posts/{post}/edit', 'pages::admin.posts.edit')
+                ->middleware('can:manage posts')
+                ->name('admin.posts.edit');
+
             Route::livewire('/admin/activity-log', 'pages::admin.activity-log')
                 ->middleware('can:view activity log')
                 ->name('admin.activity-log');

@@ -47,6 +47,20 @@
                             {{ __('Users') }}
                         </a>
 
+                        @can('manage posts')
+                            <a href="{{ route('admin.posts.index') }}" wire:navigate class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11l3 3v13a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"></path><path d="M8 10h8M8 14h8M8 18h5"></path></svg>
+                                {{ __('Posts') }}
+                            </a>
+                        @endcan
+
+                        @can('manage categories')
+                            <a href="{{ route('admin.categories.index') }}" wire:navigate class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+                                {{ __('Categories') }}
+                            </a>
+                        @endcan
+
                         @can('view activity log')
                             <a href="{{ route('admin.activity-log') }}" wire:navigate class="{{ request()->routeIs('admin.activity-log') ? 'active' : '' }}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 12 8 12 11 5 14 19 17 12 21 12"></polyline></svg>
