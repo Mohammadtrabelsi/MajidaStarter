@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TracksUserActions;
 use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Spatie\Translatable\HasTranslations;
 class Post extends Model
 {
     /** @use HasFactory<PostFactory> */
-    use HasFactory, HasTranslations, LogsActivity;
+    use HasFactory, HasTranslations, LogsActivity, TracksUserActions;
 
     public const STATUS_DRAFT = 'draft';
 
