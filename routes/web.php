@@ -35,11 +35,21 @@ Route::middleware('auth')->group(function () {
         Route::livewire('/dashboard', 'pages::dashboard')->name('dashboard');
 
         Route::middleware('admin')->group(function () {
-            Route::livewire('/admin/dashboard', 'pages::admin.dashboard')->name('admin.dashboard');
-            Route::livewire('/admin/users/create', 'pages::admin.users.create')->name('admin.users.create');
-            Route::livewire('/admin/users/{user}/edit', 'pages::admin.users.edit')->name('admin.users.edit');
-            Route::livewire('/admin/activity-log', 'pages::admin.activity-log')->name('admin.activity-log');
-            Route::livewire('/admin/settings', 'pages::admin.settings')->name('admin.settings');
+            Route::livewire('/admin/dashboard', 'pages::admin.dashboard')
+                ->middleware('can:view admin dashboard')
+                ->name('admin.dashboard');
+            Route::livewire('/admin/users/create', 'pages::admin.users.create')
+                ->middleware('can:manage users')
+                ->name('admin.users.create');
+            Route::livewire('/admin/users/{user}/edit', 'pages::admin.users.edit')
+                ->middleware('can:manage users')
+                ->name('admin.users.edit');
+            Route::livewire('/admin/activity-log', 'pages::admin.activity-log')
+                ->middleware('can:view activity log')
+                ->name('admin.activity-log');
+            Route::livewire('/admin/settings', 'pages::admin.settings')
+                ->middleware('can:manage settings')
+                ->name('admin.settings');
         });
     });
 

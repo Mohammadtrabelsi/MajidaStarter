@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TracksUserActions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -9,7 +10,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Setting extends Model
 {
-    use HasTranslations, LogsActivity;
+    use HasTranslations, LogsActivity, TracksUserActions;
 
     protected $fillable = [
         'site_name',

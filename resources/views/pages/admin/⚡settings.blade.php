@@ -38,6 +38,8 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
     public function save(SettingService $settings): void
     {
+        $this->authorize('manage settings');
+
         $this->validate();
 
         $setting = $settings->current();
