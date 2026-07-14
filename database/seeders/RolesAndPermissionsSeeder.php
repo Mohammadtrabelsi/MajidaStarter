@@ -18,6 +18,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $permissions = [
             'view admin dashboard',
             'manage users',
+            'manage categories',
+            'manage posts',
             'view activity log',
             'manage settings',
         ];
