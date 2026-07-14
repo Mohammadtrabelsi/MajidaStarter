@@ -38,6 +38,15 @@ Route::middleware('auth')->group(function () {
             Route::livewire('/admin/dashboard', 'pages::admin.dashboard')->name('admin.dashboard');
             Route::livewire('/admin/users/create', 'pages::admin.users.create')->name('admin.users.create');
             Route::livewire('/admin/users/{user}/edit', 'pages::admin.users.edit')->name('admin.users.edit');
+
+            Route::livewire('/admin/categories', 'pages::admin.categories.index')->name('admin.categories.index');
+            Route::livewire('/admin/categories/create', 'pages::admin.categories.create')->name('admin.categories.create');
+            Route::livewire('/admin/categories/{category}/edit', 'pages::admin.categories.edit')->name('admin.categories.edit');
+
+            Route::livewire('/admin/posts', 'pages::admin.posts.index')->name('admin.posts.index');
+            Route::livewire('/admin/posts/create', 'pages::admin.posts.create')->name('admin.posts.create');
+            Route::livewire('/admin/posts/{post}/edit', 'pages::admin.posts.edit')->name('admin.posts.edit');
+
             Route::livewire('/admin/activity-log', 'pages::admin.activity-log')->name('admin.activity-log');
             Route::livewire('/admin/settings', 'pages::admin.settings')->name('admin.settings');
         });
