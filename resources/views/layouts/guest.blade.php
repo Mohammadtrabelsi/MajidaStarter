@@ -27,8 +27,8 @@
                 <div class="auth-hero-tint"></div>
                 <div class="auth-hero-body">
                     <span class="brand-mark" style="background: var(--color-bg); color: var(--color-accent-900); margin-bottom: 18px;">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
-                    <h2 style="color: var(--color-bg);">Build faster with {{ config('app.name') }}.</h2>
-                    <p style="opacity: 0.85; color: var(--color-bg); margin: 0;">Auth, roles and admin scaffolding — ready before your first migration.</p>
+                    <h2 style="color: var(--color-bg);">{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
+                    <p style="opacity: 0.85; color: var(--color-bg); margin: 0;">{{ __('app.auth_scaffolding') }}</p>
                 </div>
             </div>
 

@@ -12,18 +12,18 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 
 <div style="max-width: 960px;">
     <div style="margin-bottom: 24px;">
-        <div class="card-kicker">Signed in</div>
+        <div class="card-kicker">{{ __('dashboard.title) }}</div>
         <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' ') }}</h2>
         <p class="text-muted" style="font-size: 14px; margin: 0;">
             You're logged in as {{ auth()->user()->email }}.
             @if (auth()->user()->isAdmin())
-                You have administrator privileges on this account.
+                {{ __('dashboard.admin_note') }}
             @endif
         </p>
 
         @if (auth()->user()->isAdmin())
             <a href="{{ route('admin.dashboard') }}" wire:navigate class="btn btn-primary" style="margin-top: 18px;">
-                Go to admin panel
+                1{{ __('dashboard.admin_panel') }}
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
         @endif
@@ -31,35 +31,35 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 
     <div class="dash-cards">
         <div class="card">
-            <div class="card-kicker">Account</div>
+            <div class="card-kicker">{{ __('dashboard.account') }}</div>
             <dl style="margin: 12px 0 0; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
                 <div style="display: flex; justify-content: space-between; gap: 16px;">
-                    <dt class="text-muted">Name</dt>
+                    <dt class="text-muted">{{ __('dashboard.name') }}</dt>
                     <dd style="margin: 0; font-weight: 500;">{{ auth()->user()->name }}</dd>
                 </div>
                 <div style="display: flex; justify-content: space-between; gap: 16px;">
-                    <dt class="text-muted">Email</dt>
+                    <dt class="text-muted">{{ __('dashboard.email') }}</dt>
                     <dd style="margin: 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis;">{{ auth()->user()->email }}</dd>
                 </div>
                 <div style="display: flex; justify-content: space-between; gap: 16px;">
-                    <dt class="text-muted">Member since</dt>
+                    <dt class="text-muted">{{ __('dashboard.member_since') }}</dt>
                     <dd style="margin: 0; font-weight: 500;">{{ auth()->user()->created_at->format('M j, Y') }}</dd>
                 </div>
             </dl>
         </div>
 
         <div class="card">
-            <div class="card-kicker">Role</div>
+            <div class="card-kicker">{{ __('dashboard.role') }}</div>
             <div style="margin: 12px 0 10px;">
                 <span class="tag {{ auth()->user()->isAdmin() ? 'tag-accent' : 'tag-neutral' }}">
-                    {{ auth()->user()->isAdmin() ? 'Administrator' : 'Member' }}
+                    {{ auth()->user()->isAdmin() ? __('dashboard.administrator') : __('dashboard.member') }}
                 </span>
             </div>
             <p class="text-muted" style="font-size: 13px; margin: 0;">
                 @if (auth()->user()->isAdmin())
-                    You can manage users, review the activity log and edit settings from the admin panel.
+                    {{ __('dashboard.admin_note') }}
                 @else
-                    Standard account with access to your personal dashboard.
+                    {{ __('dashboard.member_note') }}
                 @endif
             </p>
         </div>
