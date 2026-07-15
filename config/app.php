@@ -94,6 +94,7 @@ return [
     'available_locales' => [
         'en' => ['label' => 'English', 'dir' => 'ltr'],
         'ar' => ['label' => 'العربية', 'dir' => 'rtl'],
+        'fr' => ['label' => 'Français', 'dir' => 'ltr'],
     ],
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),

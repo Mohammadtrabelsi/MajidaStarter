@@ -12,7 +12,7 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 
 <div style="max-width: 960px;">
     <div style="margin-bottom: 24px;">
-        <div class="card-kicker">{{ __('dashboard.title) }}</div>
+        <div class="card-kicker">{{ __('dashboard.title') }}</div>
         <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' ') }}</h2>
         <p class="text-muted" style="font-size: 14px; margin: 0;">
             You're logged in as {{ auth()->user()->email }}.
@@ -23,7 +23,7 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 
         @if (auth()->user()->isAdmin())
             <a href="{{ route('admin.dashboard') }}" wire:navigate class="btn btn-primary" style="margin-top: 18px;">
-                1{{ __('dashboard.admin_panel') }}
+                {{ __('dashboard.admin_panel') }}
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
         @endif
@@ -57,7 +57,7 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
             </div>
             <p class="text-muted" style="font-size: 13px; margin: 0;">
                 @if (auth()->user()->isAdmin())
-                    {{ __('dashboard.admin_note') }}
+                    {{ __('dashboard.admin_permissions_note') }}
                 @else
                     {{ __('dashboard.member_note') }}
                 @endif

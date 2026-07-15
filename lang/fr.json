@@ -1,0 +1,13 @@
+{
+    "Dashboard": "Tableau de bord",
+    "Admin": "Administration",
+    "Users": "Utilisateurs",
+    "Posts": "Articles",
+    "Categories": "Catégories",
+    "Activity log": "Journal d'activité",
+    "Settings": "Paramètres",
+    "Profile": "Profil",
+    "Log out": "Déconnexion",
+    "These credentials do not match our records.": "Ces identifiants ne correspondent pas à nos enregistrements.",
+    "Too many login attempts. Please try again in :seconds seconds.": "Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes."
+}
