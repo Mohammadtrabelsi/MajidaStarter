@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'description' => '[TODO] Description',
-    'maintenance_description' => '[TODO] Maintenance description',
-    'maintenance_mode' => '[TODO] Maintenance mode',
-    'save' => '[TODO] Save',
-    'saved' => '[TODO] Saved',
-    'title' => '[TODO] Title',
+    'description' => 'Description',
+    'maintenance_description' => 'Description du mode maintenance',
+    'maintenance_mode' => 'Mode maintenance',
+    'save' => 'Enregistrer',
+    'saved' => 'Enregistré',
+    'title' => 'Titre',
 ];

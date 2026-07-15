@@ -2,25 +2,22 @@
 
 return [
     'account' => 'الحساب',
-    'actions' => '[TODO] Actions',
+    'actions' => 'الإجراءات',
     'admin_note' => 'ملاحظة المسؤول',
     'admin_panel' => 'لوحة المسؤول',
     'administrator' => 'المدير',
     'email' => 'البريد الإلكتروني',
-    'joined' => '[TODO] Joined',
-    'make_admin' => '[TODO] Make admin',
+    'joined' => 'تاريخ الانضمام',
+    'make_admin' => 'تعيين كمسؤول',
     'member' => 'العضو',
     'member_note' => 'ملاحظة العضو',
     'member_since' => 'عضو منذ',
     'name' => 'الاسم',
-    'no_users_found' => '[TODO] No users found',
-    'revoke_admin' => '[TODO] Revoke admin',
+    'no_users_found' => 'لم يتم العثور على مستخدمين',
+    'revoke_admin' => 'إلغاء صلاحية المسؤول',
     'role' => 'الدور',
     'title' => 'العنوان',
-    'title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' => '[TODO] Title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(',
-    'user' => '[TODO] User',
-    'users_description' => '[TODO] Users description',
+    'user' => 'المستخدم',
+    'users_description' => 'وصف المستخدمين',
     'welcome_back' => 'مرحباً بعودتك، :name',
 ];

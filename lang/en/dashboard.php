@@ -16,9 +16,7 @@ return [
     'no_users_found' => 'No users found',
     'revoke_admin' => 'Revoke admin',
     'role' => 'Role',
-    'title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' => 'Title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(',
+    'title' => 'Title',
     'user' => 'User',
     'users_description' => 'Users description',
 ];

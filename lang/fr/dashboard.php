@@ -2,25 +2,22 @@
 
 return [
     'account' => 'Compte',
-    'actions' => '[TODO] Actions',
+    'actions' => 'Actions',
     'admin_note' => 'Note de l\'administrateur',
     'admin_panel' => 'Panneau d\'administration',
     'administrator' => 'Administrateur',
     'email' => 'E-mail',
-    'joined' => '[TODO] Joined',
-    'make_admin' => '[TODO] Make admin',
+    'joined' => 'Inscrit le',
+    'make_admin' => 'Nommer administrateur',
     'member' => 'Membre',
     'member_note' => 'Note du membre',
     'member_since' => 'Membre depuis',
     'name' => 'Nom',
-    'no_users_found' => '[TODO] No users found',
-    'revoke_admin' => '[TODO] Revoke admin',
+    'no_users_found' => 'Aucun utilisateur trouvé',
+    'revoke_admin' => 'Révoquer l\'administrateur',
     'role' => 'Rôle',
     'title' => 'Titre',
-    'title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' => '[TODO] Title) }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(',
-    'user' => '[TODO] User',
-    'users_description' => '[TODO] Users description',
+    'user' => 'Utilisateur',
+    'users_description' => 'Description des utilisateurs',
     'welcome_back' => 'Bon retour, :name',
 ];

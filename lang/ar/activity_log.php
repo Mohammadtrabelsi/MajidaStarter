@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'attributes' => '[TODO] Attributes',
-    'description' => '[TODO] Description',
-    'no_activity' => '[TODO] No activity',
-    'title' => '[TODO] Title',
+    'attributes' => 'الخصائص',
+    'description' => 'الوصف',
+    'no_activity' => 'لا يوجد نشاط',
+    'title' => 'العنوان',
 ];

@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'back_to_users' => '[TODO] Back to users',
-    'create' => '[TODO] Create',
-    'create_description' => '[TODO] Create description',
-    'edit' => '[TODO] Edit',
-    'edit_description' => '[TODO] Edit description',
-    'no_roles' => '[TODO] No roles',
-    'save_changes' => '[TODO] Save changes',
+    'back_to_users' => 'العودة إلى المستخدمين',
+    'create' => 'إنشاء',
+    'create_description' => 'وصف الإنشاء',
+    'edit' => 'تعديل',
+    'edit_description' => 'وصف التعديل',
+    'no_roles' => 'لا توجد أدوار',
+    'save_changes' => 'حفظ التغييرات',
 ];
