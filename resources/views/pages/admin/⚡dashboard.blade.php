@@ -69,7 +69,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
         <div>
             <h2>Users</h2>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">Overview of your application's accounts and access.</p>
+            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('dashboard.users_description') }}</p>
         </div>
         @can('manage users')
             <a href="{{ route('admin.users.create') }}" wire:navigate class="btn btn-primary">
@@ -119,10 +119,10 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
             <table class="table">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Joined</th>
-                        <th>Role</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th>{{ __('dashboard.user') }}</th>
+                        <th>{{ __('dashboard.joined') }}</th>
+                        <th>{{ __('dashboard.role') }}</th>
+                        <th style="text-align: right;">{{ __('dashboard.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,7 +152,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                                             class="btn"
                                             style="padding: 6px 12px; font-size: 12px;"
                                         >
-                                            {{ $user->hasRole('admin') ? 'Revoke admin' : 'Make admin' }}
+                                            {{ $user->hasRole('admin') ? __('dashboard.revoke_admin') : __('dashboard.make_admin') }}
                                         </button>
                                         <a
                                             href="{{ route('admin.users.edit', $user) }}"
@@ -174,7 +174,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-muted" style="padding: 28px; text-align: center;">No users found.</td>
+                            <td colspan="4" class="text-muted" style="padding: 28px; text-align: center;">{{ __('dashboard.no_users_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -186,9 +186,6 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
         </div>
     </div>
 
-    <style>
-        .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-        @media (max-width: 900px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .stat-cards { grid-template-columns: 1fr; } }
-    </style>
+    {{-- Styles moved to css/admin-dashboard.css --}}
+    <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
 </div>

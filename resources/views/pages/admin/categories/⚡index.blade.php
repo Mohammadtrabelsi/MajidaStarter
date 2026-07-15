@@ -57,12 +57,12 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 <div>
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
         <div>
-            <h2>Categories</h2>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">Organize your posts into categories.</p>
+            <h2>{{ __('categories.categories') }}</h2>
+            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('categories.organize_your_posts_into_categories') }}</p>
         </div>
         <a href="{{ route('admin.categories.create') }}" wire:navigate class="btn btn-primary">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" d="M12 5v14M5 12h14"></path></svg>
-            New category
+            {{ __('categories.new_category') }}
         </a>
     </div>
 
@@ -101,11 +101,11 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Slug</th>
-                        <th>Posts</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th>{{ __('categories.name') }}</th>
+                        <th>{{ __('categories.slug') }}</th>
+                        <th>{{ __('categories.posts') }}</th>
+                        <th>{{ __('categories.status') }}</th>
+                        <th style="text-align: right;">{{ __('categories.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,20 +124,20 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
                                         wire:navigate
                                         class="btn"
                                         style="padding: 6px 12px; font-size: 12px;"
-                                    >Edit</a>
+                                    >{{ __('categories.edit') }}</a>
                                     <button
                                         type="button"
                                         wire:click="deleteCategory({{ $category->id }})"
                                         wire:confirm="Permanently delete this category? This cannot be undone."
                                         class="btn"
                                         style="padding: 6px 12px; font-size: 12px; border-color: var(--color-accent-700); color: var(--color-accent-700);"
-                                    >Delete</button>
+                                    >{{ __('categories.delete') }}</button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-muted" style="padding: 28px; text-align: center;">No categories found.</td>
+                            <td colspan="5" class="text-muted" style="padding: 28px; text-align: center;">{{ __('categories.no_categories_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>

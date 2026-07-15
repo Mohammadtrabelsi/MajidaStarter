@@ -84,9 +84,9 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
 
 <div style="max-width: 720px;">
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('admin.posts.index') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; Back to posts</a>
-        <h2 style="margin-top: 8px;">Edit post</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Update post content and publishing details.</p>
+            <a href="{{ route('admin.posts.index') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; {{ __('posts.back_to_posts') }}</a>
+            <h2 style="margin-top: 8px;">{{ __('posts.edit_post') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('posts.update_post_content') }}</p>
     </div>
 
     <form wire:submit="save" class="card" style="display: flex; flex-direction: column; gap: 24px;">
@@ -151,7 +151,7 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
             <div class="field" style="margin-bottom: 0;">
                 <x-input-label for="categoryId" value="Category" />
                 <select wire:model="categoryId" id="categoryId" class="input">
-                    <option value="">— None —</option>
+                    <option value="">{{ __('posts.select_category') }}</option>
                     @foreach ($this->categories as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
                     @endforeach
@@ -171,8 +171,8 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
         </div>
 
         <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">Save changes</button>
-            <a href="{{ route('admin.posts.index') }}" wire:navigate class="btn">Cancel</a>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">{{ __('posts.save_changes') }}</button>
+            <a href="{{ route('admin.posts.index') }}" wire:navigate class="btn">{{ __('posts.cancel') }}</a>
         </div>
     </form>
 </div>

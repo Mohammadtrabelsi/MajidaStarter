@@ -59,8 +59,8 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 
 <div x-data="{ expanded: null }">
     <div style="margin-bottom: 24px;">
-        <h2>Activity log</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Audit trail of changes made across the application.</p>
+        <h2>{{ __('activity_log.title') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('activity_log.description') }}</p>
     </div>
 
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
@@ -124,7 +124,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                             @endif
                             @if ($activity->properties->has('attributes'))
                                 <div>
-                                    <div class="card-kicker">After</div>
+                                    <div class="card-kicker">{{ __('activity_log.attributes') }}</div>
                                     <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 12px;">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
                                 </div>
                             @endif
@@ -133,7 +133,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                 @endif
             </div>
         @empty
-            <div class="text-muted" style="padding: 40px; text-align: center;">No activity recorded yet.</div>
+            <div class="text-muted" style="padding: 40px; text-align: center;">{{ __('activity_log.no_activity') }}</div>
         @endforelse
 
         <div style="padding: 12px 16px; border-top: 1px solid var(--color-divider);">
@@ -141,8 +141,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
         </div>
     </div>
 
-    <style>
-        .prop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        @media (max-width: 640px) { .prop-grid { grid-template-columns: 1fr; } }
-    </style>
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/activity-log.css') }}">
+    @endpush
 </div>

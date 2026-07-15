@@ -66,8 +66,8 @@ new #[Layout('layouts::app')] #[Title('Edit category')] class extends Component
 <div style="max-width: 640px;">
     <div style="margin-bottom: 24px;">
         <a href="{{ route('admin.categories.index') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; Back to categories</a>
-        <h2 style="margin-top: 8px;">Edit category</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Update category details.</p>
+        <h2 style="margin-top: 8px;">{{ __('categories.edit_category') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('categories.update_category_details') }}</p>
     </div>
 
     <form wire:submit="save" class="card" style="display: flex; flex-direction: column; gap: 24px;">
@@ -119,14 +119,14 @@ new #[Layout('layouts::app')] #[Title('Edit category')] class extends Component
         <label style="display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--color-divider); padding: 14px; cursor: pointer;">
             <input wire:model="isActive" type="checkbox" class="checkbox" style="margin-top: 2px;">
             <span>
-                <span style="display: block; font-size: 14px; font-weight: 500;">Active</span>
-                <span class="text-muted" style="display: block; font-size: 12px;">Inactive categories stay hidden from public listings.</span>
+                <span style="display: block; font-size: 14px; font-weight: 500;">{{ __('categories.active') }}</span>
+                <span class="text-muted" style="display: block; font-size: 12px;">{{ __('categories.inactive_categories_stay_hidden_from_public_listings') }}</span>
             </span>
         </label>
 
         <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">Save changes</button>
-            <a href="{{ route('admin.categories.index') }}" wire:navigate class="btn">Cancel</a>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">{{ __('categories.save_changes') }}</button>
+            <a href="{{ route('admin.categories.index') }}" wire:navigate class="btn">{{ __('categories.cancel') }}</a>
         </div>
     </form>
 </div>

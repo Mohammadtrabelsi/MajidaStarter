@@ -58,11 +58,11 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
         <div>
             <h2>Posts</h2>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">Write and publish content across your site.</p>
+            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('posts.write_and_publish_content') }}</p>
         </div>
         <a href="{{ route('admin.posts.create') }}" wire:navigate class="btn btn-primary">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" d="M12 5v14M5 12h14"></path></svg>
-            New post
+            {{ __('posts.new_post') }}
         </a>
     </div>
 
@@ -101,11 +101,11 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Author</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th>{{ __('posts.title') }}</th>
+                        <th>{{ __('posts.category') }}</th>
+                        <th>{{ __('posts.author') }}</th>
+                        <th>{{ __('posts.status') }}</th>
+                        <th style="text-align: right;">{{ __('posts.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -140,7 +140,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-muted" style="padding: 28px; text-align: center;">No posts found.</td>
+                            <td colspan="5" class="text-muted" style="padding: 28px; text-align: center;">{{ __('posts.no_posts_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -152,9 +152,5 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
         </div>
     </div>
 
-    <style>
-        .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        @media (max-width: 900px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .stat-cards { grid-template-columns: 1fr; } }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/admin/posts/index.css') }}">
 </div>

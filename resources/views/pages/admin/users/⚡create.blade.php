@@ -51,9 +51,9 @@ new #[Layout('layouts::app')] #[Title('New user')] class extends Component
 
 <div style="max-width: 640px;">
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('admin.dashboard') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; Back to users</a>
-        <h2 style="margin-top: 8px;">New user</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Create an account and assign roles.</p>
+        <a href="{{ route('admin.dashboard') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; {{ __('users.back_to_users') }}</a>
+        <h2 style="margin-top: 8px;">{{ __('users.create') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('users.create_description') }}</p>
     </div>
 
     <form wire:submit="save" class="card" style="display: flex; flex-direction: column; gap: 16px;">
@@ -84,13 +84,13 @@ new #[Layout('layouts::app')] #[Title('New user')] class extends Component
                         {{ Str::headline($role) }}
                     </label>
                 @empty
-                    <p class="text-muted" style="font-size: 13px; margin: 0;">No roles defined.</p>
+                    <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('users.no_roles') }}</p>
                 @endforelse
             </div>
         </div>
 
         <div style="display: flex; gap: 10px;">
-            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">Create user</button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">{{ __('users.create') }}</button>
             <a href="{{ route('admin.dashboard') }}" wire:navigate class="btn">Cancel</a>
         </div>
     </form>

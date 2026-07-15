@@ -61,8 +61,8 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
 <div style="max-width: 720px;">
     <div style="margin-bottom: 24px;">
-        <h2>Settings</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Manage general application and localization settings.</p>
+        <h2>{{ __('settings.title') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('settings.description') }}</p>
     </div>
 
     <div
@@ -73,7 +73,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         style="display: none;"
         class="tag tag-accent"
     >
-        <span style="display: block; padding: 8px 12px;">Settings saved successfully.</span>
+        <span style="display: block; padding: 8px 12px;">{{ __('settings.saved') }}</span>
     </div>
 
     <form wire:submit="save" class="card" style="margin-top: 16px; display: flex; flex-direction: column; gap: 24px;">
@@ -131,14 +131,14 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         <label style="display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--color-divider); padding: 14px; cursor: pointer;">
             <input wire:model="maintenanceMode" type="checkbox" class="checkbox" style="margin-top: 2px;">
             <span>
-                <span style="display: block; font-size: 14px; font-weight: 500;">Maintenance mode</span>
-                <span class="text-muted" style="display: block; font-size: 12px;">Temporarily mark the site as under maintenance.</span>
+                <span style="display: block; font-size: 14px; font-weight: 500;">{{ __('settings.maintenance_mode') }}</span>
+                <span class="text-muted" style="display: block; font-size: 12px;">{{ __('settings.maintenance_description') }}</span>
             </span>
         </label>
 
         <div>
             <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">
-                Save settings
+                {{ __('settings.save') }}
             </button>
         </div>
     </form>
