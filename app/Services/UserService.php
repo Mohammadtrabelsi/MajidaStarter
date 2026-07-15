@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserService
 {
@@ -38,6 +39,90 @@ class UserService
         $target->hasRole('admin')
             ? $target->removeRole('admin')
             : $target->assignRole('admin');
+    }
+
+    public function create(array $data, array $roles = []): User
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        $user->syncRoles($roles);
+
+        return $user;
+    }
+
+    public function updateUser(User $user, array $data, array $roles = []): User
+    {
+        if (array_key_exists('email', $data) && $data['email'] !== $user->email) {
+            $user->email_verified_at = null;
+        }
+
+        $user->fill([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
+
+        if (! empty($data['password'])) {
+            $user->password = Hash::make($data['password']);
+        }
+
+        $user->save();
+        $user->syncRoles($roles);
+
+        return $user;
+    }
+
+    public function delete(User $actor, User $target): void
+    {
+        if ($actor->is($target)) {
+            throw new DomainException('You cannot delete your own account here.');
+        }
+
+        $target->delete();
+    }
+
+    public function updateProfile(User $user, array $data): User
+    {
+        $emailChanged = $data['email'] !== $user->email;
+
+        $user->fill([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
+
+        if ($emailChanged) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return $user;
+    }
+
+    public function updatePassword(User $user, string $password): User
+    {
+        $user->password = Hash::make($password);
+        $user->save();
+
+        return $user;
+    }
+
+    public function deleteOwnAccount(User $user): void
+    {
+        Auth::logout();
+
+        $user->delete();
+    }
+
+    public function roleNames(): array
+    {
+        return Role::query()
+            ->orderBy('name')
+            ->pluck('name')
+            ->all();
     }
 
     public function searchPaginated(?string $search, int $perPage = 8): LengthAwarePaginator

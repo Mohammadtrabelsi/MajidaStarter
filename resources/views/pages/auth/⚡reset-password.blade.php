@@ -61,14 +61,12 @@ new #[Layout('layouts::guest')] #[Title('Reset password')] class extends Compone
 ?>
 
 <div>
-    <div class="mb-6 text-center">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Reset your password</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Choose a new password for your account</p>
-    </div>
+    <h1>Reset your password</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">Choose a new password for your account.</p>
 
-    <form wire:submit="resetPassword" class="space-y-5">
-        <div>
-            <x-input-label for="email" value="Email address" />
+    <form wire:submit="resetPassword">
+        <div class="field">
+            <x-input-label for="email" value="Email" />
             <x-text-input
                 wire:model="email"
                 id="email"
@@ -80,7 +78,7 @@ new #[Layout('layouts::guest')] #[Title('Reset password')] class extends Compone
             <x-input-error :message="$errors->first('email')" />
         </div>
 
-        <div>
+        <div class="field">
             <x-input-label for="password" value="New password" />
             <x-text-input
                 wire:model="password"
@@ -93,7 +91,7 @@ new #[Layout('layouts::guest')] #[Title('Reset password')] class extends Compone
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <div>
+        <div class="field" style="margin-bottom: 22px;">
             <x-input-label for="password_confirmation" value="Confirm new password" />
             <x-text-input
                 wire:model="password_confirmation"

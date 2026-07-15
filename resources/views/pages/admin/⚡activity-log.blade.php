@@ -57,99 +57,92 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 };
 ?>
 
-<div class="mx-auto max-w-6xl space-y-6" x-data="{ expanded: null }">
-    <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Activity Log</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Audit trail of changes made across the application.</p>
+<div x-data="{ expanded: null }">
+    <div style="margin-bottom: 24px;">
+        <h2>Activity log</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">Audit trail of changes made across the application.</p>
     </div>
 
-    <div class="rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-900">
-        <div class="flex flex-col gap-3 border-b border-slate-200 p-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex flex-wrap items-center gap-2">
-                <button
-                    wire:click="$set('logName', '')"
-                    class="rounded-full px-3 py-1 text-xs font-medium transition {{ $logName === '' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-300' }}"
-                >
-                    All
-                </button>
-                @foreach ($logNames as $name)
-                    <button
-                        wire:click="$set('logName', '{{ $name }}')"
-                        class="rounded-full px-3 py-1 text-xs font-medium capitalize transition {{ $logName === $name ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-300' }}"
-                    >
-                        {{ $name }}
-                    </button>
-                @endforeach
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="display: inline-flex; border: 1px solid var(--color-divider); flex-wrap: wrap;">
+            <div wire:click="$set('logName', '')" style="padding: 7px 12px; font-size: 12px; cursor: pointer; {{ $logName === '' ? 'background: var(--color-accent); color: var(--color-bg);' : '' }}">
+                All
             </div>
-
-            <div class="relative w-full sm:w-72">
-                <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><path stroke-linecap="round" d="M21 21l-4.35-4.35" /></svg>
-                <input
-                    wire:model.live.debounce.300ms="search"
-                    type="text"
-                    placeholder="Search description…"
-                    class="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-white/5 dark:text-white"
-                >
-            </div>
+            @foreach ($logNames as $name)
+                <div wire:click="$set('logName', '{{ $name }}')" style="padding: 7px 12px; font-size: 12px; cursor: pointer; text-transform: capitalize; {{ $logName === $name ? 'background: var(--color-accent); color: var(--color-bg);' : '' }}">
+                    {{ $name }}
+                </div>
+            @endforeach
         </div>
 
-        <div class="divide-y divide-slate-100 dark:divide-white/5">
-            @forelse ($activities as $activity)
-                <div wire:key="activity-{{ $activity->id }}" class="p-5">
-                    <button
-                        @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
-                        class="flex w-full items-start justify-between gap-4 text-left"
-                    >
-                        <div class="flex items-start gap-3">
-                            <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-xs font-semibold text-white">
-                                {{ $activity->causer ? Str::of($activity->causer->name)->substr(0, 2)->upper() : '—' }}
-                            </span>
-                            <div>
-                                <p class="text-sm font-medium text-slate-900 dark:text-white">
-                                    {{ $activity->causer?->name ?? 'System' }}
-                                    <span class="font-normal text-slate-500 dark:text-slate-400">{{ $activity->description }}</span>
-                                    @if ($activity->subject)
-                                        <span class="font-normal text-slate-500 dark:text-slate-400">— {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
-                                    @endif
-                                </p>
-                                <p class="mt-0.5 text-xs text-slate-400 dark:text-slate-500">
-                                    {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format('M j, Y H:i') }}
-                                    @if ($activity->log_name)
-                                        · <span class="capitalize">{{ $activity->log_name }}</span>
-                                    @endif
-                                </p>
+        <div style="position: relative; margin-left: auto; flex: 1; min-width: 220px; max-width: 300px;">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <input wire:model.live.debounce.300ms="search" class="input" placeholder="Search description…" style="padding-left: 32px;">
+        </div>
+    </div>
+
+    <div class="card" style="padding: 0;">
+        @forelse ($activities as $activity)
+            <div wire:key="activity-{{ $activity->id }}" style="padding: 16px 20px; border-bottom: 1px solid rgba(var(--ink), 0.08);">
+                <button
+                    type="button"
+                    @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
+                    style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 16px; background: transparent; border: none; cursor: pointer; text-align: left; font: inherit; color: inherit;"
+                >
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <span class="avatar">{{ $activity->causer ? Str::of($activity->causer->name)->substr(0, 2)->upper() : '—' }}</span>
+                        <div>
+                            <div style="font-size: 14px;">
+                                <span style="font-weight: 500;">{{ $activity->causer?->name ?? 'System' }}</span>
+                                <span class="text-muted">{{ $activity->description }}</span>
+                                @if ($activity->subject)
+                                    <span class="text-muted">— {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
+                                @endif
+                            </div>
+                            <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+                                {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format('M j, Y H:i') }}
+                                @if ($activity->log_name)
+                                    · <span style="text-transform: capitalize;">{{ $activity->log_name }}</span>
+                                @endif
                             </div>
                         </div>
-
-                        @if ($activity->properties->isNotEmpty())
-                            <svg class="mt-1 h-4 w-4 shrink-0 text-slate-400 transition" :class="expanded === {{ $activity->id }} && 'rotate-180'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                        @endif
-                    </button>
+                    </div>
 
                     @if ($activity->properties->isNotEmpty())
-                        <div x-show="expanded === {{ $activity->id }}" x-collapse style="display: none;" class="mt-3 grid grid-cols-1 gap-3 rounded-lg bg-slate-50 p-4 text-xs dark:bg-white/5 sm:grid-cols-2">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" style="margin-top: 4px; flex: none; transition: transform 0.15s;" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                    @endif
+                </button>
+
+                @if ($activity->properties->isNotEmpty())
+                    <div x-show="expanded === {{ $activity->id }}" x-collapse style="display: none;" >
+                        <div class="prop-grid" style="margin-top: 12px; padding: 14px; background: var(--color-surface); border: 1px solid var(--color-divider); font-size: 12px;">
                             @if ($activity->properties->has('old'))
                                 <div>
-                                    <p class="mb-1 font-semibold text-slate-500 dark:text-slate-400">Before</p>
-                                    <pre class="overflow-x-auto whitespace-pre-wrap text-slate-700 dark:text-slate-300">{{ json_encode($activity->properties->get('old'), JSON_PRETTY_PRINT) }}</pre>
+                                    <div class="card-kicker">Before</div>
+                                    <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 12px;">{{ json_encode($activity->properties->get('old'), JSON_PRETTY_PRINT) }}</pre>
                                 </div>
                             @endif
                             @if ($activity->properties->has('attributes'))
                                 <div>
-                                    <p class="mb-1 font-semibold text-slate-500 dark:text-slate-400">After</p>
-                                    <pre class="overflow-x-auto whitespace-pre-wrap text-slate-700 dark:text-slate-300">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
+                                    <div class="card-kicker">After</div>
+                                    <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 12px;">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
                                 </div>
                             @endif
                         </div>
-                    @endif
-                </div>
-            @empty
-                <div class="p-10 text-center text-slate-500 dark:text-slate-400">No activity recorded yet.</div>
-            @endforelse
-        </div>
+                    </div>
+                @endif
+            </div>
+        @empty
+            <div class="text-muted" style="padding: 40px; text-align: center;">No activity recorded yet.</div>
+        @endforelse
 
-        <div class="border-t border-slate-200 p-5 dark:border-white/10">
+        <div style="padding: 12px 16px; border-top: 1px solid var(--color-divider);">
             {{ $activities->links() }}
         </div>
     </div>
+
+    <style>
+        .prop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        @media (max-width: 640px) { .prop-grid { grid-template-columns: 1fr; } }
+    </style>
 </div>

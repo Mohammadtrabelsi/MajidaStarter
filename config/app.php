@@ -80,6 +80,22 @@ return [
 
     'locale' => env('APP_LOCALE', 'en'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | The locales a visitor may switch the interface to. The key is the locale
+    | code, the value describes the human label and text direction, used by
+    | the language switcher and the SetLocale middleware.
+    |
+    */
+
+    'available_locales' => [
+        'en' => ['label' => 'English', 'dir' => 'ltr'],
+        'ar' => ['label' => 'العربية', 'dir' => 'rtl'],
+    ],
+
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),

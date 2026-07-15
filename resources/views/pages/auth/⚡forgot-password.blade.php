@@ -32,29 +32,23 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
 ?>
 
 <div>
-    <div class="mb-6 text-center">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Forgot your password?</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            No worries, we'll send you a link to reset it.
-        </p>
-    </div>
+    <h1>Forgot your password?</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">No worries — we'll send you a link to reset it.</p>
 
     @if ($status)
-        <div class="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400">
-            {{ $status }}
-        </div>
+        <div class="tag tag-accent" style="display: block; margin-bottom: 20px; padding: 8px 12px;">{{ $status }}</div>
     @endif
 
-    <form wire:submit="sendResetLink" class="space-y-5">
-        <div>
-            <x-input-label for="email" value="Email address" />
+    <form wire:submit="sendResetLink">
+        <div class="field" style="margin-bottom: 22px;">
+            <x-input-label for="email" value="Email" />
             <x-text-input
                 wire:model="email"
                 id="email"
                 type="email"
                 autofocus
                 autocomplete="username"
-                placeholder="you@example.com"
+                placeholder="you@company.com"
                 :error="$errors->first('email')"
             />
             <x-input-error :message="$errors->first('email')" />
@@ -66,8 +60,8 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
         </x-primary-button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
         Remembered your password?
-        <a href="{{ route('login') }}" wire:navigate class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Back to log in</a>
+        <a href="{{ route('login') }}" wire:navigate>Back to sign in</a>
     </p>
 </div>
