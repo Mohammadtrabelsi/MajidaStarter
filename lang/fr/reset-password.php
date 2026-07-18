@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'reset_password' => '[TODO] Reset password',
+    'reset_password' => 'Réinitialiser le mot de passe',
 ];

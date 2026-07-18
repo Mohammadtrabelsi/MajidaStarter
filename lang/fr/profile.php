@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'delete_account' => '[TODO] Delete account',
-    'delete_account_description' => '[TODO] Delete account description',
-    'manage_account_info' => '[TODO] Manage account info',
-    'password_updated' => '[TODO] Password updated',
-    'profile' => '[TODO] Profile',
-    'profile_updated' => '[TODO] Profile updated',
-    'update_name_email' => '[TODO] Update name email',
+    'delete_account' => 'Supprimer le compte',
+    'delete_account_description' => 'Une fois votre compte supprimé, toutes ses ressources et données seront définitivement supprimées.',
+    'manage_account_info' => 'Gérez les informations de votre compte',
+    'password_updated' => 'Mot de passe mis à jour',
+    'profile' => 'Profil',
+    'profile_updated' => 'Profil mis à jour',
+    'update_name_email' => 'Mettez à jour votre nom et votre adresse e-mail',
 ];
