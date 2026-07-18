@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'create_one' => '[TODO] Create one',
-    'forgot_password' => '[TODO] Forgot password',
-    'no_account' => '[TODO] No account',
-    'password' => '[TODO] Password',
-    'remember_me' => '[TODO] Remember me',
-    'sign_in' => '[TODO] Sign in',
-    'sign_in_to_continue' => '[TODO] Sign in to continue',
+    'create_one' => 'Créez-en un',
+    'forgot_password' => 'Mot de passe oublié ?',
+    'no_account' => 'Vous n\'avez pas de compte ?',
+    'password' => 'Mot de passe',
+    'remember_me' => 'Se souvenir de moi',
+    'sign_in' => 'Se connecter',
+    'sign_in_to_continue' => 'Connectez-vous pour continuer.',
 ];

@@ -5,7 +5,7 @@ return [
     'actions' => 'Actions',
     'admin_note' => 'Admin note',
     'admin_panel' => 'Admin panel',
-    'admin_permissions_note' => 'Admin permissions note',
+    'admin_permissions_note' => 'You have full administrator permissions across the application.',
     'administrator' => 'Administrator',
     'email' => 'Email',
     'joined' => 'Joined',

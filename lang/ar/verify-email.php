@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'before_getting_started' => '[TODO] Before getting started',
-    'did_not_receive' => '[TODO] Did not receive',
-    'log_out' => '[TODO] Log out',
-    'resend_verification_email' => '[TODO] Resend verification email',
-    'thanks_for_signing_up' => '[TODO] Thanks for signing up',
-    'verification_link_sent' => '[TODO] Verification link sent',
-    'verify_your_email' => '[TODO] Verify your email',
-    'will_gladly_send' => '[TODO] Will gladly send',
+    'before_getting_started' => 'قبل أن تبدأ، هل يمكنك تأكيد بريدك الإلكتروني بالنقر على الرابط الذي أرسلناه للتو إلى',
+    'did_not_receive' => 'لم يصلك البريد الإلكتروني؟',
+    'log_out' => 'تسجيل الخروج',
+    'resend_verification_email' => 'إعادة إرسال بريد التأكيد',
+    'thanks_for_signing_up' => 'شكراً لتسجيلك!',
+    'verification_link_sent' => 'تم إرسال رابط تأكيد جديد إلى بريدك الإلكتروني.',
+    'verify_your_email' => 'تأكيد بريدك الإلكتروني',
+    'will_gladly_send' => 'سنرسل لك رابطاً آخر بكل سرور.',
 ];

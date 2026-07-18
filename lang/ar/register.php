@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'already_have_account' => '[TODO] Already have account',
-    'create_account' => '[TODO] Create account',
-    'sign_in' => '[TODO] Sign in',
-    'start_building' => '[TODO] Start building',
-    'today' => '[TODO] Today',
+    'already_have_account' => 'لديك حساب بالفعل؟',
+    'create_account' => 'إنشاء حساب',
+    'sign_in' => 'تسجيل الدخول',
+    'start_building' => 'ابدأ البناء مع',
+    'today' => 'اليوم',
 ];

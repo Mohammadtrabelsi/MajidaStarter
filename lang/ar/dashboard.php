@@ -5,7 +5,7 @@ return [
     'actions' => 'الإجراءات',
     'admin_note' => 'ملاحظة المسؤول',
     'admin_panel' => 'لوحة المسؤول',
-    'admin_permissions_note' => '[TODO] Admin permissions note',
+    'admin_permissions_note' => 'لديك صلاحيات مسؤول كاملة في جميع أنحاء التطبيق.',
     'administrator' => 'المدير',
     'email' => 'البريد الإلكتروني',
     'joined' => 'تاريخ الانضمام',
