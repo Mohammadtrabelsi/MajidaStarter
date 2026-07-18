@@ -1,0 +1,16 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    # Level 0 is the loosest, 10 (max) is the strictest.
+    # Start here and raise it as the codebase is cleaned up.
+    level: 5
+
+    ignoreErrors:
+        #- '#PHPDoc tag @var#'
+
+    excludePaths:
+        #- ./*/*/FileToBeExcluded.php

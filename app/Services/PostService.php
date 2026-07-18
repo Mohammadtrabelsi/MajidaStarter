@@ -60,7 +60,7 @@ class PostService
         }
 
         if ($data['status'] === Post::STATUS_PUBLISHED) {
-            $data['published_at'] = $post?->published_at ?? now();
+            $data['published_at'] = $post->published_at ?? now();
         } else {
             $data['published_at'] = null;
         }
