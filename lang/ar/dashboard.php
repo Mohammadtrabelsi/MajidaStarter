@@ -5,6 +5,7 @@ return [
     'actions' => 'الإجراءات',
     'admin_note' => 'ملاحظة المسؤول',
     'admin_panel' => 'لوحة المسؤول',
+    'admin_permissions_note' => '[TODO] Admin permissions note',
     'administrator' => 'المدير',
     'email' => 'البريد الإلكتروني',
     'joined' => 'تاريخ الانضمام',

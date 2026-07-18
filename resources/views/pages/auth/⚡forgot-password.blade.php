@@ -32,8 +32,8 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
 ?>
 
 <div>
-    <h1>Forgot your password?</h1>
-    <p class="text-muted" style="margin-bottom: 28px;">No worries — we'll send you a link to reset it.</p>
+    <h1>{{ __('forgot-password.forgot_your_password') }}</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">{{ __('forgot-password.no_worries') }} {{ __('forgot-password.we_ll_send_you_a_link') }}.</p>
 
     @if ($status)
         <div class="tag tag-accent" style="display: block; margin-bottom: 20px; padding: 8px 12px;">{{ $status }}</div>
@@ -56,12 +56,12 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
 
         <x-primary-button wire:loading.attr="disabled" wire:target="sendResetLink">
             <svg wire:loading wire:target="sendResetLink" class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
-            Email password reset link
+            {{ __('forgot-password.email_password_reset_link') }}
         </x-primary-button>
     </form>
 
     <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
-        Remembered your password?
-        <a href="{{ route('login') }}" wire:navigate>Back to sign in</a>
+        {{ __('forgot-password.remembered_your_password') }}
+        <a href="{{ route('login') }}" wire:navigate>{{ __('forgot-password.back_to_sign_in') }}</a>
     </p>
 </div>

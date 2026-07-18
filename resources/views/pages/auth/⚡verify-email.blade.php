@@ -29,16 +29,14 @@ new #[Layout('layouts::guest')] #[Title('Verify email')] class extends Component
 ?>
 
 <div>
-    <h1>Verify your email</h1>
+    <h1>{{ __('verify-email.verify_your_email') }}</h1>
     <p class="text-muted" style="margin-bottom: 24px;">
-        Thanks for signing up! Before getting started, please confirm your email address by clicking the
-        link we just sent to <strong>{{ auth()->user()->email }}</strong>. Didn't receive it? We'll gladly
-        send another.
+        {{ __('verify-email.thanks_for_signing_up') }} {{ __('verify-email.before_getting_started') }} <strong>{{ auth()->user()->email }}</strong>. {{ __('verify-email.did_not_receive') }} {{ __('verify-email.will_gladly_send') }}
     </p>
 
     @if (session('status') === 'verification-link-sent')
         <div class="tag tag-accent" style="display: block; margin-bottom: 16px; padding: 8px 12px;">
-            A fresh verification link has been sent to your email address.
+            {{ __('verify-email.verification_link_sent') }}
         </div>
     @endif
 
@@ -50,12 +48,12 @@ new #[Layout('layouts::guest')] #[Title('Verify email')] class extends Component
             wire:target="sendVerification"
             class="btn btn-primary"
         >
-            Resend verification email
+            {{ __('verify-email.resend_verification_email') }}
         </button>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn">Log out</button>
+            <button type="submit" class="btn">{{ __('verify-email.log_out') }}</button>
         </form>
     </div>
 </div>

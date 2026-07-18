@@ -78,15 +78,15 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
 
 <div style="max-width: 720px;">
     <div style="margin-bottom: 24px;">
-        <h2>Profile</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">Manage your account information, password and security.</p>
+        <h2>{{ __('profile.profile') }}</h2>
+        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('profile.manage_account_info') }}</p>
     </div>
 
     {{-- Profile information --}}
     <form wire:submit="updateProfile" class="card" style="display: flex; flex-direction: column; gap: 16px;">
         <div>
             <h3 style="font-size: 18px;">Account information</h3>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">Update your name and email address.</p>
+            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('profile.update_name_email') }}</p>
         </div>
 
         <div
@@ -97,7 +97,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             style="display: none;"
             class="tag tag-accent"
         >
-            <span style="display: block; padding: 8px 12px;">Profile updated.</span>
+            <span style="display: block; padding: 8px 12px;">{{ __('profile.profile_updated') }}</span>
         </div>
 
         <div class="field" style="margin-bottom: 0;">
@@ -147,7 +147,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             style="display: none;"
             class="tag tag-accent"
         >
-            <span style="display: block; padding: 8px 12px;">Password updated.</span>
+            <span style="display: block; padding: 8px 12px;">{{ __('profile.password_updated') }}</span>
         </div>
 
         <div class="field" style="margin-bottom: 0;">
@@ -175,10 +175,9 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     {{-- Delete account --}}
     <div class="card" style="margin-top: 16px; border-color: var(--color-accent-700); display: flex; flex-direction: column; gap: 16px;">
         <div>
-            <h3 style="font-size: 18px;">Delete account</h3>
+            <h3 style="font-size: 18px;">{{ __('profile.delete_account') }}</h3>
             <p class="text-muted" style="font-size: 13px; margin: 0;">
-                Once your account is deleted, all of its resources and data are permanently removed. Enter your
-                password to confirm.
+                {{ __('profile.delete_account_description') }}
             </p>
         </div>
 
@@ -198,7 +197,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
                     wire:loading.attr="disabled"
                     wire:target="deleteAccount"
                 >
-                    Delete account
+                    {{ __('profile.delete_account') }}
                 </button>
             </div>
         </form>

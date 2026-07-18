@@ -38,8 +38,8 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
 ?>
 
 <div>
-    <h1>Create your account</h1>
-    <p class="text-muted" style="margin-bottom: 28px;">Start building with {{ config('app.name') }} today.</p>
+    <h1>{{ __('register.create_account') }}</h1>
+    <p class="text-muted" style="margin-bottom: 28px;">{{ __('register.start_building') }} {{ config('app.name') }} {{ __('register.today') }}.</p>
 
     <form wire:submit="register">
         <div class="field">
@@ -100,7 +100,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
     </form>
 
     <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
-        Already have an account?
-        <a href="{{ route('login') }}" wire:navigate>Sign in</a>
+        {{ __('register.already_have_account') }}
+        <a href="{{ route('login') }}" wire:navigate>{{ __('register.sign_in') }}</a>
     </p>
 </div>

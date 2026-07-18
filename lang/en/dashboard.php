@@ -5,6 +5,7 @@ return [
     'actions' => 'Actions',
     'admin_note' => 'Admin note',
     'admin_panel' => 'Admin panel',
+    'admin_permissions_note' => 'Admin permissions note',
     'administrator' => 'Administrator',
     'email' => 'Email',
     'joined' => 'Joined',
