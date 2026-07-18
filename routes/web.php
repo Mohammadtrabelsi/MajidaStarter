@@ -9,6 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/docs', 'docs')->name('docs');
+Route::view('/blog', 'blog')->name('blog');
+
 Route::get('/language/{locale}', LocaleController::class)->name('locale.switch');
 
 Route::middleware('guest')->group(function () {
