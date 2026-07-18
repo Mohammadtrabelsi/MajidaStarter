@@ -1,0 +1,10 @@
+.auth-split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
+.auth-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 48px; }
+.auth-hero-tint { position: absolute; inset: 0; background: var(--color-accent); mix-blend-mode: color; }
+.auth-hero-body { position: relative; color: var(--color-bg); max-width: 420px; }
+.auth-form-side { display: flex; align-items: center; justify-content: center; padding: 48px; }
+@media (max-width: 767px) {
+    .auth-split { grid-template-columns: 1fr; }
+    .auth-hero { display: none; }
+    .auth-form-side { padding: 40px 24px; align-items: flex-start; }
+}
