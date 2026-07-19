@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    dir="{{ config('app.available_locales.'.app()->getLocale().'.dir', 'ltr') }}"
+>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +29,7 @@
                 <a href="{{ route('login') }}" class="btn btn-ghost">Sign in</a>
                 <a href="{{ route('register') }}" class="btn btn-primary">Get Started</a>
             @endauth
+            @include('partials.locale-switcher-static')
         </div>
 
         <main>

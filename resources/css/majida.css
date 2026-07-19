@@ -267,3 +267,9 @@ html.theme-ready body { transition: background-color 0.2s ease, color 0.2s ease;
 }
 .menu-pop a:hover, .menu-pop button:hover { background: rgba(var(--ink), 0.07); color: var(--color-text); }
 .menu-pop a.active { color: var(--color-accent-800); background: var(--color-accent-100); }
+
+/* JS-free locale switcher (front office) built on a native <details> element. */
+.locale-switcher { position: relative; }
+.locale-switcher > summary { list-style: none; user-select: none; }
+.locale-switcher > summary::-webkit-details-marker { display: none; }
+.locale-switcher[open] > summary { background: rgba(var(--ink), 0.07); }
