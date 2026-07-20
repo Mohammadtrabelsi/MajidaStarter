@@ -78,12 +78,12 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 
     <div class="stat-cards">
         @foreach ([
-            ['Total categories', $this->stats['total']],
-            ['Active', $this->stats['active']],
-            ['Inactive', $this->stats['inactive']],
+            ['categories.total_categories', $this->stats['total']],
+            ['categories.active', $this->stats['active']],
+            ['categories.inactive', $this->stats['inactive']],
         ] as [$label, $value])
             <div class="card">
-                <div class="card-kicker">{{ $label }}</div>
+                <div class="card-kicker">{{ __($label) }}</div>
                 <div class="stat-value">{{ $value }}</div>
             </div>
         @endforeach
@@ -149,9 +149,4 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
         </div>
     </div>
 
-    <style>
-        .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        @media (max-width: 900px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .stat-cards { grid-template-columns: 1fr; } }
-    </style>
 </div>

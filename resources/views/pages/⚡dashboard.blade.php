@@ -13,9 +13,9 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 <div style="max-width: 960px;">
     <div style="margin-bottom: 24px;">
         <div class="card-kicker">{{ __('dashboard.title') }}</div>
-        <h2>Welcome back, {{ Str::of(auth()->user()->name)->before(' ') }}</h2>
+        <h2>{{ __('dashboard.welcome', ['name' => Str::of(auth()->user()->name)->before(' ')]) }}</h2>
         <p class="text-muted" style="font-size: 14px; margin: 0;">
-            You're logged in as {{ auth()->user()->email }}.
+            {{ __('dashboard.logged_in_as', ['email' => auth()->user()->email]) }}
             @if (auth()->user()->isAdmin())
                 {{ __('dashboard.admin_note') }}
             @endif

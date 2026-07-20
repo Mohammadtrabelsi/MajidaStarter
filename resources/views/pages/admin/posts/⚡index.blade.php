@@ -78,12 +78,12 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 
     <div class="stat-cards">
         @foreach ([
-            ['Total posts', $this->stats['total']],
-            ['Published', $this->stats['published']],
-            ['Drafts', $this->stats['drafts']],
+            ['posts.total_posts', $this->stats['total']],
+            ['posts.published', $this->stats['published']],
+            ['posts.drafts', $this->stats['drafts']],
         ] as [$label, $value])
             <div class="card">
-                <div class="card-kicker">{{ $label }}</div>
+                <div class="card-kicker">{{ __($label) }}</div>
                 <div class="stat-value">{{ $value }}</div>
             </div>
         @endforeach
@@ -134,7 +134,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
                                         wire:confirm="Permanently delete this post? This cannot be undone."
                                         class="btn"
                                         style="padding: 6px 12px; font-size: 12px; border-color: var(--color-accent-700); color: var(--color-accent-700);"
-                                    >Delete</button>
+                                    >{{ __('posts.delete') }}</button>
                                 </div>
                             </td>
                         </tr>
