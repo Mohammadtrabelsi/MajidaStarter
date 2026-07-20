@@ -20,14 +20,14 @@
                 <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                 <span class="brand-name">{{ config('app.name') }}</span>
             </a>
-            <a href="{{ url('/') }}#features" class="link">Features</a>
-            <a href="{{ route('docs') }}" class="link">Docs</a>
-            <a href="{{ route('blog') }}" class="link">Blog</a>
+            <a href="{{ url('/') }}#features" class="link">{{ __('marketing.features') }}</a>
+            <a href="{{ route('docs') }}" class="link">{{ __('marketing.docs') }}</a>
+            <a href="{{ route('blog') }}" class="link">{{ __('marketing.blog') }}</a>
             @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-primary">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('marketing.dashboard') }}</a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-ghost">Sign in</a>
-                <a href="{{ route('register') }}" class="btn btn-primary">Get Started</a>
+                <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('marketing.sign_in') }}</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
             @endauth
             @include('partials.locale-switcher-static')
         </div>
@@ -49,35 +49,25 @@
                     <div>
                         <div class="footer-heading">Product</div>
                         <div class="footer-links">
-                            <a href="{{ url('/') }}#features" class="link" style="color: var(--color-text);">Features</a>
-                            <a href="{{ route('docs') }}" class="link" style="color: var(--color-text);">Docs</a>
-                            <a href="#" class="link" style="color: var(--color-text);">Changelog</a>
+                            <a href="{{ url('/') }}#features" class="link" style="color: var(--color-text);">{{ __('marketing.features') }}</a>
+                            <a href="{{ route('docs') }}" class="link" style="color: var(--color-text);">{{ __('marketing.docs') }}</a>
+                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.changelog') }}</a>
                         </div>
                     </div>
                     <div>
                         <div class="footer-heading">Company</div>
                         <div class="footer-links">
-                            <a href="{{ route('blog') }}" class="link" style="color: var(--color-text);">Blog</a>
-                            <a href="#" class="link" style="color: var(--color-text);">GitHub</a>
-                            <a href="#" class="link" style="color: var(--color-text);">License</a>
+                            <a href="{{ route('blog') }}" class="link" style="color: var(--color-text);">{{ __('marketing.blog') }}</a>
+                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.github') }}</a>
+                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.license') }}</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="container footer-bottom">
                 <div class="text-muted" style="font-size: 12px;">© {{ date('Y') }} {{ config('app.name') }}.</div>
-                <div class="text-muted" style="font-size: 12px;">In loving memory of Majida — this project carries her name forward.</div>
+                <div class="text-muted" style="font-size: 12px;">{{ __('marketing.in_memory') }}</div>
             </div>
         </footer>
-
-        <style>
-            .footer-top { padding: 48px 48px 32px; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
-            .footer-bottom { border-top: 1px solid var(--color-divider); padding: 20px 48px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-            .footer-heading { color: rgba(var(--ink), 0.6); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
-            .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-            @media (max-width: 900px) {
-                .footer-top, .footer-bottom { padding-left: 24px; padding-right: 24px; }
-            }
-        </style>
     </body>
 </html>

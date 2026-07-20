@@ -16,23 +16,23 @@
     @endpush
 
     <div class="container page-head">
-        <div class="tag tag-accent" style="margin-bottom: 20px;">Documentation</div>
+        <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('docs.title') }}</div>
         <h1 style="max-width: 560px;">Get up and running with {{ config('app.name') }}</h1>
-        <p class="text-muted" style="font-size: 16px; max-width: 520px;">Everything you need to install the starter kit, understand the admin panel, and extend it for your own product.</p>
+        <p class="text-muted" style="font-size: 16px; max-width: 520px;">{{ __('docs.description') }}</p>
     </div>
 
     <div class="container" style="padding-bottom: 96px;">
         <div class="docs-grid">
             @foreach ([
-                ['Getting started', 'Clone the repository, install dependencies, run the migrations and seeders, and launch the app in under ten minutes.', 'README', 'https://github.com'],
-                ['Authentication', 'Breeze-style login, registration, email verification and password resets — all built on Livewire components.', 'Auth routes', url('/login')],
-                ['Roles & permissions', 'How the roles and permissions layer gates routes and Livewire components, and how to add your own abilities.', 'Admin dashboard', url('/dashboard')],
-                ['User management', 'Search, filter, create and edit accounts, and promote users to admin from the management screen.', 'Users', url('/dashboard')],
-                ['CRUD scaffolding', 'Generate Livewire tables with search, filters and pagination straight from your Eloquent models.', 'Posts & categories', url('/dashboard')],
-                ['Settings & activity log', 'Configure translatable site settings and maintenance mode, and audit every write in the activity log.', 'Settings', url('/dashboard')],
+                ['Getting started', __('docs.getting_started_body'), __('docs.readme'), 'https://github.com'],
+                ['Authentication', __('docs.authentication_body'), __('docs.auth_routes'), url('/login')],
+                ['Roles & permissions', __('docs.roles_permissions_body'), __('docs.admin_dashboard'), url('/dashboard')],
+                ['User management', __('docs.user_management_body'), __('docs.users'), url('/dashboard')],
+                ['CRUD scaffolding', __('docs.crud_scaffolding_body'), __('docs.posts_categories'), url('/dashboard')],
+                ['Settings & activity log', __('docs.settings_activity_log_body'), __('docs.settings'), url('/dashboard')],
             ] as [$title, $body, $linkLabel, $linkUrl])
                 <div class="docs-cell">
-                    <div class="card-kicker">Guide</div>
+                    <div class="card-kicker">{{ __('docs.guide') }}</div>
                     <h3>{{ $title }}</h3>
                     <p>{{ $body }}</p>
                     <a href="{{ $linkUrl }}">{{ $linkLabel }} →</a>

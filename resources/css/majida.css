@@ -205,6 +205,16 @@ a:hover { color: var(--color-accent-600); }
 .stat-band .stat-value { font-family: var(--font-heading); font-weight: 600; font-size: 44px; }
 .stat-band .stat-label { font-size: 13px; opacity: 0.65; margin-top: 6px; }
 
+/* — footer — */
+.footer-top { padding: 48px 48px 32px; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-bottom { border-top: 1px solid var(--color-divider); padding: 20px 48px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.footer-heading { color: rgba(var(--ink), 0.6); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+.footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+
+@media (max-width: 900px) {
+    .footer-top, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+}
+
 /* — helpers — */
 .text-muted { color: rgba(var(--ink), 0.6); }
 .container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }

@@ -15,17 +15,17 @@
     @endpush
 
     <div class="container page-head">
-        <div class="tag tag-accent" style="margin-bottom: 20px;">Blog</div>
+        <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('blog.title') }}</div>
         <h1 style="max-width: 560px;">News &amp; notes from {{ config('app.name') }}</h1>
-        <p class="text-muted" style="font-size: 16px; max-width: 520px;">Release notes, build logs and lessons from shipping an admin-heavy Laravel starter. New posts land here as the project grows.</p>
+        <p class="text-muted" style="font-size: 16px; max-width: 520px;">{{ __('blog.description') }}</p>
     </div>
 
     <div class="container" style="padding-bottom: 96px;">
         <div class="post-list">
             @foreach ([
-                ['Jul 2026', 'Introducing the Majida starter kit', 'A first look at what ships out of the box — Livewire admin, auth, roles, activity log and a matching marketing front end.'],
-                ['Jun 2026', 'Why we built the admin on Livewire', 'How full-page Livewire components keep the admin fast to build and easy to extend without a separate SPA.'],
-                ['Jun 2026', 'Roles & permissions, the pragmatic way', 'A walkthrough of the gating layer and how to add your own abilities at the route and component level.'],
+                ['Jul 2026', __('blog.post_1_title'), __('blog.post_1_excerpt')],
+                ['Jun 2026', __('blog.post_2_title'), __('blog.post_2_excerpt')],
+                ['Jun 2026', __('blog.post_3_title'), __('blog.post_3_excerpt')],
             ] as [$date, $title, $excerpt])
                 <article class="post-row">
                     <div class="post-date">{{ $date }}</div>
