@@ -9,6 +9,7 @@ return [
     'administrator' => 'Administrateur',
     'email' => 'E-mail',
     'joined' => 'Inscrit le',
+    'logged_in_as' => '[TODO] Logged in as',
     'make_admin' => 'Nommer administrateur',
     'member' => 'Membre',
     'member_note' => 'Note du membre',
@@ -20,5 +21,6 @@ return [
     'title' => 'Titre',
     'user' => 'Utilisateur',
     'users_description' => 'Description des utilisateurs',
+    'welcome' => '[TODO] Welcome',
     'welcome_back' => 'Bon retour, :name',
 ];

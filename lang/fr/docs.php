@@ -14,6 +14,8 @@ return [
     'features_body' => 'Un panneau d\'administration Livewire natif et un front-end assorti — connectés entre eux, prêts à être étendus.',
     'getting_started_body' => 'Texte de prise en main',
     'guide' => 'Guide',
+    'hero_description' => '[TODO] Hero description',
+    'hero_title' => '[TODO] Hero title',
     'people' => 'Gestion des utilisateurs',
     'people_body' => 'Recherchez, filtrez et gérez chaque compte, avec la promotion administrateur intégrée.',
     'posts_categories' => 'Articles et catégories',

@@ -14,6 +14,8 @@ return [
     'features_body' => 'A Livewire-native admin panel and a matching front end — wired together, ready to extend.',
     'getting_started_body' => 'Getting started body',
     'guide' => 'Guide',
+    'hero_description' => 'Hero description',
+    'hero_title' => 'Hero title',
     'people' => 'User management',
     'people_body' => 'Search, filter and manage every account, with admin promotion built in.',
     'posts_categories' => 'Posts categories',

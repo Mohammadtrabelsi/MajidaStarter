@@ -14,6 +14,8 @@ return [
     'features_body' => 'لوحة تحكم Livewire متكاملة وواجهة تسويقية متوافقة معها، مرتبطتان معًا وجاهزتان للتوسعة.',
     'getting_started_body' => 'نص البدء السريع',
     'guide' => 'دليل',
+    'hero_description' => '[TODO] Hero description',
+    'hero_title' => '[TODO] Hero title',
     'people' => 'إدارة المستخدمين',
     'people_body' => 'ابحث وصنّف وأدر كل حساب، مع إمكانية ترقية المستخدمين إلى مسؤولين مدمجة.',
     'posts_categories' => 'المنشورات والتصنيفات',

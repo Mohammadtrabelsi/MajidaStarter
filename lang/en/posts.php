@@ -7,6 +7,7 @@ return [
     'cancel' => 'Cancel',
     'category' => 'Category',
     'create_post' => 'Create post',
+    'delete' => 'Delete',
     'edit_post' => 'Edit post',
     'new_post' => 'New post',
     'no_posts_found' => 'No posts found',

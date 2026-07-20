@@ -7,6 +7,7 @@ return [
     'cancel' => 'إلغاء',
     'category' => 'الفئة',
     'create_post' => 'إنشاء منشور',
+    'delete' => '[TODO] Delete',
     'edit_post' => 'تعديل المنشور',
     'new_post' => 'منشور جديد',
     'no_posts_found' => 'لم يتم العثور على منشورات',
