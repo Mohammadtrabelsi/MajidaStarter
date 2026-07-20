@@ -15,15 +15,15 @@
 
     <div class="container hero-grid">
         <div>
-            <div class="tag tag-accent" style="margin-bottom: 20px;">Laravel + Livewire Starter Kit</div>
-            <h1 style="max-width: 480px;">Admin &amp; auth scaffolding, done right.</h1>
-            <p class="text-muted" style="font-size: 16px; max-width: 440px;">{{ config('app.name') }} ships a full Livewire admin — users, roles, activity logs, settings — and a marketing front end, so you skip the boilerplate and start on the product.</p>
+            <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('marketing.hero_tag') }}</div>
+            <h1 style="max-width: 480px;">{{ __('marketing.hero_title') }}</h1>
+            <p class="text-muted" style="font-size: 16px; max-width: 440px;">{{ __('marketing.hero_description', ['name' => config('app.name')]) }}</p>
             <div style="display: flex; gap: 12px; margin: 28px 0 32px; flex-wrap: wrap;">
                 <a href="{{ route('register') }}" class="btn btn-primary blueprint">
                     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                    Get Started
+                    {{ __('marketing.get_started') }}
                 </a>
-                <a href="https://github.com" class="btn">View on GitHub</a>
+                <a href="https://github.com" class="btn">{{ __('marketing.view_on_github') }}</a>
             </div>
         </div>
         <div class="blueprint" style="padding: 6px;">
@@ -37,18 +37,18 @@
 
     <div class="container" id="features" style="padding-bottom: 96px;">
         <div style="max-width: 560px; margin-bottom: 44px;">
-            <h2>Everything your app needs on day one</h2>
-            <p class="text-muted">A Livewire-native admin panel and a matching front end — wired together, ready to extend.</p>
+            <h2>{{ __('docs.features') }}</h2>
+            <p class="text-muted">{{ __('docs.features_body') }}</p>
         </div>
 
         <div class="feature-grid">
             @foreach ([
-                ['Security', 'Auth & roles', 'Breeze-style auth plus a full roles & permissions layer, gated at the route and component level.'],
-                ['People', 'User management', 'Search, filter and manage every account, with admin promotion built in.'],
-                ['Data', 'CRUD scaffolding', 'Livewire tables with search, filters and pagination generated straight from your models.'],
-                ['Trust', 'Activity log', 'Every write is recorded — who, what, when — searchable from the admin.'],
-                ['Config', 'Settings panel', 'Translatable site settings, support contact and maintenance mode, ready to wire up.'],
-                ['Speed', 'Ready to ship', 'A tested foundation so you can start on the product, not the plumbing.'],
+                ['Security', __('docs.security'), __('docs.security_body')],
+                ['People', __('docs.people'), __('docs.people_body')],
+                ['Data', __('docs.data'), __('docs.data_body')],
+                ['Trust', __('docs.trust'), __('docs.trust_body')],
+                ['Config', __('docs.config'), __('docs.config_body')],
+                ['Speed', __('docs.speed'), __('docs.speed_body')],
             ] as [$kicker, $title, $body])
                 <div class="feature-cell">
                     <div class="card-kicker">{{ $kicker }}</div>
