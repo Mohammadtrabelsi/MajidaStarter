@@ -17,7 +17,7 @@
 
     <div class="container page-head">
         <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('docs.title') }}</div>
-        <h1 style="max-width: 560px;">{{ __('docs.hero_title') }}</h1>
+        <h1 style="max-width: 560px;">{{ __('docs.hero_title', ['name' => config('app.name')]) }}</h1>
         <p class="text-muted" style="font-size: 16px; max-width: 520px;">{{ __('docs.hero_description') }}</p>
     </div>
 

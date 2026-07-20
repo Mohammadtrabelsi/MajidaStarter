@@ -19,7 +19,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
     public bool $maintenanceMode = false;
 
-    public array $locales = ['en' => 'English', 'ar' => 'العربية'];
+    public array $locales = ['en' => 'English', 'ar' => 'العربية', 'fr' => 'Français'];
 
     public function mount(SettingService $settings): void
     {

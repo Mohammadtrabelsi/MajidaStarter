@@ -7,7 +7,7 @@ return [
     'cancel' => 'Annuler',
     'category' => 'Catégorie',
     'create_post' => 'Créer un article',
-    'delete' => '[TODO] Delete',
+    'delete' => 'Supprimer',
     'edit_post' => 'Modifier l\'article',
     'new_post' => 'Nouvel article',
     'no_posts_found' => 'Aucun article trouvé',

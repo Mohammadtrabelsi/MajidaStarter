@@ -9,7 +9,7 @@ return [
     'administrator' => 'Administrator',
     'email' => 'Email',
     'joined' => 'Joined',
-    'logged_in_as' => 'Logged in as',
+    'logged_in_as' => "You're logged in as :email.",
     'make_admin' => 'Make admin',
     'member' => 'Member',
     'member_note' => 'Member note',
@@ -21,5 +21,5 @@ return [
     'title' => 'Title',
     'user' => 'User',
     'users_description' => 'Users description',
-    'welcome' => 'Welcome',
+    'welcome' => 'Welcome back, :name',
 ];

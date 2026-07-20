@@ -9,7 +9,7 @@ return [
     'administrator' => 'المدير',
     'email' => 'البريد الإلكتروني',
     'joined' => 'تاريخ الانضمام',
-    'logged_in_as' => '[TODO] Logged in as',
+    'logged_in_as' => 'أنت مسجّل الدخول باستخدام :email.',
     'make_admin' => 'تعيين كمسؤول',
     'member' => 'العضو',
     'member_note' => 'ملاحظة العضو',
@@ -21,6 +21,6 @@ return [
     'title' => 'العنوان',
     'user' => 'المستخدم',
     'users_description' => 'وصف المستخدمين',
-    'welcome' => '[TODO] Welcome',
+    'welcome' => 'مرحباً بعودتك، :name',
     'welcome_back' => 'مرحباً بعودتك، :name',
 ];
