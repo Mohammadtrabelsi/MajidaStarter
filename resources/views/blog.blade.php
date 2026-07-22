@@ -15,12 +15,12 @@
     @endpush
 
     <div class="container page-head">
-        <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('blog.title') }}</div>
-        <h1 style="max-width: 560px;">News &amp; notes from {{ config('app.name') }}</h1>
-        <p class="text-muted" style="font-size: 16px; max-width: 520px;">{{ __('blog.description') }}</p>
+        <div class="tag tag-accent ms-mb-20">{{ __('blog.title') }}</div>
+        <h1 class="ms-mw-560">News &amp; notes from {{ config('app.name') }}</h1>
+        <p class="text-muted ms-lead">{{ __('blog.description') }}</p>
     </div>
 
-    <div class="container" style="padding-bottom: 96px;">
+    <div class="container ms-pb-96">
         <div class="post-list">
             @foreach ([
                 ['Jul 2026', __('blog.post_1_title'), __('blog.post_1_excerpt')],

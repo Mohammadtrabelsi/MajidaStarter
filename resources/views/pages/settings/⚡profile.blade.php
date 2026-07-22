@@ -76,17 +76,17 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
 };
 ?>
 
-<div style="max-width: 720px;">
-    <div style="margin-bottom: 24px;">
+<div class="ms-mw-720">
+    <div class="ms-mb-24">
         <h2>{{ __('profile.profile') }}</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('profile.manage_account_info') }}</p>
+        <p class="text-muted ms-note">{{ __('profile.manage_account_info') }}</p>
     </div>
 
     {{-- Profile information --}}
-    <form wire:submit="updateProfile" class="card" style="display: flex; flex-direction: column; gap: 16px;">
+    <form wire:submit="updateProfile" class="card ms-stack-16">
         <div>
-            <h3 style="font-size: 18px;">Account information</h3>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('profile.update_name_email') }}</p>
+            <h3 class="ms-fs-18">Account information</h3>
+            <p class="text-muted ms-note">{{ __('profile.update_name_email') }}</p>
         </div>
 
         <div
@@ -94,34 +94,33 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             x-on:profile-updated.window="show = true; setTimeout(() => show = false, 3000)"
             x-show="show"
             x-transition
-            style="display: none;"
-            class="tag tag-accent"
+            class="tag tag-accent ms-hidden"
         >
-            <span style="display: block; padding: 8px 12px;">{{ __('profile.profile_updated') }}</span>
+            <span class="ms-block-pad">{{ __('profile.profile_updated') }}</span>
         </div>
 
-        <div class="field" style="margin-bottom: 0;">
+        <div class="field ms-mb-0">
             <x-input-label for="name" value="Full name" />
             <x-text-input wire:model="name" id="name" type="text" autocomplete="name" :error="$errors->first('name')" />
             <x-input-error :message="$errors->first('name')" />
         </div>
 
-        <div class="field" style="margin-bottom: 0;">
+        <div class="field ms-mb-0">
             <x-input-label for="email" value="Email" />
             <x-text-input wire:model="email" id="email" type="email" autocomplete="username" :error="$errors->first('email')" />
             <x-input-error :message="$errors->first('email')" />
 
             @if (! auth()->user()->hasVerifiedEmail())
-                <p class="text-muted" style="font-size: 12px; margin-top: 8px;">
+                <p class="text-muted ms-fs12-mt8">
                     Your email address is unverified.
-                    <button type="button" wire:click="resendVerification" class="btn-ghost" style="background: none; border: none; padding: 0; cursor: pointer; font: inherit; font-size: 12px; color: var(--color-accent);">
+                    <button type="button" wire:click="resendVerification" class="btn-ghost ms-linkbtn">
                         Resend verification email
                     </button>
                     <span
                         x-data="{ show: false }"
                         x-on:verification-sent.window="show = true; setTimeout(() => show = false, 3000)"
                         x-show="show"
-                        style="display: none; color: var(--color-accent-700);"
+                        class="ms-hidden-danger"
                     >— a new link has been sent.</span>
                 </p>
             @endif
@@ -133,10 +132,10 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     </form>
 
     {{-- Update password --}}
-    <form wire:submit="updatePassword" class="card" style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+    <form wire:submit="updatePassword" class="card ms-mt16-stack-16">
         <div>
-            <h3 style="font-size: 18px;">Update password</h3>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">Use a long, random password to keep your account secure.</p>
+            <h3 class="ms-fs-18">Update password</h3>
+            <p class="text-muted ms-note">Use a long, random password to keep your account secure.</p>
         </div>
 
         <div
@@ -144,25 +143,24 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             x-on:password-updated.window="show = true; setTimeout(() => show = false, 3000)"
             x-show="show"
             x-transition
-            style="display: none;"
-            class="tag tag-accent"
+            class="tag tag-accent ms-hidden"
         >
-            <span style="display: block; padding: 8px 12px;">{{ __('profile.password_updated') }}</span>
+            <span class="ms-block-pad">{{ __('profile.password_updated') }}</span>
         </div>
 
-        <div class="field" style="margin-bottom: 0;">
+        <div class="field ms-mb-0">
             <x-input-label for="current_password" value="Current password" />
             <x-text-input wire:model="current_password" id="current_password" type="password" autocomplete="current-password" :error="$errors->first('current_password')" />
             <x-input-error :message="$errors->first('current_password')" />
         </div>
 
-        <div class="field" style="margin-bottom: 0;">
+        <div class="field ms-mb-0">
             <x-input-label for="password" value="New password" />
             <x-text-input wire:model="password" id="password" type="password" autocomplete="new-password" :error="$errors->first('password')" />
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <div class="field" style="margin-bottom: 0;">
+        <div class="field ms-mb-0">
             <x-input-label for="password_confirmation" value="Confirm new password" />
             <x-text-input wire:model="password_confirmation" id="password_confirmation" type="password" autocomplete="new-password" />
         </div>
@@ -173,16 +171,16 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     </form>
 
     {{-- Delete account --}}
-    <div class="card" style="margin-top: 16px; border-color: var(--color-accent-700); display: flex; flex-direction: column; gap: 16px;">
+    <div class="card ms-mt16-danger-stack">
         <div>
-            <h3 style="font-size: 18px;">{{ __('profile.delete_account') }}</h3>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">
+            <h3 class="ms-fs-18">{{ __('profile.delete_account') }}</h3>
+            <p class="text-muted ms-note">
                 {{ __('profile.delete_account_description') }}
             </p>
         </div>
 
-        <form wire:submit="deleteAccount" style="display: flex; flex-direction: column; gap: 16px;">
-            <div class="field" style="margin-bottom: 0; max-width: 320px;">
+        <form wire:submit="deleteAccount" class="ms-stack-16">
+            <div class="field ms-mb0-mw320">
                 <x-input-label for="delete_password" value="Password" />
                 <x-text-input wire:model="delete_password" id="delete_password" type="password" autocomplete="current-password" :error="$errors->first('delete_password')" />
                 <x-input-error :message="$errors->first('delete_password')" />
@@ -191,8 +189,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             <div>
                 <button
                     type="submit"
-                    class="btn"
-                    style="border-color: var(--color-accent-700); color: var(--color-accent-700);"
+                    class="btn ms-outline-danger"
                     wire:confirm="Are you sure you want to permanently delete your account?"
                     wire:loading.attr="disabled"
                     wire:target="deleteAccount"

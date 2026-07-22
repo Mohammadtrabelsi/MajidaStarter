@@ -38,35 +38,35 @@
 
         <footer>
             <div class="container footer-top">
-                <div style="max-width: 280px;">
-                    <div class="brand" style="margin-bottom: 10px;">
+                <div class="ms-mw-280">
+                    <div class="brand ms-mb-10">
                         <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </div>
-                    <p class="text-muted" style="font-size: 13px;">A Laravel Livewire starter for admin-heavy products.</p>
+                    <p class="text-muted ms-fs-13">A Laravel Livewire starter for admin-heavy products.</p>
                 </div>
-                <div style="display: flex; gap: 56px; flex-wrap: wrap;">
+                <div class="ms-row-56">
                     <div>
                         <div class="footer-heading">Product</div>
                         <div class="footer-links">
-                            <a href="{{ url('/') }}#features" class="link" style="color: var(--color-text);">{{ __('marketing.features') }}</a>
-                            <a href="{{ route('docs') }}" class="link" style="color: var(--color-text);">{{ __('marketing.docs') }}</a>
-                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.changelog') }}</a>
+                            <a href="{{ url('/') }}#features" class="link ms-color-text">{{ __('marketing.features') }}</a>
+                            <a href="{{ route('docs') }}" class="link ms-color-text">{{ __('marketing.docs') }}</a>
+                            <a href="#" class="link ms-color-text">{{ __('marketing.changelog') }}</a>
                         </div>
                     </div>
                     <div>
                         <div class="footer-heading">Company</div>
                         <div class="footer-links">
-                            <a href="{{ route('blog') }}" class="link" style="color: var(--color-text);">{{ __('marketing.blog') }}</a>
-                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.github') }}</a>
-                            <a href="#" class="link" style="color: var(--color-text);">{{ __('marketing.license') }}</a>
+                            <a href="{{ route('blog') }}" class="link ms-color-text">{{ __('marketing.blog') }}</a>
+                            <a href="#" class="link ms-color-text">{{ __('marketing.github') }}</a>
+                            <a href="#" class="link ms-color-text">{{ __('marketing.license') }}</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="container footer-bottom">
-                <div class="text-muted" style="font-size: 12px;">© {{ date('Y') }} {{ config('app.name') }}.</div>
-                <div class="text-muted" style="font-size: 12px;">{{ __('marketing.in_memory') }}</div>
+                <div class="text-muted ms-fs-12">© {{ date('Y') }} {{ config('app.name') }}.</div>
+                <div class="text-muted ms-fs-12">{{ __('marketing.in_memory') }}</div>
             </div>
         </footer>
     </body>

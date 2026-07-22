@@ -76,28 +76,28 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
 };
 ?>
 
-<div style="max-width: 720px;">
-    <div style="margin-bottom: 24px;">
-        <a href="{{ route('admin.posts.index') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; {{ __('posts.back_to_posts') }}</a>
-        <h2 style="margin-top: 8px;">{{ __('posts.new_post') }}</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('posts.write_a_new_post') }}</p>
+<div class="ms-mw-720">
+    <div class="ms-mb-24">
+        <a href="{{ route('admin.posts.index') }}" wire:navigate class="text-muted ms-fs-13">&larr; {{ __('posts.back_to_posts') }}</a>
+        <h2 class="ms-mt-8">{{ __('posts.new_post') }}</h2>
+        <p class="text-muted ms-note">{{ __('posts.write_a_new_post') }}</p>
     </div>
 
-    <form wire:submit="save" class="card" style="display: flex; flex-direction: column; gap: 24px;">
+    <form wire:submit="save" class="card ms-stack-24">
         <div>
-            <div style="display: flex; gap: 2px; border-bottom: 1px solid var(--color-divider); margin-bottom: 18px;">
+            <div class="ms-tabs">
                 @foreach ($locales as $code => $label)
                     <button
                         type="button"
                         wire:click="$set('activeLocale', '{{ $code }}')"
-                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(var(--ink),.6);' }}"
+                        @class(['ms-locale-tab', 'active' => $activeLocale === $code])
                     >{{ $label }}</button>
                 @endforeach
             </div>
 
             @foreach ($locales as $code => $label)
-                <div style="flex-direction: column; gap: 16px; display: {{ $activeLocale === $code ? 'flex' : 'none' }};">
-                    <div class="field" style="margin-bottom: 0;">
+                <div @class(['ms-locale-panel', 'active' => $activeLocale === $code])>
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'title-'.$code" :value="'Title ('.$label.')'" />
                         <x-text-input
                             wire:model="title.{{ $code }}"
@@ -109,7 +109,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
                         <x-input-error :message="$errors->first('title.'.$code)" />
                     </div>
 
-                    <div class="field" style="margin-bottom: 0;">
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'excerpt-'.$code" :value="'Excerpt ('.$label.')'" />
                         <textarea
                             wire:model="excerpt.{{ $code }}"
@@ -120,7 +120,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
                         ></textarea>
                     </div>
 
-                    <div class="field" style="margin-bottom: 0;">
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'body-'.$code" :value="'Body ('.$label.')'" />
                         <textarea
                             wire:model="body.{{ $code }}"
@@ -135,14 +135,14 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
             @endforeach
         </div>
 
-        <div style="border-top: 1px solid var(--color-divider); padding-top: 20px; display: flex; flex-direction: column; gap: 16px;">
-            <div class="field" style="margin-bottom: 0;">
+        <div class="ms-section-top-stack">
+            <div class="field ms-mb-0">
                 <x-input-label for="slug" value="Slug" />
                 <x-text-input wire:model="slug" id="slug" type="text" placeholder="Generated from title if left blank" :error="$errors->first('slug')" />
                 <x-input-error :message="$errors->first('slug')" />
             </div>
 
-            <div class="field" style="margin-bottom: 0;">
+            <div class="field ms-mb-0">
                 <x-input-label for="categoryId" value="Category" />
                 <select wire:model="categoryId" id="categoryId" class="input">
                     <option value="">{{ __('posts.select_category') }}</option>
@@ -153,7 +153,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
                 <x-input-error :message="$errors->first('categoryId')" />
             </div>
 
-            <div class="field" style="margin-bottom: 0;">
+            <div class="field ms-mb-0">
                 <x-input-label for="status" value="Status" />
                 <select wire:model="status" id="status" class="input">
                     @foreach (\App\Models\Post::statuses() as $value => $label)
@@ -164,7 +164,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
             </div>
         </div>
 
-        <div style="display: flex; gap: 10px;">
+        <div class="ms-row-10">
             <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">{{ __('posts.create_post') }}</button>
             <a href="{{ route('admin.posts.index') }}" wire:navigate class="btn">{{ __('posts.cancel') }}</a>
         </div>

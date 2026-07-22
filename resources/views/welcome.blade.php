@@ -15,10 +15,10 @@
 
     <div class="container hero-grid">
         <div>
-            <div class="tag tag-accent" style="margin-bottom: 20px;">{{ __('marketing.hero_tag') }}</div>
-            <h1 style="max-width: 480px;">{{ __('marketing.hero_title') }}</h1>
-            <p class="text-muted" style="font-size: 16px; max-width: 440px;">{{ __('marketing.hero_description', ['name' => config('app.name')]) }}</p>
-            <div style="display: flex; gap: 12px; margin: 28px 0 32px; flex-wrap: wrap;">
+            <div class="tag tag-accent ms-mb-20">{{ __('marketing.hero_tag') }}</div>
+            <h1 class="ms-mw-480">{{ __('marketing.hero_title') }}</h1>
+            <p class="text-muted ms-lead-440">{{ __('marketing.hero_description', ['name' => config('app.name')]) }}</p>
+            <div class="ms-cta-row">
                 <a href="{{ route('register') }}" class="btn btn-primary blueprint">
                     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
                     {{ __('marketing.get_started') }}
@@ -26,17 +26,17 @@
                 <a href="https://github.com" class="btn">{{ __('marketing.view_on_github') }}</a>
             </div>
         </div>
-        <div class="blueprint" style="padding: 6px;">
+        <div class="blueprint ms-p-6">
             <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <div class="hatch" style="position: relative; overflow: hidden; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center;">
-                <div style="position: absolute; inset: 0; background: var(--color-accent); mix-blend-mode: color;"></div>
-                <span style="font-family: monospace; font-size: 12px; background: var(--color-bg); padding: 4px 10px; border: 1px solid var(--color-divider);">dashboard preview</span>
+            <div class="hatch ms-figure">
+                <div class="ms-tint"></div>
+                <span class="ms-code-chip">dashboard preview</span>
             </div>
         </div>
     </div>
 
-    <div class="container" id="features" style="padding-bottom: 96px;">
-        <div style="max-width: 560px; margin-bottom: 44px;">
+    <div class="container ms-pb-96" id="features">
+        <div class="ms-mw-560-mb44">
             <h2>{{ __('docs.features') }}</h2>
             <p class="text-muted">{{ __('docs.features_body') }}</p>
         </div>

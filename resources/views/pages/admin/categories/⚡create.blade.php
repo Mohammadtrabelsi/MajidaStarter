@@ -55,28 +55,28 @@ new #[Layout('layouts::app')] #[Title('New category')] class extends Component
 };
 ?>
 
-<div style="max-width: 640px;">
-    <div style="margin-bottom: 24px;">
-        <a href="{{ route('admin.categories.index') }}" wire:navigate class="text-muted" style="font-size: 13px;">&larr; Back to categories</a>
-        <h2 style="margin-top: 8px;">{{ __('categories.new_category') }}</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('categories.create_a_category_to_group_related_posts') }}</p>
+<div class="ms-mw-640">
+    <div class="ms-mb-24">
+        <a href="{{ route('admin.categories.index') }}" wire:navigate class="text-muted ms-fs-13">&larr; Back to categories</a>
+        <h2 class="ms-mt-8">{{ __('categories.new_category') }}</h2>
+        <p class="text-muted ms-note">{{ __('categories.create_a_category_to_group_related_posts') }}</p>
     </div>
 
-    <form wire:submit="save" class="card" style="display: flex; flex-direction: column; gap: 24px;">
+    <form wire:submit="save" class="card ms-stack-24">
         <div>
-            <div style="display: flex; gap: 2px; border-bottom: 1px solid var(--color-divider); margin-bottom: 18px;">
+            <div class="ms-tabs">
                 @foreach ($locales as $code => $label)
                     <button
                         type="button"
                         wire:click="$set('activeLocale', '{{ $code }}')"
-                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(var(--ink),.6);' }}"
+                        @class(['ms-locale-tab', 'active' => $activeLocale === $code])
                     >{{ $label }}</button>
                 @endforeach
             </div>
 
             @foreach ($locales as $code => $label)
-                <div style="flex-direction: column; gap: 16px; display: {{ $activeLocale === $code ? 'flex' : 'none' }};">
-                    <div class="field" style="margin-bottom: 0;">
+                <div @class(['ms-locale-panel', 'active' => $activeLocale === $code])>
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'name-'.$code" :value="'Name ('.$label.')'" />
                         <x-text-input
                             wire:model="name.{{ $code }}"
@@ -88,7 +88,7 @@ new #[Layout('layouts::app')] #[Title('New category')] class extends Component
                         <x-input-error :message="$errors->first('name.'.$code)" />
                     </div>
 
-                    <div class="field" style="margin-bottom: 0;">
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'description-'.$code" :value="'Description ('.$label.')'" />
                         <textarea
                             wire:model="description.{{ $code }}"
@@ -102,21 +102,21 @@ new #[Layout('layouts::app')] #[Title('New category')] class extends Component
             @endforeach
         </div>
 
-        <div class="field" style="margin-bottom: 0; border-top: 1px solid var(--color-divider); padding-top: 20px;">
+        <div class="field ms-section-top">
             <x-input-label for="slug" value="Slug" />
             <x-text-input wire:model="slug" id="slug" type="text" placeholder="Generated from name if left blank" :error="$errors->first('slug')" />
             <x-input-error :message="$errors->first('slug')" />
         </div>
 
-        <label style="display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--color-divider); padding: 14px; cursor: pointer;">
-            <input wire:model="isActive" type="checkbox" class="checkbox" style="margin-top: 2px;">
+        <label class="ms-option-card">
+            <input wire:model="isActive" type="checkbox" class="checkbox ms-mt-2">
             <span>
-                <span style="display: block; font-size: 14px; font-weight: 500;">{{ __('categories.active') }}</span>
-                <span class="text-muted" style="display: block; font-size: 12px;">{{ __('categories.inactive_categories_stay_hidden_from_public_listings') }}</span>
+                <span class="ms-block-strong">{{ __('categories.active') }}</span>
+                <span class="text-muted ms-block-fs12">{{ __('categories.inactive_categories_stay_hidden_from_public_listings') }}</span>
             </span>
         </label>
 
-        <div style="display: flex; gap: 10px;">
+        <div class="ms-row-10">
             <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">{{ __('categories.create_category') }}</button>
             <a href="{{ route('admin.categories.index') }}" wire:navigate class="btn">{{ __('categories.cancel') }}</a>
         </div>
