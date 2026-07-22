@@ -18,7 +18,7 @@
         @livewireStyles
     </head>
     <body class="antialiased">
-        <div style="position: absolute; top: 18px; inset-inline-end: 20px; z-index: 10; display: flex; gap: 8px;">
+        <div class="ms-corner-actions">
             @include('partials.locale-switcher')
             @include('partials.theme-toggle')
         </div>
@@ -26,15 +26,15 @@
             <div class="auth-hero hatch">
                 <div class="auth-hero-tint"></div>
                 <div class="auth-hero-body">
-                    <span class="brand-mark" style="background: var(--color-bg); color: var(--color-accent-900); margin-bottom: 18px;">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
-                    <h2 style="color: var(--color-bg);">{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
-                    <p style="opacity: 0.85; color: var(--color-bg); margin: 0;">{{ __('app.auth_scaffolding') }}</p>
+                    <span class="brand-mark ms-brand-invert">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                    <h2 class="ms-color-bg">{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
+                    <p class="ms-color-bg-muted">{{ __('app.auth_scaffolding') }}</p>
                 </div>
             </div>
 
             <div class="auth-form-side">
-                <div style="width: 100%; max-width: 360px;">
-                    <a href="{{ url('/') }}" wire:navigate class="brand" style="margin-bottom: 36px;">
+                <div class="ms-mw-360-full">
+                    <a href="{{ url('/') }}" wire:navigate class="brand ms-mb-36">
                         <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </a>

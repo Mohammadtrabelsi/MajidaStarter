@@ -33,14 +33,14 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
 
 <div>
     <h1>{{ __('forgot-password.forgot_your_password') }}</h1>
-    <p class="text-muted" style="margin-bottom: 28px;">{{ __('forgot-password.no_worries') }} {{ __('forgot-password.we_ll_send_you_a_link') }}.</p>
+    <p class="text-muted ms-mb-28">{{ __('forgot-password.no_worries') }} {{ __('forgot-password.we_ll_send_you_a_link') }}.</p>
 
     @if ($status)
-        <div class="tag tag-accent" style="display: block; margin-bottom: 20px; padding: 8px 12px;">{{ $status }}</div>
+        <div class="tag tag-accent ms-notice-20">{{ $status }}</div>
     @endif
 
     <form wire:submit="sendResetLink">
-        <div class="field" style="margin-bottom: 22px;">
+        <div class="field ms-mb-22">
             <x-input-label for="email" value="Email" />
             <x-text-input
                 wire:model="email"
@@ -60,7 +60,7 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
         </x-primary-button>
     </form>
 
-    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
+    <p class="text-muted ms-form-foot">
         {{ __('forgot-password.remembered_your_password') }}
         <a href="{{ route('login') }}" wire:navigate>{{ __('forgot-password.back_to_sign_in') }}</a>
     </p>

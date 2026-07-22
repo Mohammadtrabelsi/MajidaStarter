@@ -58,74 +58,74 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 ?>
 
 <div x-data="{ expanded: null }">
-    <div style="margin-bottom: 24px;">
+    <div class="ms-mb-24">
         <h2>{{ __('activity_log.title') }}</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('activity_log.description') }}</p>
+        <p class="text-muted ms-note">{{ __('activity_log.description') }}</p>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
-        <div style="display: inline-flex; border: 1px solid var(--color-divider); flex-wrap: wrap;">
-            <div wire:click="$set('logName', '')" style="padding: 7px 12px; font-size: 12px; cursor: pointer; {{ $logName === '' ? 'background: var(--color-accent); color: var(--color-bg);' : '' }}">
+    <div class="ms-row-12-mb16">
+        <div class="ms-inline-frame">
+            <div wire:click="$set('logName', '')" @class(['ms-logfilter', 'active' => $logName === ''])>
                 All
             </div>
             @foreach ($logNames as $name)
-                <div wire:click="$set('logName', '{{ $name }}')" style="padding: 7px 12px; font-size: 12px; cursor: pointer; text-transform: capitalize; {{ $logName === $name ? 'background: var(--color-accent); color: var(--color-bg);' : '' }}">
+                <div wire:click="$set('logName', '{{ $name }}')" @class(['ms-logfilter ms-capitalize', 'active' => $logName === $name])>
                     {{ $name }}
                 </div>
             @endforeach
         </div>
 
-        <div style="position: relative; margin-left: auto; flex: 1; min-width: 220px; max-width: 300px;">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
-            <input wire:model.live.debounce.300ms="search" class="input" placeholder="Search description…" style="padding-left: 32px;">
+        <div class="ms-search-field-right">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="Search description…">
         </div>
     </div>
 
-    <div class="card" style="padding: 0;">
+    <div class="card ms-p-0">
         @forelse ($activities as $activity)
-            <div wire:key="activity-{{ $activity->id }}" style="padding: 16px 20px; border-bottom: 1px solid rgba(var(--ink), 0.08);">
+            <div wire:key="activity-{{ $activity->id }}" class="ms-list-row">
                 <button
                     type="button"
                     @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
-                    style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 16px; background: transparent; border: none; cursor: pointer; text-align: left; font: inherit; color: inherit;"
+                    class="ms-disclosure-btn"
                 >
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div class="ms-row-start-12">
                         <span class="avatar">{{ $activity->causer ? Str::of($activity->causer->name)->substr(0, 2)->upper() : '—' }}</span>
                         <div>
-                            <div style="font-size: 14px;">
-                                <span style="font-weight: 500;">{{ $activity->causer?->name ?? 'System' }}</span>
+                            <div class="ms-fs-14">
+                                <span class="ms-fw-500">{{ $activity->causer?->name ?? 'System' }}</span>
                                 <span class="text-muted">{{ $activity->description }}</span>
                                 @if ($activity->subject)
                                     <span class="text-muted">— {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
                                 @endif
                             </div>
-                            <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+                            <div class="text-muted ms-fs-11-mt2">
                                 {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format('M j, Y H:i') }}
                                 @if ($activity->log_name)
-                                    · <span style="text-transform: capitalize;">{{ $activity->log_name }}</span>
+                                    · <span class="ms-capitalize">{{ $activity->log_name }}</span>
                                 @endif
                             </div>
                         </div>
                     </div>
 
                     @if ($activity->properties->isNotEmpty())
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" style="margin-top: 4px; flex: none; transition: transform 0.15s;" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" class="ms-chevron" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                     @endif
                 </button>
 
                 @if ($activity->properties->isNotEmpty())
-                    <div x-show="expanded === {{ $activity->id }}" x-collapse style="display: none;" >
-                        <div class="prop-grid" style="margin-top: 12px; padding: 14px; background: var(--color-surface); border: 1px solid var(--color-divider); font-size: 12px;">
+                    <div x-show="expanded === {{ $activity->id }}" x-collapse class="ms-hidden" >
+                        <div class="prop-grid ms-inset-note">
                             @if ($activity->properties->has('old'))
                                 <div>
                                     <div class="card-kicker">Before</div>
-                                    <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 12px;">{{ json_encode($activity->properties->get('old'), JSON_PRETTY_PRINT) }}</pre>
+                                    <pre class="ms-pre">{{ json_encode($activity->properties->get('old'), JSON_PRETTY_PRINT) }}</pre>
                                 </div>
                             @endif
                             @if ($activity->properties->has('attributes'))
                                 <div>
                                     <div class="card-kicker">{{ __('activity_log.attributes') }}</div>
-                                    <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 12px;">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
+                                    <pre class="ms-pre">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
                                 </div>
                             @endif
                         </div>
@@ -133,10 +133,10 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                 @endif
             </div>
         @empty
-            <div class="text-muted" style="padding: 40px; text-align: center;">{{ __('activity_log.no_activity') }}</div>
+            <div class="text-muted ms-empty-40">{{ __('activity_log.no_activity') }}</div>
         @endforelse
 
-        <div style="padding: 12px 16px; border-top: 1px solid var(--color-divider);">
+        <div class="ms-cell-top">
             {{ $activities->links() }}
         </div>
     </div>

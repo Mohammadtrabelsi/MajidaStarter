@@ -22,13 +22,12 @@
             <div
                 x-show="sidebarOpen"
                 x-transition.opacity
-                class="shell-overlay"
+                class="shell-overlay ms-hidden"
                 @click="sidebarOpen = false"
-                style="display: none;"
             ></div>
 
             <aside class="shell-sidebar" :class="sidebarOpen && 'open'">
-                <a href="{{ route('dashboard') }}" wire:navigate class="brand" style="padding: 0 20px 22px;">
+                <a href="{{ route('dashboard') }}" wire:navigate class="brand ms-pad-x20-b22">
                     <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                     <span class="brand-name">{{ config('app.name') }}</span>
                 </a>
@@ -79,9 +78,9 @@
 
                 <div class="side-user">
                     <span class="avatar">{{ Str::of(auth()->user()->name)->explode(' ')->map(fn ($p) => $p[0] ?? '')->take(2)->implode('') }}</span>
-                    <div style="min-width: 0;">
-                        <div style="font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ auth()->user()->name }}</div>
-                        <div class="text-muted" style="font-size: 11px;">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Member' }}</div>
+                    <div class="ms-minw-0">
+                        <div class="ms-ellipsis-strong">{{ auth()->user()->name }}</div>
+                        <div class="text-muted ms-fs-11">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Member' }}</div>
                     </div>
                 </div>
             </aside>
@@ -92,15 +91,15 @@
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
 
-                    <div style="flex: 1;"></div>
+                    <div class="ms-flex-1"></div>
 
                     @include('partials.locale-switcher')
                     @include('partials.theme-toggle')
 
-                    <div style="display: flex; align-items: center; gap: 12px; position: relative;" x-data="{ open: false }">
-                        <button type="button" @click="open = !open" @click.outside="open = false" style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font: inherit;">
+                    <div class="ms-row-12-rel" x-data="{ open: false }">
+                        <button type="button" @click="open = !open" @click.outside="open = false" class="ms-iconbtn-plain">
                             <span class="avatar">{{ Str::of(auth()->user()->name)->explode(' ')->map(fn ($p) => $p[0] ?? '')->take(2)->implode('') }}</span>
-                            <span style="font-size: 13px; font-weight: 500;" class="hidden sm:inline">{{ auth()->user()->name }}</span>
+                            <span class="hidden sm:inline ms-strong-13">{{ auth()->user()->name }}</span>
                             @if (auth()->user()->isAdmin())
                                 <span class="tag tag-accent hidden sm:inline-flex">{{ __('app.admin') }}</span>
                             @endif
@@ -109,19 +108,18 @@
                         <div
                             x-show="open"
                             x-transition
-                            class="blueprint"
-                            style="display: none; position: absolute; right: 0; top: 44px; z-index: 50; width: 210px; background: var(--color-bg);"
+                            class="blueprint ms-menu-abs"
                         >
-                            <div class="text-muted" style="padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--color-divider); overflow: hidden; text-overflow: ellipsis;">
+                            <div class="text-muted ms-menu-head">
                                 {{ auth()->user()->email }}
                             </div>
-                            <a href="{{ route('profile.edit') }}" wire:navigate style="display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 14px; text-decoration: none; font-size: 13px; color: var(--color-text);">
+                            <a href="{{ route('profile.edit') }}" wire:navigate class="ms-menu-link">
                                 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 20c0-3.3 3-5 7-5s7 1.7 7 5"></path></svg>
                                 {{ __('app.profile') }}
                             </a>
-                            <form method="POST" action="{{ route('logout') }}" style="border-top: 1px solid var(--color-divider);">
+                            <form method="POST" action="{{ route('logout') }}" class="ms-border-top">
                                 @csrf
-                                <button type="submit" style="display: flex; width: 100%; align-items: center; gap: 8px; padding: 10px 14px; background: transparent; border: none; cursor: pointer; text-align: left; font: inherit; font-size: 13px; color: var(--color-accent-700);">
+                                <button type="submit" class="ms-menu-btn-danger">
                                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                     {{ __('app.logout') }}
                                 </button>

@@ -54,10 +54,10 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
 
 <div>
     <h1>Welcome back</h1>
-    <p class="text-muted" style="margin-bottom: 28px;">{{ __('login.sign_in_to_continue') }}</p>
+    <p class="text-muted ms-mb-28">{{ __('login.sign_in_to_continue') }}</p>
 
     @if (session('status'))
-        <div class="tag tag-accent" style="display: block; margin-bottom: 16px; padding: 8px 12px;">{{ session('status') }}</div>
+        <div class="tag tag-accent ms-notice">{{ session('status') }}</div>
     @endif
 
     <form wire:submit="login">
@@ -75,10 +75,10 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
             <x-input-error :message="$errors->first('email')" />
         </div>
 
-        <div class="field" style="margin-bottom: 12px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <label for="password" class="ds-label" style="margin-bottom: 0;">{{ __('login.password') }}</label>
-                <a href="{{ route('password.request') }}" wire:navigate style="font-size: 12px;">{{ __('login.forgot_password') }}</a>
+        <div class="field ms-mb-12">
+            <div class="ms-row-between">
+                <label for="password" class="ds-label ms-mb-0">{{ __('login.password') }}</label>
+                <a href="{{ route('password.request') }}" wire:navigate class="ms-fs-12">{{ __('login.forgot_password') }}</a>
             </div>
             <x-text-input
                 wire:model="password"
@@ -86,13 +86,13 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
                 type="password"
                 placeholder="••••••••"
                 autocomplete="current-password"
-                style="margin-top: 5px;"
+                class="ms-mt-5"
                 :error="$errors->first('password')"
             />
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 22px; cursor: pointer;">
+        <label class="ms-check-label-22">
             <input wire:model="remember" type="checkbox" class="checkbox"> {{ __('login.remember_me') }}
         </label>
 
@@ -102,7 +102,7 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
         </x-primary-button>
     </form>
 
-    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
+    <p class="text-muted ms-form-foot">
         {{ __('login.no_account') }}
         <a href="{{ route('register') }}" wire:navigate>{{ __('login.create_one') }}</a>
     </p>

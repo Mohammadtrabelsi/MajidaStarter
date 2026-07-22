@@ -39,7 +39,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
 
 <div>
     <h1>{{ __('register.create_account') }}</h1>
-    <p class="text-muted" style="margin-bottom: 28px;">{{ __('register.start_building') }} {{ config('app.name') }} {{ __('register.today') }}.</p>
+    <p class="text-muted ms-mb-28">{{ __('register.start_building') }} {{ config('app.name') }} {{ __('register.today') }}.</p>
 
     <form wire:submit="register">
         <div class="field">
@@ -82,7 +82,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
             <x-input-error :message="$errors->first('password')" />
         </div>
 
-        <div class="field" style="margin-bottom: 22px;">
+        <div class="field ms-mb-22">
             <x-input-label for="password_confirmation" value="Confirm password" />
             <x-text-input
                 wire:model="password_confirmation"
@@ -99,7 +99,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
         </x-primary-button>
     </form>
 
-    <p class="text-muted" style="text-align: center; font-size: 13px; margin-top: 22px;">
+    <p class="text-muted ms-form-foot">
         {{ __('register.already_have_account') }}
         <a href="{{ route('login') }}" wire:navigate>{{ __('register.sign_in') }}</a>
     </p>

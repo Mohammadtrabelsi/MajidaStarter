@@ -59,10 +59,10 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 };
 ?>
 
-<div style="max-width: 720px;">
-    <div style="margin-bottom: 24px;">
+<div class="ms-mw-720">
+    <div class="ms-mb-24">
         <h2>{{ __('settings.title') }}</h2>
-        <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('settings.description') }}</p>
+        <p class="text-muted ms-note">{{ __('settings.description') }}</p>
     </div>
 
     <div
@@ -70,20 +70,19 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         x-on:settings-saved.window="show = true; setTimeout(() => show = false, 3000)"
         x-show="show"
         x-transition
-        style="display: none;"
-        class="tag tag-accent"
+        class="tag tag-accent ms-hidden"
     >
-        <span style="display: block; padding: 8px 12px;">{{ __('settings.saved') }}</span>
+        <span class="ms-block-pad">{{ __('settings.saved') }}</span>
     </div>
 
-    <form wire:submit="save" class="card" style="margin-top: 16px; display: flex; flex-direction: column; gap: 24px;">
+    <form wire:submit="save" class="card ms-mt16-stack-24">
         <div>
-            <div style="display: flex; gap: 2px; border-bottom: 1px solid var(--color-divider); margin-bottom: 18px;">
+            <div class="ms-tabs">
                 @foreach ($locales as $code => $label)
                     <button
                         type="button"
                         wire:click="$set('activeLocale', '{{ $code }}')"
-                        style="padding: 8px 14px; font-size: 13px; font-weight: 500; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; {{ $activeLocale === $code ? 'color: var(--color-accent-800); border-bottom-color: var(--color-accent);' : 'color: rgba(var(--ink),.6);' }}"
+                        @class(['ms-locale-tab', 'active' => $activeLocale === $code])
                     >
                         {{ $label }}
                     </button>
@@ -91,8 +90,8 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
             </div>
 
             @foreach ($locales as $code => $label)
-                <div style="flex-direction: column; gap: 16px; display: {{ $activeLocale === $code ? 'flex' : 'none' }};">
-                    <div class="field" style="margin-bottom: 0;">
+                <div @class(['ms-locale-panel', 'active' => $activeLocale === $code])>
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'siteName-'.$code" :value="'Site name ('.$label.')'" />
                         <x-text-input
                             wire:model="siteName.{{ $code }}"
@@ -102,7 +101,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                         />
                     </div>
 
-                    <div class="field" style="margin-bottom: 0;">
+                    <div class="field ms-mb-0">
                         <x-input-label :for="'siteDescription-'.$code" :value="'Site description ('.$label.')'" />
                         <textarea
                             wire:model="siteDescription.{{ $code }}"
@@ -116,7 +115,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
             @endforeach
         </div>
 
-        <div class="field" style="margin-bottom: 0; border-top: 1px solid var(--color-divider); padding-top: 20px;">
+        <div class="field ms-section-top">
             <x-input-label for="supportEmail" value="Support email" />
             <x-text-input
                 wire:model="supportEmail"
@@ -128,11 +127,11 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
             <x-input-error :message="$errors->first('supportEmail')" />
         </div>
 
-        <label style="display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--color-divider); padding: 14px; cursor: pointer;">
-            <input wire:model="maintenanceMode" type="checkbox" class="checkbox" style="margin-top: 2px;">
+        <label class="ms-option-card">
+            <input wire:model="maintenanceMode" type="checkbox" class="checkbox ms-mt-2">
             <span>
-                <span style="display: block; font-size: 14px; font-weight: 500;">{{ __('settings.maintenance_mode') }}</span>
-                <span class="text-muted" style="display: block; font-size: 12px;">{{ __('settings.maintenance_description') }}</span>
+                <span class="ms-block-strong">{{ __('settings.maintenance_mode') }}</span>
+                <span class="text-muted ms-block-fs12">{{ __('settings.maintenance_description') }}</span>
             </span>
         </label>
 

@@ -30,17 +30,17 @@ new #[Layout('layouts::guest')] #[Title('Verify email')] class extends Component
 
 <div>
     <h1>{{ __('verify-email.verify_your_email') }}</h1>
-    <p class="text-muted" style="margin-bottom: 24px;">
+    <p class="text-muted ms-mb-24">
         {{ __('verify-email.thanks_for_signing_up') }} {{ __('verify-email.before_getting_started') }} <strong>{{ auth()->user()->email }}</strong>. {{ __('verify-email.did_not_receive') }} {{ __('verify-email.will_gladly_send') }}
     </p>
 
     @if (session('status') === 'verification-link-sent')
-        <div class="tag tag-accent" style="display: block; margin-bottom: 16px; padding: 8px 12px;">
+        <div class="tag tag-accent ms-notice">
             {{ __('verify-email.verification_link_sent') }}
         </div>
     @endif
 
-    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div class="ms-row-12-center-wrap">
         <button
             type="button"
             wire:click="sendVerification"

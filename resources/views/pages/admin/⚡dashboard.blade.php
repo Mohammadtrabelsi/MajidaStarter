@@ -66,10 +66,10 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
 ?>
 
 <div>
-    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+    <div class="ms-page-head">
         <div>
             <h2>Users</h2>
-            <p class="text-muted" style="font-size: 13px; margin: 0;">{{ __('dashboard.users_description') }}</p>
+            <p class="text-muted ms-note">{{ __('dashboard.users_description') }}</p>
         </div>
         @can('manage users')
             <a href="{{ route('admin.users.create') }}" wire:navigate class="btn btn-primary">
@@ -84,8 +84,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
             x-data="{ show: true }"
             x-show="show"
             x-init="setTimeout(() => show = false, 3000)"
-            class="tag tag-accent"
-            style="display: block; margin-bottom: 16px; padding: 8px 12px;"
+            class="tag tag-accent ms-notice"
         >{{ session('status') }}</div>
     @endif
 
@@ -104,17 +103,17 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     </div>
 
     @error('toggle')
-        <div class="tag tag-outline" style="display: block; margin-bottom: 16px; padding: 8px 12px;">{{ $message }}</div>
+        <div class="tag tag-outline ms-notice">{{ $message }}</div>
     @enderror
 
-    <div style="display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; flex-wrap: wrap;">
-        <div style="position: relative; flex: 1; min-width: 220px; max-width: 320px;">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
-            <input wire:model.live.debounce.300ms="search" class="input" placeholder="Search by name or email…" style="padding-left: 32px;">
+    <div class="ms-toolbar">
+        <div class="ms-search-field">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="Search by name or email…">
         </div>
     </div>
 
-    <div class="card" style="padding: 0;">
+    <div class="card ms-p-0">
         <div class="table-wrap">
             <table class="table">
                 <thead>
@@ -122,51 +121,48 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                         <th>{{ __('dashboard.user') }}</th>
                         <th>{{ __('dashboard.joined') }}</th>
                         <th>{{ __('dashboard.role') }}</th>
-                        <th style="text-align: right;">{{ __('dashboard.actions') }}</th>
+                        <th class="ms-text-right">{{ __('dashboard.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($this->users as $user)
                         <tr wire:key="user-{{ $user->id }}">
                             <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="ms-row-10-center">
                                     <span class="avatar">{{ Str::of($user->name)->substr(0, 2)->upper() }}</span>
-                                    <div style="min-width: 0;">
-                                        <div style="font-weight: 500;">{{ $user->name }}</div>
-                                        <div class="text-muted" style="font-size: 12px;">{{ $user->email }}</div>
+                                    <div class="ms-minw-0">
+                                        <div class="ms-fw-500">{{ $user->name }}</div>
+                                        <div class="text-muted ms-fs-12">{{ $user->email }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-muted" style="white-space: nowrap;">{{ $user->created_at->format('M j, Y') }}</td>
+                            <td class="text-muted ms-nowrap">{{ $user->created_at->format('M j, Y') }}</td>
                             <td>
                                 <span class="tag {{ $user->hasRole('admin') ? 'tag-accent' : 'tag-neutral' }}">{{ $user->hasRole('admin') ? 'Admin' : 'Member' }}</span>
                             </td>
-                            <td style="text-align: right;">
+                            <td class="ms-text-right">
                                 @can('manage users')
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap;">
+                                    <div class="ms-actions-end">
                                         <button
                                             type="button"
                                             wire:click="toggleAdmin({{ $user->id }})"
                                             wire:confirm="Are you sure you want to {{ $user->hasRole('admin') ? 'remove admin access from' : 'grant admin access to' }} {{ $user->name }}?"
                                             @disabled($user->id === auth()->id())
-                                            class="btn"
-                                            style="padding: 6px 12px; font-size: 12px;"
+                                            class="btn ms-btn-sm"
                                         >
                                             {{ $user->hasRole('admin') ? __('dashboard.revoke_admin') : __('dashboard.make_admin') }}
                                         </button>
                                         <a
                                             href="{{ route('admin.users.edit', $user) }}"
                                             wire:navigate
-                                            class="btn"
-                                            style="padding: 6px 12px; font-size: 12px;"
+                                            class="btn ms-btn-sm"
                                         >Edit</a>
                                         <button
                                             type="button"
                                             wire:click="deleteUser({{ $user->id }})"
                                             wire:confirm="Permanently delete {{ $user->name }}? This cannot be undone."
                                             @disabled($user->id === auth()->id())
-                                            class="btn"
-                                            style="padding: 6px 12px; font-size: 12px; border-color: var(--color-accent-700); color: var(--color-accent-700);"
+                                            class="btn ms-btn-sm-danger"
                                         >Delete</button>
                                     </div>
                                 @endcan
@@ -174,14 +170,14 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-muted" style="padding: 28px; text-align: center;">{{ __('dashboard.no_users_found') }}</td>
+                            <td colspan="4" class="text-muted ms-empty">{{ __('dashboard.no_users_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
-        <div style="padding: 12px 16px; border-top: 1px solid var(--color-divider);">
+        <div class="ms-cell-top">
             {{ $this->users->links() }}
         </div>
     </div>
