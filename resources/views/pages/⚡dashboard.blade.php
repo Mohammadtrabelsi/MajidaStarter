@@ -64,9 +64,4 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
             </p>
         </div>
     </div>
-
-    <style>
-        .dash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        @media (max-width: 640px) { .dash-cards { grid-template-columns: 1fr; } }
-    </style>
 </div>

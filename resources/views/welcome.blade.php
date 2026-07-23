@@ -1,18 +1,4 @@
 <x-layouts.marketing>
-    @push('styles')
-        <style>
-            .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; padding: 88px 48px; }
-            .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--color-divider); border: 1px solid var(--color-divider); }
-            .feature-cell { background: var(--color-bg); padding: 28px; }
-            .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
-            @media (max-width: 900px) {
-                .hero-grid { grid-template-columns: 1fr; gap: 36px; padding: 56px 24px; }
-                .feature-grid { grid-template-columns: 1fr; }
-                .stat-grid { grid-template-columns: 1fr; gap: 28px; }
-            }
-        </style>
-    @endpush
-
     <div class="container hero-grid">
         <div>
             <div class="tag tag-accent ms-mb-20">{{ __('marketing.hero_tag') }}</div>

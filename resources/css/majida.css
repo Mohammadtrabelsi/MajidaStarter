@@ -411,3 +411,42 @@ html.theme-ready body { transition: background-color 0.2s ease, color 0.2s ease;
 .ms-locale-panel.active { display: flex; }
 .ms-logfilter { padding: 7px 12px; font-size: 12px; cursor: pointer; }
 .ms-logfilter.active { background: var(--color-accent); color: var(--color-bg); }
+
+/* — content page layouts (moved from inline <style> blocks) —
+   Marketing (welcome), blog, docs and dashboard page grids. Previously
+   pushed inline via @push('styles'); centralised here so the Blade views
+   carry no CSS. Class names are page-scoped, so no global collisions. */
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; padding: 88px 48px; }
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--color-divider); border: 1px solid var(--color-divider); }
+.feature-cell { background: var(--color-bg); padding: 28px; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
+
+.page-head { padding: 72px 48px 40px; }
+
+.post-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-divider); }
+.post-row { display: grid; grid-template-columns: 160px 1fr; gap: 32px; padding: 28px 0; border-bottom: 1px solid var(--color-divider); }
+.post-row .post-date { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(var(--ink), 0.55); }
+.post-row h3 { font-family: var(--font-heading); font-weight: 600; font-size: 20px; margin: 0 0 8px; }
+.post-row p { font-size: 14px; opacity: 0.75; margin: 0; max-width: 620px; }
+
+.docs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--color-divider); border: 1px solid var(--color-divider); }
+.docs-cell { background: var(--color-bg); padding: 28px; }
+.docs-cell h3 { font-family: var(--font-heading); font-weight: 600; font-size: 18px; margin: 0 0 8px; }
+.docs-cell p { font-size: 13px; opacity: 0.75; margin: 0 0 14px; }
+.docs-cell a { font-size: 13px; color: var(--color-accent); text-decoration: none; }
+.docs-cell a:hover { text-decoration: underline; }
+
+.dash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+@media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; padding: 56px 24px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr; gap: 28px; }
+    .page-head { padding: 48px 24px 32px; }
+    .post-row { grid-template-columns: 1fr; gap: 8px; }
+    .docs-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+    .dash-cards { grid-template-columns: 1fr; }
+}
