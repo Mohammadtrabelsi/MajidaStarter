@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Notifications\QueuedVerifyEmail;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
@@ -59,6 +62,27 @@ class EmailVerificationTest extends TestCase
         Event::assertDispatched(Verified::class);
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
         $response->assertRedirect(route('dashboard').'?verified=1');
+    }
+
+    public function test_verification_notification_is_queued(): void
+    {
+        $this->assertInstanceOf(ShouldQueue::class, new QueuedVerifyEmail);
+    }
+
+    public function test_registration_sends_queued_verification_notification(): void
+    {
+        Notification::fake();
+
+        $this->postJson('/api/auth/register', [
+            'name' => 'Fresh User',
+            'email' => 'fresh@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ])->assertCreated();
+
+        $user = User::where('email', 'fresh@example.com')->firstOrFail();
+
+        Notification::assertSentTo($user, QueuedVerifyEmail::class);
     }
 
     public function test_email_is_not_verified_with_invalid_hash(): void

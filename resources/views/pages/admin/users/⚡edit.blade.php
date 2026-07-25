@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -43,7 +44,7 @@ new #[Layout('layouts::app')] #[Title('Edit user')] class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user->id)],
-            'password' => ['nullable', 'string', 'min:8'],
+            'password' => ['nullable', Password::defaults()],
             'roles' => ['array'],
             'roles.*' => ['string', Rule::in($this->availableRoles)],
         ]);

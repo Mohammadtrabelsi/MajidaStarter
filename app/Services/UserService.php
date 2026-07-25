@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\DomainActionException;
 use App\Models\User;
-use DomainException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +33,7 @@ class UserService
     public function toggleAdminRole(User $actor, User $target): void
     {
         if ($actor->is($target)) {
-            throw new DomainException('You cannot change your own admin status.');
+            throw new DomainActionException('You cannot change your own admin status.');
         }
 
         $target->hasRole('admin')
@@ -78,7 +78,7 @@ class UserService
     public function delete(User $actor, User $target): void
     {
         if ($actor->is($target)) {
-            throw new DomainException('You cannot delete your own account here.');
+            throw new DomainActionException('You cannot delete your own account here.');
         }
 
         $target->delete();
@@ -114,6 +114,13 @@ class UserService
     {
         Auth::logout();
 
+        // Fully tear down the session (not just the auth state) so no stale
+        // session/CSRF token survives the account deletion.
+        if (request()->hasSession()) {
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+        }
+
         $user->delete();
     }
 
@@ -134,16 +141,26 @@ class UserService
                     ->orWhere('email', 'like', "%{$search}%")
             ))
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function stats(): array
     {
+        // Collapse the three created_at counts into a single aggregate query
+        // (the role-based admin count needs its own join, so it stays separate).
+        $counts = User::query()
+            ->selectRaw('count(*) as total')
+            ->selectRaw('sum(case when created_at >= ? then 1 else 0 end) as new_this_week', [now()->subWeek()])
+            ->selectRaw('sum(case when created_at >= ? then 1 else 0 end) as new_today', [now()->startOfDay()])
+            ->toBase()
+            ->first();
+
         return [
-            'total' => User::count(),
+            'total' => (int) ($counts->total ?? 0),
             'admins' => User::role('admin')->count(),
-            'newThisWeek' => User::where('created_at', '>=', now()->subWeek())->count(),
-            'newToday' => User::whereDate('created_at', today())->count(),
+            'newThisWeek' => (int) ($counts->new_this_week ?? 0),
+            'newToday' => (int) ($counts->new_today ?? 0),
         ];
     }
 }

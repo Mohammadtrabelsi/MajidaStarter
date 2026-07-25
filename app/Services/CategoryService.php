@@ -46,17 +46,30 @@ class CategoryService
     {
         return Category::query()
             ->withCount('posts')
-            ->when($search, fn ($query) => $query->where('slug', 'like', "%{$search}%"))
+            ->when($search, fn ($query) => $query->where(fn ($q) => $q
+                ->where('slug', 'like', "%{$search}%")
+                ->orWhere('name->en', 'like', "%{$search}%")
+                ->orWhere('name->ar', 'like', "%{$search}%")
+            ))
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function stats(): array
     {
+        // Single aggregate query instead of three separate COUNT statements.
+        $counts = Category::query()
+            ->selectRaw('count(*) as total')
+            ->selectRaw('sum(case when is_active = ? then 1 else 0 end) as active', [true])
+            ->selectRaw('sum(case when is_active = ? then 1 else 0 end) as inactive', [false])
+            ->toBase()
+            ->first();
+
         return [
-            'total' => Category::count(),
-            'active' => Category::where('is_active', true)->count(),
-            'inactive' => Category::where('is_active', false)->count(),
+            'total' => (int) ($counts->total ?? 0),
+            'active' => (int) ($counts->active ?? 0),
+            'inactive' => (int) ($counts->inactive ?? 0),
         ];
     }
 
