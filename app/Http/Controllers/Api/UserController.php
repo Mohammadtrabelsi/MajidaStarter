@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\UserService;
-use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -56,7 +56,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', Password::defaults()],
             'roles' => ['array'],
             'roles.*' => ['string', Rule::in($this->users->roleNames())],
         ]);
@@ -74,7 +74,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['nullable', 'string', 'min:8'],
+            'password' => ['nullable', Password::defaults()],
             'roles' => ['array'],
             'roles.*' => ['string', Rule::in($this->users->roleNames())],
         ]);
@@ -89,11 +89,9 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user): JsonResponse
     {
-        try {
-            $this->users->delete($request->user(), $user);
-        } catch (DomainException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        }
+        // Guard-rail violations throw DomainActionException, which renders
+        // itself as a 422 JSON response (see App\Exceptions).
+        $this->users->delete($request->user(), $user);
 
         return response()->json(null, 204);
     }
@@ -103,11 +101,7 @@ class UserController extends Controller
      */
     public function toggleAdmin(Request $request, User $user): JsonResponse
     {
-        try {
-            $this->users->toggleAdminRole($request->user(), $user);
-        } catch (DomainException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        }
+        $this->users->toggleAdminRole($request->user(), $user);
 
         return response()->json($user->fresh()->load('roles'));
     }

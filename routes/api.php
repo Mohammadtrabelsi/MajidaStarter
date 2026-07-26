@@ -19,9 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// UserService::register / UserService::attempt — open to guests.
-Route::post('auth/register', [AuthController::class, 'register']);
-Route::post('auth/login', [AuthController::class, 'login']);
+// UserService::register / UserService::attempt — open to guests, but rate
+// limited (email + IP) to blunt credential stuffing and account enumeration.
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('auth/register', [AuthController::class, 'register']);
+    Route::post('auth/login', [AuthController::class, 'login']);
+});
 
 Route::middleware('auth')->group(function () {
     // ---------------------------------------------------------------------

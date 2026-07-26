@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\TracksUserActions;
+use App\Notifications\QueuedVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -39,6 +40,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Send the email-verification notification on the queue so the request
+     * that triggers it (registration / resend) isn't blocked on the mailer.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new QueuedVerifyEmail);
     }
 
     public function getActivitylogOptions(): LogOptions

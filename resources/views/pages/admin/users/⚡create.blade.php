@@ -2,6 +2,7 @@
 
 use App\Services\UserService;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -35,7 +36,7 @@ new #[Layout('layouts::app')] #[Title('New user')] class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', Password::defaults()],
             'roles' => ['array'],
             'roles.*' => ['string', Rule::in($this->availableRoles)],
         ]);

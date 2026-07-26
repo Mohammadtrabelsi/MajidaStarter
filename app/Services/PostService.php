@@ -36,17 +36,30 @@ class PostService
     {
         return Post::query()
             ->with(['category', 'author'])
-            ->when($search, fn ($query) => $query->where('slug', 'like', "%{$search}%"))
+            ->when($search, fn ($query) => $query->where(fn ($q) => $q
+                ->where('slug', 'like', "%{$search}%")
+                ->orWhere('title->en', 'like', "%{$search}%")
+                ->orWhere('title->ar', 'like', "%{$search}%")
+            ))
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function stats(): array
     {
+        // Single aggregate query instead of three separate COUNT statements.
+        $counts = Post::query()
+            ->selectRaw('count(*) as total')
+            ->selectRaw('sum(case when status = ? then 1 else 0 end) as published', [Post::STATUS_PUBLISHED])
+            ->selectRaw('sum(case when status = ? then 1 else 0 end) as drafts', [Post::STATUS_DRAFT])
+            ->toBase()
+            ->first();
+
         return [
-            'total' => Post::count(),
-            'published' => Post::where('status', Post::STATUS_PUBLISHED)->count(),
-            'drafts' => Post::where('status', Post::STATUS_DRAFT)->count(),
+            'total' => (int) ($counts->total ?? 0),
+            'published' => (int) ($counts->published ?? 0),
+            'drafts' => (int) ($counts->drafts ?? 0),
         ];
     }
 
