@@ -32,7 +32,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 
         $posts->delete(Post::findOrFail($postId));
 
-        session()->flash('status', 'Post deleted successfully.');
+        $this->dispatch('notify', type: 'success', message: 'Post deleted successfully.');
     }
 
     #[Computed]

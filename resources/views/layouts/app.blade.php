@@ -134,6 +134,8 @@
             </div>
         </div>
 
+        <x-toast-hub />
+
         @livewireScripts
     </body>
 </html>

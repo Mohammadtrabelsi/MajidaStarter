@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Observers\CrudNotificationObserver;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -25,6 +27,26 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configurePasswordRules();
         $this->configureRateLimiting();
+        $this->registerCrudNotifications();
+    }
+
+    /**
+     * Register the generic CRUD notification observer against every model
+     * declared in config/crud_notifications.php. Adding a resource to that
+     * config is all it takes to start notifying — no per-model wiring here.
+     */
+    private function registerCrudNotifications(): void
+    {
+        if (! config('crud_notifications.enabled', true)) {
+            return;
+        }
+
+        /** @var array<class-string<Model>, mixed> $models */
+        $models = (array) config('crud_notifications.models', []);
+
+        foreach (array_keys($models) as $model) {
+            $model::observe(CrudNotificationObserver::class);
+        }
     }
 
     /**
