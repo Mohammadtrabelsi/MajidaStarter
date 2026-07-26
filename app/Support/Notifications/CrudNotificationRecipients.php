@@ -21,7 +21,10 @@ class CrudNotificationRecipients
         $roles = array_values(array_filter((array) config('crud_notifications.recipients.roles', [])));
 
         return User::query()
-            ->when($roles !== [], fn ($query) => $query->role($roles))
+            ->when($roles !== [], fn ($query) => $query->whereHas(
+                'roles',
+                fn ($role) => $role->whereIn('name', $roles)
+            ))
             ->when($excludeUserId !== null, fn ($query) => $query->whereKeyNot($excludeUserId))
             ->get();
     }
