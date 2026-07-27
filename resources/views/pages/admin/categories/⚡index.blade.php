@@ -32,7 +32,7 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 
         $categories->delete(Category::findOrFail($categoryId));
 
-        session()->flash('status', 'Category deleted successfully.');
+        $this->dispatch('notify', type: 'success', message: 'Category deleted successfully.');
     }
 
     #[Computed]
