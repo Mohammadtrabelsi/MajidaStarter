@@ -4,6 +4,7 @@ namespace Tests\Feature\Models;
 
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class PostModelTest extends TestCase
@@ -44,6 +45,6 @@ class PostModelTest extends TestCase
     {
         $post = Post::factory()->published()->create();
 
-        $this->assertInstanceOf(\Illuminate\Support\Carbon::class, $post->published_at);
+        $this->assertInstanceOf(Carbon::class, $post->published_at);
     }
 }

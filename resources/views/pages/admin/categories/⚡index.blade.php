@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Services\CategoryService;
+use App\Support\Livewire\InteractsWithToasts;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -11,6 +12,7 @@ use Livewire\WithPagination;
 
 new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 {
+    use InteractsWithToasts;
     use WithPagination;
 
     #[Url(as: 'q', history: true)]
@@ -32,7 +34,7 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 
         $categories->delete(Category::findOrFail($categoryId));
 
-        $this->dispatch('notify', type: 'success', message: 'Category deleted successfully.');
+        $this->toast('Category deleted successfully.');
     }
 
     #[Computed]

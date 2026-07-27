@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use App\Services\PostService;
+use App\Support\Livewire\InteractsWithToasts;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -11,6 +12,7 @@ use Livewire\WithPagination;
 
 new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 {
+    use InteractsWithToasts;
     use WithPagination;
 
     #[Url(as: 'q', history: true)]
@@ -32,7 +34,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 
         $posts->delete(Post::findOrFail($postId));
 
-        $this->dispatch('notify', type: 'success', message: 'Post deleted successfully.');
+        $this->toast('Post deleted successfully.');
     }
 
     #[Computed]
