@@ -12,5 +12,10 @@ parameters:
     ignoreErrors:
         #- '#PHPDoc tag @var#'
 
+        # Consumed by Volt single-file components under resources/views, which sit
+        # outside the `app` analysis path (and can't be added: they mix Blade with PHP).
+        - identifier: trait.unused
+          path: app/Support/Livewire/InteractsWithToasts.php
+
     excludePaths:
         #- ./*/*/FileToBeExcluded.php
