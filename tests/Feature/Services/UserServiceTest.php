@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase
@@ -195,8 +196,8 @@ class UserServiceTest extends TestCase
     public function test_role_names_are_returned_sorted(): void
     {
         // Seeder creates the "admin" role; add more to prove ordering.
-        \Spatie\Permission\Models\Role::findOrCreate('editor', 'web');
-        \Spatie\Permission\Models\Role::findOrCreate('author', 'web');
+        Role::findOrCreate('editor', 'web');
+        Role::findOrCreate('author', 'web');
 
         $names = $this->service->roleNames();
 

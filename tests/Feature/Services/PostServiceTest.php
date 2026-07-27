@@ -4,6 +4,7 @@ namespace Tests\Feature\Services;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -27,7 +28,7 @@ class PostServiceTest extends TestCase
             'title' => ['en' => 'Sample Title'],
             'body' => ['en' => 'Sample body.'],
             'category_id' => Category::factory()->create()->id,
-            'user_id' => \App\Models\User::factory()->create()->id,
+            'user_id' => User::factory()->create()->id,
         ], $overrides);
     }
 
