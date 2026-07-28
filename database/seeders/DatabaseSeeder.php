@@ -11,12 +11,41 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Authentication baseline. AdminUserSeeder also seeds roles & permissions.
+     * Always seeded, in every mode.
+     *
+     * @var array<int, class-string>
+     */
+    public const MINIMAL = [
+        AdminUserSeeder::class,
+    ];
+
+    /**
+     * Structural configuration / lookups. This starter kit ships none yet.
+     *
+     * @var array<int, class-string>
+     */
+    public const REFERENCE = [];
+
+    /**
+     * Demo / sample seeders. Sample users are created inline in run() below.
+     *
+     * @var array<int, class-string>
+     */
+    public const DEMO = [];
+
+    /**
+     * Seed the application's database with full data (configuration + demo content).
      */
     public function run(): void
     {
-        $this->call(AdminUserSeeder::class);
+        $this->call([
+            ...self::MINIMAL,
+            ...self::REFERENCE,
+            ...self::DEMO,
+        ]);
 
+        // Demo users - full mode only.
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
