@@ -90,13 +90,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             <p class="text-muted ms-note">{{ __('profile.update_name_email') }}</p>
         </div>
 
-        <div
-            x-data="{ show: false }"
-            x-on:profile-updated.window="show = true; setTimeout(() => show = false, 3000)"
-            x-show="show"
-            x-transition
-            class="tag tag-accent ms-hidden"
-        >
+        <div data-show-on="profile-updated" class="tag tag-accent">
             <span class="ms-block-pad">{{ __('profile.profile_updated') }}</span>
         </div>
 
@@ -118,9 +112,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
                         Resend verification email
                     </button>
                     <span
-                        x-data="{ show: false }"
-                        x-on:verification-sent.window="show = true; setTimeout(() => show = false, 3000)"
-                        x-show="show"
+                        data-show-on="verification-sent"
                         class="ms-hidden-danger"
                     >— a new link has been sent.</span>
                 </p>
@@ -139,13 +131,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
             <p class="text-muted ms-note">Use a long, random password to keep your account secure.</p>
         </div>
 
-        <div
-            x-data="{ show: false }"
-            x-on:password-updated.window="show = true; setTimeout(() => show = false, 3000)"
-            x-show="show"
-            x-transition
-            class="tag tag-accent ms-hidden"
-        >
+        <div data-show-on="password-updated" class="tag tag-accent">
             <span class="ms-block-pad">{{ __('profile.password_updated') }}</span>
         </div>
 
