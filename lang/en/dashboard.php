@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'account' => 'Account',
+    'actions' => 'Actions',
+    'admin_note' => 'Admin note',
+    'admin_panel' => 'Admin panel',
+    'admin_permissions_note' => 'You have full administrator permissions across the application.',
+    'administrator' => 'Administrator',
+    'email' => 'Email',
+    'joined' => 'Joined',
+    'logged_in_as' => "You're logged in as :email.",
+    'make_admin' => 'Make admin',
+    'member' => 'Member',
+    'member_note' => 'Member note',
+    'member_since' => 'Member since',
+    'name' => 'Name',
+    'no_users_found' => 'No users found',
+    'revoke_admin' => 'Revoke admin',
+    'role' => 'Role',
+    'title' => 'Title',
+    'user' => 'User',
+    'users_description' => 'Users description',
+    'welcome' => 'Welcome back, :name',
+];

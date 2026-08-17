@@ -1,58 +1,216 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MajidaStarter
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. It ships with everything you usually rebuild at the start of every project — authentication, an admin panel, role-based access control, activity logging, multilingual (LTR/RTL) support, light/dark theming, a content module (posts & categories), a matching REST API, and a clean service layer — so you can skip the boilerplate and start building features.
 
-## About Laravel
+## Highlights
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Full authentication flow** — registration, login, logout, password reset, and email verification, all built as single-file Livewire components.
+- **Admin panel** — a dedicated, permission-gated back office for managing users, posts, categories, reviewing activity, and editing site settings.
+- **Content module** — full CRUD for **posts** and **categories** in the admin panel, plus public `/blog` and `/docs` pages.
+- **Role & permission based access control** — powered by [spatie/laravel-permission](https://spatie.be/docs/laravel-permission), with an `admin` role seeded out of the box.
+- **Activity logging** — every meaningful change to users, posts, categories, and settings is recorded with [spatie/laravel-activitylog](https://spatie.be/docs/laravel-activitylog) and browsable from the admin panel.
+- **REST API** — every service is exposed as JSON endpoints under `/api`, protected by the same authorization gates as the web UI (see [API](#api)).
+- **Localization (i18n) with RTL support** — English, Arabic, and French ship by default, with a language switcher, per-session locale persistence, and automatic text-direction handling.
+- **Translatable settings** — site name and description are stored per-locale via [spatie/laravel-translatable](https://spatie.be/docs/laravel-translatable).
+- **Light / dark theme toggle** — a persistent, no-flash theme switcher.
+- **Service-oriented architecture** — business logic lives in dedicated service classes (`UserService`, `PostService`, `CategoryService`, `SettingService`) instead of controllers or components.
+- **Modern front-end** — Tailwind CSS 4 and Vite 8, wired up and ready to go.
+- **Tested & analysed** — a PHPUnit feature/unit suite covering auth, profiles, admin pages, user/post/category management, the API, and localization, plus Pint (code style) and Larastan (static analysis), all run on CI.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Layer            | Technology                                             |
+| ---------------- | ------------------------------------------------------ |
+| Framework        | Laravel 13 (PHP 8.3+)                                   |
+| UI / Interactivity | Livewire 4 (single-file components)                  |
+| Styling / Build  | Tailwind CSS 4, Vite 8                                  |
+| Auth & Access    | Laravel Auth + spatie/laravel-permission               |
+| Auditing         | spatie/laravel-activitylog                             |
+| i18n             | spatie/laravel-translatable + custom locale middleware |
+| Database         | SQLite by default (any Laravel-supported driver works) |
+| Testing          | PHPUnit 12                                              |
+| Code quality     | Laravel Pint + Larastan (PHPStan)                      |
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.3 or higher
+- Composer
+- Node.js & npm
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Getting Started
 
 ```bash
-composer require laravel/boost --dev
+# 1. Install PHP and JS dependencies, create .env, generate a key,
+#    run migrations, and build assets — all in one step:
+composer setup
 
-php artisan boost:install
+# 2. (Optional) Seed demo data: an admin, a test user, roles, and 10 sample users
+php artisan db:seed
+
+# 3. Start the full development environment
+#    (server + queue worker + log tailer + Vite)
+composer dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The `composer setup` script runs `composer install`, copies `.env.example` to `.env`, generates the application key, runs migrations, and builds the front-end assets. The `composer dev` script uses [concurrently](https://www.npmjs.com/package/concurrently) to run the PHP server, queue listener, `pail` log viewer, and the Vite dev server together.
 
-## Contributing
+### Default seeded accounts
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+When you run `php artisan db:seed`, the following accounts are created:
 
-## Code of Conduct
+| Role  | Email               | Notes                          |
+| ----- | ------------------- | ------------------------------ |
+| Admin | `admin@example.com` | Has the `admin` role           |
+| User  | `test@example.com`  | Standard verified user         |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+> Passwords are generated by the factory — check `database/factories/UserFactory.php` (the default is Laravel's usual `password`).
 
-## Security Vulnerabilities
+## Project Structure
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Api/           # JSON API controllers backing each service
+│   │   ├── Auth/          # Logout
+│   │   └── LocaleController.php
+│   └── Middleware/
+│       ├── SetLocale.php          # Applies the session locale on every request
+│       └── EnsureUserIsAdmin.php  # Guards admin routes ('admin' alias)
+├── Models/
+│   ├── User.php           # Roles, activity logging, email verification
+│   ├── Post.php           # Blog/content posts
+│   ├── Category.php       # Post categories
+│   └── Setting.php        # Translatable, singleton-style site settings
+└── Services/
+    ├── UserService.php    # Registration, CRUD, role toggling, stats
+    ├── PostService.php    # Post CRUD, search, stats
+    ├── CategoryService.php# Category CRUD, options, stats
+    └── SettingService.php # Reads/updates the site settings record
+
+resources/views/
+├── pages/                 # Livewire single-file page components (⚡ prefixed)
+│   ├── auth/              # login, register, forgot/reset password, verify email
+│   ├── admin/            # dashboard, users, posts, categories, activity log, settings
+│   ├── settings/profile   # self-service profile management
+│   └── dashboard          # authenticated user dashboard
+├── welcome.blade.php      # marketing landing page
+├── blog.blade.php         # public blog page
+└── docs.blade.php         # public documentation page
+
+routes/
+├── web.php                # Guest, authenticated, verified, and admin route groups
+├── api.php                # JSON API endpoints (see below)
+└── console.php
+
+lang/
+├── en/  ar/  fr/          # PHP translation files per locale
+└── *.json                 # JSON translation strings per locale
+```
+
+## Routing Overview
+
+### Web
+
+- **Public** — `/` (landing), `/blog`, `/docs`
+- **Guest routes** — `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`
+- **Authenticated routes** — `/verify-email`, `/settings/profile`, `/logout`
+- **Verified routes** — `/dashboard`
+- **Admin routes** (`verified` + `admin` middleware) —
+  `/admin/dashboard`, `/admin/users/create`, `/admin/users/{user}/edit`,
+  `/admin/categories`, `/admin/categories/create`, `/admin/categories/{category}/edit`,
+  `/admin/posts`, `/admin/posts/create`, `/admin/posts/{post}/edit`,
+  `/admin/activity-log`, `/admin/settings`
+- **Locale switch** — `/language/{locale}` persists the chosen locale to the session
+
+### API
+
+All endpoints are prefixed with `/api` and defined in `routes/api.php`. Each maps
+directly onto a service method and is protected by the same authorization gates
+(`can:manage users`, `can:manage posts`, etc.) as the web UI. Authentication is
+session/cookie based (`auth` middleware) — call `POST /api/auth/login` first to
+establish a session.
+
+| Method & path                       | Guard                  | Backed by                       |
+| ----------------------------------- | ---------------------- | ------------------------------- |
+| `POST   /api/auth/register`         | guest                  | `UserService::register`         |
+| `POST   /api/auth/login`            | guest                  | `UserService::attempt`          |
+| `GET    /api/profile`               | auth                   | current user                    |
+| `PUT    /api/profile`               | auth                   | `UserService::updateProfile`    |
+| `PUT    /api/profile/password`      | auth                   | `UserService::updatePassword`   |
+| `DELETE /api/profile`               | auth                   | `UserService::deleteOwnAccount` |
+| `GET    /api/categories`            | `can:manage categories`| `CategoryService::searchPaginated` |
+| `POST   /api/categories`            | `can:manage categories`| `CategoryService::create`       |
+| `PUT    /api/categories/{category}` | `can:manage categories`| `CategoryService::update`       |
+| `DELETE /api/categories/{category}` | `can:manage categories`| `CategoryService::delete`       |
+| `GET    /api/posts`                 | `can:manage posts`     | `PostService::searchPaginated`  |
+| `POST   /api/posts`                 | `can:manage posts`     | `PostService::create`           |
+| `PUT    /api/posts/{post}`          | `can:manage posts`     | `PostService::update`           |
+| `DELETE /api/posts/{post}`          | `can:manage posts`     | `PostService::delete`           |
+| `GET    /api/users`                 | `can:manage users`     | `UserService::searchPaginated`  |
+| `POST   /api/users`                 | `can:manage users`     | `UserService::create`           |
+| `PUT    /api/users/{user}`          | `can:manage users`     | `UserService::updateUser`       |
+| `DELETE /api/users/{user}`          | `can:manage users`     | `UserService::delete`           |
+| `POST   /api/users/{user}/toggle-admin` | `can:manage users` | `UserService::toggleAdminRole`  |
+| `GET    /api/settings`              | `can:manage settings`  | `SettingService::current`       |
+| `PUT    /api/settings`              | `can:manage settings`  | `SettingService::update`        |
+
+> Several resources also expose helper endpoints — `.../options`, `.../stats`,
+> and `users/roles` — used to populate select boxes and dashboard widgets.
+
+## Localization
+
+Available locales are configured in `config/app.php` under `available_locales`:
+
+```php
+'available_locales' => [
+    'en' => ['label' => 'English', 'dir' => 'ltr'],
+    'ar' => ['label' => 'العربية', 'dir' => 'rtl'],
+    'fr' => ['label' => 'Français', 'dir' => 'ltr'],
+],
+```
+
+The `SetLocale` middleware applies the session's chosen locale on every request, the `LocaleController` handles switching, and text direction (`ltr`/`rtl`) is derived automatically for correct RTL rendering. Add a new language by adding an entry here and a matching `lang/{locale}` directory (and/or `lang/{locale}.json` file).
+
+The `php artisan translations:sync` command (`app/console/Commands/SyncTranslationKeys.php`) scaffolds missing keys for non-base locales, prefixing untranslated values with `[TODO]` so they are easy to find and complete.
+
+## Roles & Permissions
+
+Roles and permissions are seeded by `RolesAndPermissionsSeeder`. The `admin` role is granted the following permissions:
+
+- `view admin dashboard`
+- `manage users`
+- `manage posts`
+- `manage categories`
+- `view activity log`
+- `manage settings`
+
+Check for admin access in code via `$user->isAdmin()` or the `admin` route middleware alias.
+
+## Testing & Code Quality
+
+```bash
+# Run the test suite
+composer test          # or: php artisan test
+
+# Check code style (Laravel Pint)
+vendor/bin/pint --test # add --dirty to only check changed files, drop --test to fix
+
+# Static analysis (Larastan / PHPStan)
+composer analyse
+```
+
+The suite (in `tests/Feature` and `tests/Unit`) covers authentication, email verification, profile management, user/post/category management, admin pages, the REST API, and localization. Tests run against an in-memory SQLite database (see `phpunit.xml`).
+
+## Continuous Integration
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `develop`/`main` and on every pull request. It:
+
+- runs the test suite on PHP 8.3 and 8.4 (building front-end assets first), and
+- checks code style with Pint and runs Larastan static analysis.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MajidaStarter is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). It is built on the [Laravel framework](https://laravel.com), which is also MIT licensed.
+</content>
+</invoke>

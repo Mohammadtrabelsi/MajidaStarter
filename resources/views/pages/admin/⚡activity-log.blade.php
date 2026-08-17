@@ -1,0 +1,147 @@
+<?php
+
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Spatie\Activitylog\Models\Activity;
+
+new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
+{
+    use WithPagination;
+
+    #[Url(as: 'q', history: true)]
+    public string $search = '';
+
+    #[Url(as: 'log', history: true)]
+    public string $logName = '';
+
+    public function mount(): void
+    {
+        $this->authorize('view activity log');
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedLogName(): void
+    {
+        $this->resetPage();
+    }
+
+    public function logNames()
+    {
+        return Activity::query()->distinct()->pluck('log_name')->filter()->values();
+    }
+
+    public function activities()
+    {
+        return Activity::query()
+            ->with(['causer', 'subject'])
+            ->when($this->logName, fn ($query) => $query->where('log_name', $this->logName))
+            ->when($this->search, fn ($query) => $query->where('description', 'like', "%{$this->search}%"))
+            ->latest()
+            ->paginate(10);
+    }
+
+    public function render()
+    {
+        return $this->view([
+            'activities' => $this->activities(),
+            'logNames' => $this->logNames(),
+        ]);
+    }
+};
+?>
+
+<div x-data="{ expanded: null }">
+    <div class="ms-mb-24">
+        <h2>{{ __('activity_log.title') }}</h2>
+        <p class="text-muted ms-note">{{ __('activity_log.description') }}</p>
+    </div>
+
+    <div class="ms-row-12-mb16">
+        <div class="ms-inline-frame">
+            <div wire:click="$set('logName', '')" @class(['ms-logfilter', 'active' => $logName === ''])>
+                All
+            </div>
+            @foreach ($logNames as $name)
+                <div wire:click="$set('logName', '{{ $name }}')" @class(['ms-logfilter ms-capitalize', 'active' => $logName === $name])>
+                    {{ $name }}
+                </div>
+            @endforeach
+        </div>
+
+        <div class="ms-search-field-right">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="Search description…">
+        </div>
+    </div>
+
+    <div class="card ms-p-0">
+        @forelse ($activities as $activity)
+            <div wire:key="activity-{{ $activity->id }}" class="ms-list-row">
+                <button
+                    type="button"
+                    @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
+                    class="ms-disclosure-btn"
+                >
+                    <div class="ms-row-start-12">
+                        <span class="avatar">{{ $activity->causer ? Str::of($activity->causer->name)->substr(0, 2)->upper() : '—' }}</span>
+                        <div>
+                            <div class="ms-fs-14">
+                                <span class="ms-fw-500">{{ $activity->causer?->name ?? 'System' }}</span>
+                                <span class="text-muted">{{ $activity->description }}</span>
+                                @if ($activity->subject)
+                                    <span class="text-muted">— {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
+                                @endif
+                            </div>
+                            <div class="text-muted ms-fs-11-mt2">
+                                {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format('M j, Y H:i') }}
+                                @if ($activity->log_name)
+                                    · <span class="ms-capitalize">{{ $activity->log_name }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    @if ($activity->properties->isNotEmpty())
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" class="ms-chevron" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                    @endif
+                </button>
+
+                @if ($activity->properties->isNotEmpty())
+                    <div x-show="expanded === {{ $activity->id }}" x-collapse class="ms-hidden" >
+                        <div class="prop-grid ms-inset-note">
+                            @if ($activity->properties->has('old'))
+                                <div>
+                                    <div class="card-kicker">Before</div>
+                                    <pre class="ms-pre">{{ json_encode($activity->properties->get('old'), JSON_PRETTY_PRINT) }}</pre>
+                                </div>
+                            @endif
+                            @if ($activity->properties->has('attributes'))
+                                <div>
+                                    <div class="card-kicker">{{ __('activity_log.attributes') }}</div>
+                                    <pre class="ms-pre">{{ json_encode($activity->properties->get('attributes'), JSON_PRETTY_PRINT) }}</pre>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @empty
+            <div class="text-muted ms-empty-40">{{ __('activity_log.no_activity') }}</div>
+        @endforelse
+
+        <div class="ms-cell-top">
+            {{ $activities->links() }}
+        </div>
+    </div>
+
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/activity-log.css') }}">
+    @endpush
+</div>

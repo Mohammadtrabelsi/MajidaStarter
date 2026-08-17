@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Observers\CrudNotificationObserver;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +25,56 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->configurePasswordRules();
+        $this->configureRateLimiting();
+        $this->registerCrudNotifications();
+    }
+
+    /**
+     * Register the generic CRUD notification observer against every model
+     * declared in config/crud_notifications.php. Adding a resource to that
+     * config is all it takes to start notifying — no per-model wiring here.
+     */
+    private function registerCrudNotifications(): void
+    {
+        if (! config('crud_notifications.enabled', true)) {
+            return;
+        }
+
+        /** @var array<class-string<Model>, mixed> $models */
+        $models = (array) config('crud_notifications.models', []);
+
+        foreach (array_keys($models) as $model) {
+            $model::observe(CrudNotificationObserver::class);
+        }
+    }
+
+    /**
+     * A single, centrally-tunable password policy used by every validation
+     * rule in the app. Kept lenient in local/testing so factories and tests
+     * stay fast, and hardened in production with complexity + breach checks.
+     */
+    private function configurePasswordRules(): void
+    {
+        Password::defaults(function () {
+            $rule = Password::min(8);
+
+            return $this->app->isProduction()
+                ? $rule->mixedCase()->numbers()->uncompromised()
+                : $rule;
+        });
+    }
+
+    /**
+     * Named rate limiter guarding the stateless API auth endpoints against
+     * credential stuffing / enumeration, keyed by email + client IP.
+     */
+    private function configureRateLimiting(): void
+    {
+        RateLimiter::for('auth', function (Request $request) {
+            $key = mb_strtolower((string) $request->input('email')).'|'.$request->ip();
+
+            return Limit::perMinute(6)->by($key);
+        });
     }
 }
