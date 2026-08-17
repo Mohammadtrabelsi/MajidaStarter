@@ -65,13 +65,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         <p class="text-muted ms-note">{{ __('settings.description') }}</p>
     </div>
 
-    <div
-        x-data="{ show: false }"
-        x-on:settings-saved.window="show = true; setTimeout(() => show = false, 3000)"
-        x-show="show"
-        x-transition
-        class="tag tag-accent ms-hidden"
-    >
+    <div data-show-on="settings-saved" class="tag tag-accent">
         <span class="ms-block-pad">{{ __('settings.saved') }}</span>
     </div>
 
