@@ -1,6 +1,9 @@
 *.log
 .DS_Store
 .env
+# Laravel app mounted into the Docker stack (keep the folder, ignore its contents)
+/src/*
+!/src/.gitkeep
 .env.backup
 .env.production
 .phpactor.json
