@@ -27,7 +27,7 @@ return [
     'settings_activity_log_body' => 'Texte des paramètres et du journal d\'activité',
     'speed' => 'Prêt à être lancé',
     'speed_body' => 'Une base testée pour vous permettre de vous concentrer sur le produit, pas sur la plomberie.',
-    'title' => 'Titre',
+    'title' => 'Journal de documentation',
     'trust' => 'Journal d\'activité',
     'trust_body' => 'Chaque écriture est enregistrée — qui, quoi, quand — et consultable depuis l\'administration.',
     'user_management_body' => 'Texte de gestion des utilisateurs',

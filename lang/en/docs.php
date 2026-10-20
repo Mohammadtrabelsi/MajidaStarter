@@ -27,7 +27,7 @@ return [
     'settings_activity_log_body' => 'Settings activity log body',
     'speed' => 'Ready to ship',
     'speed_body' => 'A tested foundation so you can start on the product, not the plumbing.',
-    'title' => 'Title',
+    'title' => 'Documentation',
     'trust' => 'Activity log',
     'trust_body' => 'Every write is recorded — who, what, when — searchable from the admin.',
     'user_management_body' => 'User management body',
