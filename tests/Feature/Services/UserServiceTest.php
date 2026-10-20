@@ -157,7 +157,7 @@ class UserServiceTest extends TestCase
 
         $this->service->delete($actor, $target);
 
-        $this->assertModelMissing($target);
+        $this->assertSoftDeleted($target);
     }
 
     public function test_update_profile_resets_verification_only_on_email_change(): void
@@ -190,7 +190,7 @@ class UserServiceTest extends TestCase
         $this->service->deleteOwnAccount($user);
 
         $this->assertGuest();
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 
     public function test_role_names_are_returned_sorted(): void
@@ -242,7 +242,7 @@ class UserServiceTest extends TestCase
     {
         $stats = $this->service->stats();
 
-        $this->assertSame(['total' => 0, 'admins' => 0, 'newThisWeek' => 0, 'newToday' => 0], $stats);
+        $this->assertSame(['total' => 0, 'admins' => 0, 'newThisWeek' => 0, 'newToday' => 0, 'trashed' => 0], $stats);
     }
 
     public function test_stats_counts_totals_admins_and_recent_windows(): void

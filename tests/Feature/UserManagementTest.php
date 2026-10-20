@@ -96,7 +96,7 @@ class UserManagementTest extends TestCase
             ->call('deleteUser', $user->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 
     public function test_admin_cannot_delete_themselves(): void

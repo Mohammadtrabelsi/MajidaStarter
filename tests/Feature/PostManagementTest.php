@@ -122,7 +122,7 @@ class PostManagementTest extends TestCase
             ->call('deletePost', $post->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($post);
+        $this->assertSoftDeleted($post);
     }
 
     public function test_deleting_category_nulls_post_category(): void

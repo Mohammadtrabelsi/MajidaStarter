@@ -90,7 +90,7 @@ class PostApiTest extends TestCase
         $this->actingAs($admin)->deleteJson("/api/posts/{$post->id}")
             ->assertNoContent();
 
-        $this->assertModelMissing($post);
+        $this->assertSoftDeleted($post);
     }
 
     public function test_admin_can_fetch_post_stats(): void

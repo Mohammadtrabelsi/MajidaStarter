@@ -8,9 +8,12 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 new #[Layout('layouts::app')] #[Title('New post')] class extends Component
 {
+    use WithFileUploads;
+
     public string $activeLocale = 'en';
 
     public array $title = [];
@@ -25,11 +28,13 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
 
     public ?int $categoryId = null;
 
+    public $cover = null;
+
     public array $locales = ['en' => 'English', 'ar' => 'العربية'];
 
     public function mount(): void
     {
-        $this->authorize('manage posts');
+        $this->authorize('create', Post::class);
 
         foreach (array_keys($this->locales) as $locale) {
             $this->title[$locale] = '';
@@ -46,7 +51,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
 
     public function save(PostService $posts): void
     {
-        $this->authorize('manage posts');
+        $this->authorize('create', Post::class);
 
         $this->validate([
             'title.en' => ['required', 'string', 'max:255'],
@@ -57,6 +62,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
             'slug' => ['nullable', 'string', 'max:255', 'unique:posts,slug'],
             'status' => ['required', Rule::in(array_keys(Post::statuses()))],
             'categoryId' => ['nullable', 'exists:categories,id'],
+            'cover' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $posts->create([
@@ -67,6 +73,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
             'status' => $this->status,
             'category_id' => $this->categoryId,
             'user_id' => auth()->id(),
+            'cover_image' => $this->cover ? $posts->storeCover($this->cover) : null,
         ]);
 
         session()->flash('status', 'Post created successfully.');
@@ -161,6 +168,13 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
                     @endforeach
                 </select>
                 <x-input-error :message="$errors->first('status')" />
+            </div>
+
+            <div class="field ms-mb-0">
+                <x-input-label for="cover" value="Cover image" />
+                <input type="file" wire:model="cover" id="cover" accept="image/*" class="input">
+                <div wire:loading wire:target="cover" class="text-muted ms-fs-12">Uploading…</div>
+                <x-input-error :message="$errors->first('cover')" />
             </div>
         </div>
 

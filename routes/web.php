@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ActivityLogExportController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +12,8 @@ Route::get('/', function () {
 });
 
 Route::view('/docs', 'docs')->name('docs');
-Route::view('/blog', 'blog')->name('blog');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/language/{locale}', LocaleController::class)->name('locale.switch');
 
@@ -19,6 +22,7 @@ Route::middleware('guest')->group(function () {
     Route::livewire('/register', 'pages::auth.register')->name('register');
     Route::livewire('/forgot-password', 'pages::auth.forgot-password')->name('password.request');
     Route::livewire('/reset-password/{token}', 'pages::auth.reset-password')->name('password.reset');
+    Route::livewire('/two-factor-challenge', 'pages::auth.two-factor-challenge')->name('two-factor.challenge');
 });
 
 Route::middleware('auth')->group(function () {
@@ -33,6 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // Account / profile management
     Route::livewire('/settings/profile', 'pages::settings.profile')->name('profile.edit');
+    Route::livewire('/settings/two-factor', 'pages::settings.two-factor')->name('two-factor.settings');
 
     Route::middleware('verified')->group(function () {
         Route::livewire('/dashboard', 'pages::dashboard')->name('dashboard');
@@ -72,6 +77,10 @@ Route::middleware('auth')->group(function () {
             Route::livewire('/admin/activity-log', 'pages::admin.activity-log')
                 ->middleware('can:view activity log')
                 ->name('admin.activity-log');
+            Route::get('/admin/activity-log/export/{format}', ActivityLogExportController::class)
+                ->middleware('can:view activity log')
+                ->where('format', 'csv|json')
+                ->name('admin.activity-log.export');
             Route::livewire('/admin/settings', 'pages::admin.settings')
                 ->middleware('can:manage settings')
                 ->name('admin.settings');

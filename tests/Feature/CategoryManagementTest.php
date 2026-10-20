@@ -97,7 +97,7 @@ class CategoryManagementTest extends TestCase
             ->call('deleteCategory', $category->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($category);
+        $this->assertSoftDeleted($category);
     }
 
     public function test_slug_is_generated_uniquely(): void

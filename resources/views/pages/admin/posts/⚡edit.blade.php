@@ -8,9 +8,12 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
 {
+    use WithFileUploads;
+
     public Post $post;
 
     public string $activeLocale = 'en';
@@ -27,11 +30,15 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
 
     public ?int $categoryId = null;
 
+    public $cover = null;
+
+    public bool $removeCover = false;
+
     public array $locales = ['en' => 'English', 'ar' => 'العربية'];
 
     public function mount(Post $post): void
     {
-        $this->authorize('manage posts');
+        $this->authorize('update', $post);
 
         $this->post = $post;
         $this->slug = $post->slug;
@@ -53,7 +60,7 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
 
     public function save(PostService $posts): void
     {
-        $this->authorize('manage posts');
+        $this->authorize('update', $this->post);
 
         $this->validate([
             'title.en' => ['required', 'string', 'max:255'],
@@ -64,6 +71,7 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
             'slug' => ['required', 'string', 'max:255', Rule::unique('posts', 'slug')->ignore($this->post->id)],
             'status' => ['required', Rule::in(array_keys(Post::statuses()))],
             'categoryId' => ['nullable', 'exists:categories,id'],
+            'cover' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $posts->update($this->post, [
@@ -73,6 +81,9 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
             'slug' => $this->slug,
             'status' => $this->status,
             'category_id' => $this->categoryId,
+            'cover_image' => $this->cover
+                ? $posts->storeCover($this->cover)
+                : ($this->removeCover ? null : $this->post->cover_image),
         ]);
 
         session()->flash('status', 'Post updated successfully.');
@@ -167,6 +178,24 @@ new #[Layout('layouts::app')] #[Title('Edit post')] class extends Component
                     @endforeach
                 </select>
                 <x-input-error :message="$errors->first('status')" />
+            </div>
+
+            <div class="field ms-mb-0">
+                <x-input-label for="cover" value="Cover image" />
+                @if ($this->post->coverImageUrl() && ! $removeCover && ! $cover)
+                    <img src="{{ $this->post->coverImageUrl() }}" alt="" class="ms-mb-8" style="width:100%;max-width:360px;aspect-ratio:16/9;object-fit:cover;border-radius:8px">
+                @endif
+                @if ($cover)
+                    <img src="{{ $cover->temporaryUrl() }}" alt="" class="ms-mb-8" style="width:100%;max-width:360px;aspect-ratio:16/9;object-fit:cover;border-radius:8px">
+                @endif
+                <input type="file" wire:model="cover" id="cover" accept="image/*" class="input">
+                <div wire:loading wire:target="cover" class="text-muted ms-fs-12">Uploading…</div>
+                <x-input-error :message="$errors->first('cover')" />
+                @if ($this->post->cover_image)
+                    <label class="ms-check-label-22">
+                        <input wire:model="removeCover" type="checkbox" class="checkbox"> Remove cover image
+                    </label>
+                @endif
             </div>
         </div>
 

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -21,12 +22,17 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'status' => ['nullable', 'in:active,inactive'],
+            'trashed' => ['nullable', 'in:only,with'],
+            'sort' => ['nullable', 'in:name,created_at'],
+            'direction' => ['nullable', 'in:asc,desc'],
         ]);
 
         return response()->json(
             $this->categories->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 10,
+                collect($validated)->only(['status', 'trashed', 'sort', 'direction'])->all(),
             )
         );
     }
@@ -52,6 +58,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Gate::authorize('create', Category::class);
+
         $validated = $request->validate([
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
@@ -77,6 +85,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category): JsonResponse
     {
+        Gate::authorize('update', $category);
+
         $validated = $request->validate([
             'name' => ['required', 'array'],
             'name.en' => ['required', 'string', 'max:255'],
@@ -102,7 +112,31 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
+        Gate::authorize('delete', $category);
+
         $this->categories->delete($category);
+
+        return response()->json(null, 204);
+    }
+
+    /**
+     * CategoryService::restore (route binds trashed categories)
+     */
+    public function restore(Category $category): JsonResponse
+    {
+        Gate::authorize('restore', $category);
+
+        return response()->json($this->categories->restore($category));
+    }
+
+    /**
+     * CategoryService::forceDelete (route binds trashed categories)
+     */
+    public function forceDestroy(Category $category): JsonResponse
+    {
+        Gate::authorize('forceDelete', $category);
+
+        $this->categories->forceDelete($category);
 
         return response()->json(null, 204);
     }

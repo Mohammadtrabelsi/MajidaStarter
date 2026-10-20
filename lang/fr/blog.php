@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'description' => 'Articles',
-    'post_1_excerpt' => "Extrait de l'article 1",
-    'post_1_title' => "Titre de l'article 1",
-    'post_2_excerpt' => "Extrait de l'article 2",
-    'post_2_title' => "Titre de l'article 2",
-    'post_3_excerpt' => "Extrait de l'article 3",
-    'post_3_title' => "Titre de l'article 3",
-    'title' => 'Articles',
+    'title' => 'Blog',
+    'description' => 'Actualités, notes et guides de notre équipe.',
+    'heading' => 'Récits de :name',
+    'search_placeholder' => 'Rechercher un article…',
+    'search' => 'Rechercher',
+    'no_posts' => 'Aucun article trouvé.',
+    'back' => 'Retour au blog',
 ];

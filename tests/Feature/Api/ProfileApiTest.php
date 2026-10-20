@@ -72,6 +72,6 @@ class ProfileApiTest extends TestCase
             'password' => 'password',
         ])->assertNoContent();
 
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 }

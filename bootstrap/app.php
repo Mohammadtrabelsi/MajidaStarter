@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnforceMaintenanceMode;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\TrackVisit;
@@ -19,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             SetLocale::class,
             TrackVisit::class,
+            EnforceMaintenanceMode::class,
+        ]);
+
+        $middleware->api(append: [
+            EnforceMaintenanceMode::class,
         ]);
 
         $middleware->alias([
