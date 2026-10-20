@@ -2,7 +2,7 @@
 
 return [
     'attributes' => 'Attributs',
-    'description' => 'Description',
+    'description' => 'Journaux d\'activité',
     'no_activity' => 'Aucune activité',
-    'title' => 'Titre',
+    'title' => 'Journaux d\'activité',
 ];

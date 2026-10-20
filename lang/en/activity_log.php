@@ -2,7 +2,7 @@
 
 return [
     'attributes' => 'Attributes',
-    'description' => 'Description',
+    'description' => 'Activity logs',
     'no_activity' => 'No activity',
-    'title' => 'Title',
+    'title' => 'Activity Logs',
 ];
