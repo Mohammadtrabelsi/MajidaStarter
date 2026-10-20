@@ -80,12 +80,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     </div>
 
     @if (session('status'))
-        <div
-            x-data="{ show: true }"
-            x-show="show"
-            x-init="setTimeout(() => show = false, 3000)"
-            class="tag tag-accent ms-notice"
-        >{{ session('status') }}</div>
+        <div data-autohide="3000" class="tag tag-accent ms-notice">{{ session('status') }}</div>
     @endif
 
     <div class="stat-cards">

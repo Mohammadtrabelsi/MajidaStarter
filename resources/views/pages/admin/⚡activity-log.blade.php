@@ -57,7 +57,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 };
 ?>
 
-<div x-data="{ expanded: null }">
+<div data-accordion>
     <div class="ms-mb-24">
         <h2>{{ __('activity_log.title') }}</h2>
         <p class="text-muted ms-note">{{ __('activity_log.description') }}</p>
@@ -86,7 +86,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
             <div wire:key="activity-{{ $activity->id }}" class="ms-list-row">
                 <button
                     type="button"
-                    @click="expanded = expanded === {{ $activity->id }} ? null : {{ $activity->id }}"
+                    data-accordion-toggle="{{ $activity->id }}"
                     class="ms-disclosure-btn"
                 >
                     <div class="ms-row-start-12">
@@ -109,12 +109,12 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                     </div>
 
                     @if ($activity->properties->isNotEmpty())
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" class="ms-chevron" :style="expanded === {{ $activity->id }} ? 'transform: rotate(180deg)' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.75" class="ms-chevron" data-accordion-chevron="{{ $activity->id }}"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                     @endif
                 </button>
 
                 @if ($activity->properties->isNotEmpty())
-                    <div x-show="expanded === {{ $activity->id }}" x-collapse class="ms-hidden" >
+                    <div data-accordion-panel="{{ $activity->id }}">
                         <div class="prop-grid ms-inset-note">
                             @if ($activity->properties->has('old'))
                                 <div>

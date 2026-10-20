@@ -17,16 +17,15 @@
 
         @livewireStyles
     </head>
-    <body class="antialiased" x-data="{ sidebarOpen: false }">
-        <div class="shell">
+    <body class="antialiased">
+        <div class="shell" data-sidebar>
             <div
-                x-show="sidebarOpen"
-                x-transition.opacity
                 class="shell-overlay ms-hidden"
-                @click="sidebarOpen = false"
+                data-sidebar-overlay
+                data-sidebar-close
             ></div>
 
-            <aside class="shell-sidebar" :class="sidebarOpen && 'open'">
+            <aside class="shell-sidebar">
                 <a href="{{ route('dashboard') }}" wire:navigate class="brand ms-pad-x20-b22">
                     <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                     <span class="brand-name">{{ config('app.name') }}</span>
@@ -87,7 +86,7 @@
 
             <div class="shell-main">
                 <div class="shell-topbar">
-                    <button type="button" class="topbar-burger" @click="sidebarOpen = true" aria-label="Open menu">
+                    <button type="button" class="topbar-burger" data-sidebar-open aria-label="Open menu">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
 
@@ -96,8 +95,8 @@
                     @include('partials.locale-switcher')
                     @include('partials.theme-toggle')
 
-                    <div class="ms-row-12-rel" x-data="{ open: false }">
-                        <button type="button" @click="open = !open" @click.outside="open = false" class="ms-iconbtn-plain">
+                    <div class="ms-row-12-rel" data-dropdown>
+                        <button type="button" data-dropdown-toggle class="ms-iconbtn-plain">
                             <span class="avatar">{{ Str::of(auth()->user()->name)->explode(' ')->map(fn ($p) => $p[0] ?? '')->take(2)->implode('') }}</span>
                             <span class="hidden sm:inline ms-strong-13">{{ auth()->user()->name }}</span>
                             @if (auth()->user()->isAdmin())
@@ -106,8 +105,7 @@
                         </button>
 
                         <div
-                            x-show="open"
-                            x-transition
+                            data-dropdown-menu
                             class="blueprint ms-menu-abs"
                         >
                             <div class="text-muted ms-menu-head">
