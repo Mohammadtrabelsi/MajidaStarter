@@ -12,6 +12,7 @@ return [
     'admin_panel' => 'Admin panel',
     'admin_permissions_note' => 'You have full administrator permissions across the application.',
     'administrator' => 'Administrator',
+    'all_roles' => 'All roles',
     'all_time' => 'All time',
     'categories' => 'Categories',
     'days_as_member' => 'Days as member',

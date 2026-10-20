@@ -18,12 +18,21 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
     #[Url(as: 'q', history: true)]
     public string $search = '';
 
+    /** '' for all, '1' for active only, '0' for inactive only. */
+    #[Url(as: 'active', history: true)]
+    public string $active = '';
+
     public function mount(): void
     {
         $this->authorize('manage categories');
     }
 
     public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedActive(): void
     {
         $this->resetPage();
     }
@@ -46,7 +55,11 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
     #[Computed]
     public function categories()
     {
-        return app(CategoryService::class)->searchPaginated($this->search);
+        return app(CategoryService::class)->searchPaginated($this->search, 10, match ($this->active) {
+            '1' => true,
+            '0' => false,
+            default => null,
+        });
     }
 
     public function render()
@@ -89,6 +102,14 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
         <div class="ms-search-field">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
             <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('categories.search_placeholder') }}">
+        </div>
+
+        <div class="ms-mw-280">
+            <select wire:model.live="active" class="input" aria-label="{{ __('categories.status') }}">
+                <option value="">{{ __('categories.all_statuses') }}</option>
+                <option value="1">{{ __('categories.active') }}</option>
+                <option value="0">{{ __('categories.inactive') }}</option>
+            </select>
         </div>
     </div>
 

@@ -15,7 +15,16 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     #[Url(as: 'q', history: true)]
     public string $search = '';
 
+    /** '' for all, 'admin' for administrators, 'member' for everyone else. */
+    #[Url(as: 'role', history: true)]
+    public string $role = '';
+
     public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedRole(): void
     {
         $this->resetPage();
     }
@@ -55,7 +64,11 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     #[Computed]
     public function users()
     {
-        return app(UserService::class)->searchPaginated($this->search);
+        return app(UserService::class)->searchPaginated(
+            $this->search,
+            8,
+            $this->role !== '' ? $this->role : null,
+        );
     }
 
     public function render()
@@ -105,6 +118,14 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
         <div class="ms-search-field">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
             <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('dashboard.search_placeholder') }}">
+        </div>
+
+        <div class="ms-mw-280">
+            <select wire:model.live="role" class="input" aria-label="{{ __('dashboard.role') }}">
+                <option value="">{{ __('dashboard.all_roles') }}</option>
+                <option value="admin">{{ __('dashboard.administrator') }}</option>
+                <option value="member">{{ __('dashboard.member') }}</option>
+            </select>
         </div>
     </div>
 

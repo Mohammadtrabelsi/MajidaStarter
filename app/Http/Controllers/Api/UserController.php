@@ -22,12 +22,14 @@ class UserController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'role' => ['nullable', Rule::in(['admin', 'member'])],
         ]);
 
         return response()->json(
             $this->users->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 8,
+                $validated['role'] ?? null,
             )
         );
     }

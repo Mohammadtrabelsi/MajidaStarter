@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Services\CategoryService;
 use App\Services\PostService;
 use App\Support\Livewire\InteractsWithToasts;
 use Livewire\Attributes\Computed;
@@ -18,12 +19,30 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     #[Url(as: 'q', history: true)]
     public string $search = '';
 
+    /** '' for all, otherwise a key of Post::statuses(). */
+    #[Url(as: 'status', history: true)]
+    public string $status = '';
+
+    /** '' for all, otherwise a category id. */
+    #[Url(as: 'category', history: true)]
+    public string $category = '';
+
     public function mount(): void
     {
         $this->authorize('manage posts');
     }
 
     public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedStatus(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedCategory(): void
     {
         $this->resetPage();
     }
@@ -44,9 +63,20 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     }
 
     #[Computed]
+    public function categories(): array
+    {
+        return app(CategoryService::class)->options();
+    }
+
+    #[Computed]
     public function posts()
     {
-        return app(PostService::class)->searchPaginated($this->search);
+        return app(PostService::class)->searchPaginated(
+            $this->search,
+            10,
+            $this->status !== '' ? $this->status : null,
+            $this->category !== '' ? (int) $this->category : null,
+        );
     }
 
     public function render()
@@ -89,6 +119,24 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
         <div class="ms-search-field">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
             <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('posts.search_placeholder') }}">
+        </div>
+
+        <div class="ms-mw-280">
+            <select wire:model.live="status" class="input" aria-label="{{ __('posts.status') }}">
+                <option value="">{{ __('posts.all_statuses') }}</option>
+                @foreach (\App\Models\Post::statuses() as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="ms-mw-280">
+            <select wire:model.live="category" class="input" aria-label="{{ __('posts.category') }}">
+                <option value="">{{ __('posts.all_categories') }}</option>
+                @foreach ($this->categories as $id => $name)
+                    <option value="{{ $id }}">{{ $name }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
