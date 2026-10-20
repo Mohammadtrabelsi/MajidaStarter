@@ -42,7 +42,7 @@ class CategoryService
             ->all();
     }
 
-    public function searchPaginated(?string $search, int $perPage = 10): LengthAwarePaginator
+    public function searchPaginated(?string $search, int $perPage = 10, ?bool $active = null): LengthAwarePaginator
     {
         return Category::query()
             ->withCount('posts')
@@ -51,6 +51,7 @@ class CategoryService
                 ->orWhere('name->en', 'like', "%{$search}%")
                 ->orWhere('name->ar', 'like', "%{$search}%")
             ))
+            ->when($active !== null, fn ($query) => $query->where('is_active', $active))
             ->latest()
             ->paginate($perPage)
             ->withQueryString();

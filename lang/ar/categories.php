@@ -3,6 +3,7 @@
 return [
     'actions' => 'الإجراءات',
     'active' => 'نشط',
+    'all_statuses' => 'كل الحالات',
     'cancel' => 'إلغاء',
     'categories' => 'الفئات',
     'create_a_category_to_group_related_posts' => 'أنشئ فئة لتجميع المنشورات ذات الصلة',

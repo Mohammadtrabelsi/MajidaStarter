@@ -132,13 +132,20 @@ class UserService
             ->all();
     }
 
-    public function searchPaginated(?string $search, int $perPage = 8): LengthAwarePaginator
+    /**
+     * @param  string|null  $role  'admin' for administrators, 'member' for everyone else.
+     */
+    public function searchPaginated(?string $search, int $perPage = 8, ?string $role = null): LengthAwarePaginator
     {
         return User::query()
             ->with('roles')
             ->when($search, fn ($query) => $query->where(
                 fn ($q) => $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
+            ))
+            ->when($role === 'admin', fn ($query) => $query->role('admin'))
+            ->when($role === 'member', fn ($query) => $query->whereDoesntHave(
+                'roles', fn ($q) => $q->where('name', 'admin')
             ))
             ->latest()
             ->paginate($perPage)

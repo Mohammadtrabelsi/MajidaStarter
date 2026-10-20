@@ -12,6 +12,7 @@ return [
     'admin_panel' => 'Panneau d\'administration',
     'admin_permissions_note' => 'Vous disposez de tous les droits d\'administrateur sur l\'ensemble de l\'application.',
     'administrator' => 'Administrateur',
+    'all_roles' => 'Tous les rôles',
     'all_time' => 'Depuis le début',
     'categories' => 'Catégories',
     'days_as_member' => 'Jours en tant que membre',

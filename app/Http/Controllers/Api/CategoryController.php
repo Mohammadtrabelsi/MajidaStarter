@@ -21,12 +21,14 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'active' => ['nullable', 'boolean'],
         ]);
 
         return response()->json(
             $this->categories->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 10,
+                $request->filled('active') ? $request->boolean('active') : null,
             )
         );
     }

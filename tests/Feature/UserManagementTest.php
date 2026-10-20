@@ -38,7 +38,7 @@ class UserManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.users.create')
+            ->test('admin.users.form')
             ->set('name', 'New Person')
             ->set('email', 'new-person@example.com')
             ->set('password', 'password123')
@@ -59,7 +59,7 @@ class UserManagementTest extends TestCase
         $user = User::factory()->create(['name' => 'Before']);
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.users.edit', ['user' => $user])
+            ->test('admin.users.form', ['user' => $user])
             ->set('name', 'After')
             ->set('roles', ['admin'])
             ->call('save')
@@ -78,7 +78,7 @@ class UserManagementTest extends TestCase
         $user = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.users.edit', ['user' => $user])
+            ->test('admin.users.form', ['user' => $user])
             ->set('roles', [])
             ->call('save')
             ->assertHasNoErrors();
@@ -97,6 +97,31 @@ class UserManagementTest extends TestCase
             ->assertHasNoErrors();
 
         $this->assertModelMissing($user);
+    }
+
+    public function test_user_list_can_be_filtered_by_role(): void
+    {
+        $admin = User::factory()->admin()->create(['name' => 'Filter Admin']);
+        User::factory()->create(['name' => 'Filter Member']);
+
+        Livewire::actingAs($admin)
+            ->test('pages::admin.dashboard')
+            ->set('role', 'member')
+            ->assertSee('Filter Member')
+            ->assertDontSee('Filter Admin')
+            ->set('role', 'admin')
+            ->assertSee('Filter Admin')
+            ->assertDontSee('Filter Member');
+    }
+
+    public function test_delete_user_button_asks_for_confirmation(): void
+    {
+        $admin = User::factory()->admin()->create();
+        User::factory()->create(['name' => 'Confirm User']);
+
+        $this->actingAs($admin)
+            ->get('/admin/dashboard')
+            ->assertSee('wire:confirm="Permanently delete Confirm User? This cannot be undone."', false);
     }
 
     public function test_admin_cannot_delete_themselves(): void

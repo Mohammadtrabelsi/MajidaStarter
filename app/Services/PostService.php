@@ -32,7 +32,7 @@ class PostService
         $post->delete();
     }
 
-    public function searchPaginated(?string $search, int $perPage = 10): LengthAwarePaginator
+    public function searchPaginated(?string $search, int $perPage = 10, ?string $status = null, ?int $categoryId = null): LengthAwarePaginator
     {
         return Post::query()
             ->with(['category', 'author'])
@@ -41,6 +41,8 @@ class PostService
                 ->orWhere('title->en', 'like', "%{$search}%")
                 ->orWhere('title->ar', 'like', "%{$search}%")
             ))
+            ->when($status !== null, fn ($query) => $query->where('status', $status))
+            ->when($categoryId !== null, fn ($query) => $query->where('category_id', $categoryId))
             ->latest()
             ->paginate($perPage)
             ->withQueryString();

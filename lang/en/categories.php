@@ -3,6 +3,7 @@
 return [
     'actions' => 'Actions',
     'active' => 'Active',
+    'all_statuses' => 'All statuses',
     'cancel' => 'Cancel',
     'categories' => 'Categories',
     'create_a_category_to_group_related_posts' => 'Create a category to group related posts',

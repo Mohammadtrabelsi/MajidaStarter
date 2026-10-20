@@ -21,12 +21,16 @@ class PostController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'status' => ['nullable', Rule::in(array_keys(Post::statuses()))],
+            'category_id' => ['nullable', 'integer'],
         ]);
 
         return response()->json(
             $this->posts->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 10,
+                $validated['status'] ?? null,
+                isset($validated['category_id']) ? (int) $validated['category_id'] : null,
             )
         );
     }
