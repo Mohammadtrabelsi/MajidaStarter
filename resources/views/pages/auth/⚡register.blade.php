@@ -56,7 +56,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
                 type="text"
                 autofocus
                 autocomplete="name"
-                placeholder="Jane Doe"
+                placeholder="{{ __('register.name_placeholder') }}"
                 :error="$errors->first('name')"
             />
             <x-input-error :message="$errors->first('name')" />
@@ -69,7 +69,7 @@ new #[Layout('layouts::guest')] #[Title('Create account')] class extends Compone
                 id="email"
                 type="email"
                 autocomplete="username"
-                placeholder="you@company.com"
+                placeholder="{{ __('register.email_placeholder') }}"
                 :error="$errors->first('email')"
             />
             <x-input-error :message="$errors->first('email')" />

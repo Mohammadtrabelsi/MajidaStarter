@@ -3,6 +3,7 @@
 return [
     'back_to_sign_in' => 'Retour à la connexion',
     'email_password_reset_link' => 'Envoyer le lien de réinitialisation',
+    'email_placeholder' => 'vous@entreprise.com',
     'forgot_your_password' => 'Mot de passe oublié ?',
     'no_worries' => 'Pas d\'inquiétude.',
     'remembered_your_password' => 'Vous vous souvenez de votre mot de passe ?',

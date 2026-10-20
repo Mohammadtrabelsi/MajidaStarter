@@ -138,7 +138,7 @@ new #[Layout('layouts::app')] #[Title('New post')] class extends Component
         <div class="ms-section-top-stack">
             <div class="field ms-mb-0">
                 <x-input-label for="slug" value="Slug" />
-                <x-text-input wire:model="slug" id="slug" type="text" placeholder="Generated from title if left blank" :error="$errors->first('slug')" />
+                <x-text-input wire:model="slug" id="slug" type="text" placeholder="{{ __('posts.slug_placeholder') }}" :error="$errors->first('slug')" />
                 <x-input-error :message="$errors->first('slug')" />
             </div>
 

@@ -18,6 +18,7 @@ return [
     'no_users_found' => 'Aucun utilisateur trouvé',
     'revoke_admin' => 'Révoquer l\'administrateur',
     'role' => 'Rôle',
+    'search_placeholder' => 'Rechercher par nom ou e-mail…',
     'title' => 'Titre',
     'user' => 'Utilisateur',
     'users_description' => 'Description des utilisateurs',

@@ -104,7 +104,7 @@ new #[Layout('layouts::app')] #[Title('New category')] class extends Component
 
         <div class="field ms-section-top">
             <x-input-label for="slug" value="Slug" />
-            <x-text-input wire:model="slug" id="slug" type="text" placeholder="Generated from name if left blank" :error="$errors->first('slug')" />
+            <x-text-input wire:model="slug" id="slug" type="text" placeholder="{{ __('categories.slug_placeholder') }}" :error="$errors->first('slug')" />
             <x-input-error :message="$errors->first('slug')" />
         </div>
 

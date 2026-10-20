@@ -6,5 +6,6 @@ return [
     'maintenance_mode' => 'Maintenance mode',
     'save' => 'Save',
     'saved' => 'Saved',
+    'support_email_placeholder' => 'support@company.com',
     'title' => 'Settings',
 ];

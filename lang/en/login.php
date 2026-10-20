@@ -2,6 +2,7 @@
 
 return [
     'create_one' => 'Create one',
+    'email_placeholder' => 'you@company.com',
     'forgot_password' => 'Forgot password?',
     'no_account' => 'Don\'t have an account?',
     'password' => 'Password',

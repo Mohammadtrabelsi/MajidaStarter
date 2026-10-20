@@ -2,6 +2,7 @@
 
 return [
     'create_one' => 'Créez-en un',
+    'email_placeholder' => 'vous@entreprise.com',
     'forgot_password' => 'Mot de passe oublié ?',
     'no_account' => 'Vous n\'avez pas de compte ?',
     'password' => 'Mot de passe',

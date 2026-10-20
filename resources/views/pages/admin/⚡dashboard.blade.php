@@ -104,7 +104,7 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
     <div class="ms-toolbar">
         <div class="ms-search-field">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
-            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="Search by name or email…">
+            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('dashboard.search_placeholder') }}">
         </div>
     </div>
 

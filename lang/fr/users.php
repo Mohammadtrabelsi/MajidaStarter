@@ -7,5 +7,6 @@ return [
     'edit' => 'Modifier',
     'edit_description' => 'Description de modification',
     'no_roles' => 'Aucun rôle',
+    'password_placeholder' => 'Laisser vide pour conserver le mot de passe actuel',
     'save_changes' => 'Enregistrer les modifications',
 ];

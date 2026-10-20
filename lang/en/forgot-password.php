@@ -3,6 +3,7 @@
 return [
     'back_to_sign_in' => 'Back to sign in',
     'email_password_reset_link' => 'Email password reset link',
+    'email_placeholder' => 'you@company.com',
     'forgot_your_password' => 'Forgot your password?',
     'no_worries' => 'No worries.',
     'remembered_your_password' => 'Remembered your password?',

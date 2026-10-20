@@ -18,6 +18,7 @@ return [
     'no_users_found' => 'No users found',
     'revoke_admin' => 'Revoke admin',
     'role' => 'Role',
+    'search_placeholder' => 'Search by name or email…',
     'title' => 'Title',
     'user' => 'User',
     'users_description' => 'Users description',

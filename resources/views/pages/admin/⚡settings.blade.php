@@ -115,7 +115,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                 wire:model="supportEmail"
                 id="supportEmail"
                 type="email"
-                placeholder="support@company.com"
+                placeholder="{{ __('settings.support_email_placeholder') }}"
                 :error="$errors->first('supportEmail')"
             />
             <x-input-error :message="$errors->first('supportEmail')" />

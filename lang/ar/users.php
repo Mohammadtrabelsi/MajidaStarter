@@ -7,5 +7,6 @@ return [
     'edit' => 'تعديل',
     'edit_description' => 'وصف التعديل',
     'no_roles' => 'لا توجد أدوار',
+    'password_placeholder' => 'اتركه فارغًا للإبقاء على كلمة المرور الحالية',
     'save_changes' => 'حفظ التغييرات',
 ];

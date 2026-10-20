@@ -2,6 +2,7 @@
 
 return [
     'create_one' => 'أنشئ حساباً',
+    'email_placeholder' => 'you@company.com',
     'forgot_password' => 'نسيت كلمة المرور؟',
     'no_account' => 'ليس لديك حساب؟',
     'password' => 'كلمة المرور',

@@ -67,7 +67,7 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
                 wire:model="email"
                 id="email"
                 type="email"
-                placeholder="you@company.com"
+                placeholder="{{ __('login.email_placeholder') }}"
                 autofocus
                 autocomplete="username"
                 :error="$errors->first('email')"

@@ -18,6 +18,7 @@ return [
     'no_users_found' => 'لم يتم العثور على مستخدمين',
     'revoke_admin' => 'إلغاء صلاحية المسؤول',
     'role' => 'الدور',
+    'search_placeholder' => 'ابحث بالاسم أو البريد الإلكتروني…',
     'title' => 'العنوان',
     'user' => 'المستخدم',
     'users_description' => 'وصف المستخدمين',

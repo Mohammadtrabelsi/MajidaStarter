@@ -80,7 +80,7 @@ new #[Layout('layouts::app')] #[Title('Edit user')] class extends Component
 
         <div class="field ms-mb-0">
             <x-input-label for="password" value="New password" />
-            <x-text-input wire:model="password" id="password" type="password" autocomplete="new-password" placeholder="Leave blank to keep current" :error="$errors->first('password')" />
+            <x-text-input wire:model="password" id="password" type="password" autocomplete="new-password" placeholder="{{ __('users.password_placeholder') }}" :error="$errors->first('password')" />
             <x-input-error :message="$errors->first('password')" />
         </div>
 

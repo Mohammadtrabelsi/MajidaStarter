@@ -48,7 +48,7 @@ new #[Layout('layouts::guest')] #[Title('Forgot password')] class extends Compon
                 type="email"
                 autofocus
                 autocomplete="username"
-                placeholder="you@company.com"
+                placeholder="{{ __('forgot-password.email_placeholder') }}"
                 :error="$errors->first('email')"
             />
             <x-input-error :message="$errors->first('email')" />

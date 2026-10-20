@@ -6,5 +6,6 @@ return [
     'maintenance_mode' => 'Mode maintenance',
     'save' => 'Enregistrer',
     'saved' => 'Enregistré',
+    'support_email_placeholder' => 'support@entreprise.com',
     'title' => 'Paramètres',
 ];

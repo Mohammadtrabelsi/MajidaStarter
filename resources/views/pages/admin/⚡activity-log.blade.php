@@ -77,7 +77,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 
         <div class="ms-search-field-right">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(var(--ink),.5)" stroke-width="1.5" class="ms-input-icon"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
-            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="Search description…">
+            <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('activity_log.search_placeholder') }}">
         </div>
     </div>
 
