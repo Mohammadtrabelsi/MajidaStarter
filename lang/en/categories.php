@@ -10,6 +10,7 @@ return [
     'delete' => 'Delete',
     'edit' => 'Edit',
     'edit_category' => 'Edit category',
+    'inactive' => 'Inactive',
     'inactive_categories_stay_hidden_from_public_listings' => 'Inactive categories stay hidden from public listings',
     'name' => 'Name',
     'new_category' => 'New category',
@@ -19,5 +20,6 @@ return [
     'save_changes' => 'Save changes',
     'slug' => 'Slug',
     'status' => 'Status',
+    'total_categories' => 'Total categories',
     'update_category_details' => 'Update category details',
 ];

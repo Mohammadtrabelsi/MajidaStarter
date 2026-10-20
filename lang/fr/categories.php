@@ -10,6 +10,7 @@ return [
     'delete' => 'Supprimer',
     'edit' => 'Modifier',
     'edit_category' => 'Modifier la catégorie',
+    'inactive' => 'Inactif',
     'inactive_categories_stay_hidden_from_public_listings' => 'Les catégories inactives restent masquées des listes publiques',
     'name' => 'Nom',
     'new_category' => 'Nouvelle catégorie',
@@ -19,5 +20,6 @@ return [
     'save_changes' => 'Enregistrer les modifications',
     'slug' => 'Slug',
     'status' => 'Statut',
+    'total_categories' => 'Total des catégories',
     'update_category_details' => 'Mettre à jour les détails de la catégorie',
 ];

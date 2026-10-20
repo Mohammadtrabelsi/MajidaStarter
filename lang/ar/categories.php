@@ -10,6 +10,7 @@ return [
     'delete' => 'حذف',
     'edit' => 'تعديل',
     'edit_category' => 'تعديل الفئة',
+    'inactive' => 'غير نشط',
     'inactive_categories_stay_hidden_from_public_listings' => 'تبقى الفئات غير النشطة مخفية عن القوائم العامة',
     'name' => 'الاسم',
     'new_category' => 'فئة جديدة',
@@ -19,5 +20,6 @@ return [
     'save_changes' => 'حفظ التغييرات',
     'slug' => 'الرابط المختصر',
     'status' => 'الحالة',
+    'total_categories' => 'إجمالي الفئات',
     'update_category_details' => 'تحديث تفاصيل الفئة',
 ];

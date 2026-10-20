@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'description' => 'Description',
+    'description' => 'Gerez les paramètres de votre site Web.',
     'maintenance_description' => 'Description du mode maintenance',
     'maintenance_mode' => 'Mode maintenance',
     'save' => 'Enregistrer',
     'saved' => 'Enregistré',
-    'title' => 'Titre',
+    'title' => 'Paramètres',
 ];
