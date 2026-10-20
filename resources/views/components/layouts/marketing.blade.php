@@ -36,37 +36,36 @@
             {{ $slot }}
         </main>
 
-        <footer>
-            <div class="container footer-top">
-                <div class="ms-mw-280">
-                    <div class="brand ms-mb-10">
+        <footer class="site-footer">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <a href="{{ url('/') }}" class="brand">
                         <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
                         <span class="brand-name">{{ config('app.name') }}</span>
-                    </div>
-                    <p class="text-muted ms-fs-13">A Laravel Livewire starter for admin-heavy products.</p>
+                    </a>
+                    <p class="text-muted footer-brand-copy">A Laravel Livewire starter for admin-heavy products.</p>
+                    <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
                 </div>
-                <div class="ms-row-56">
-                    <div>
-                        <div class="footer-heading">Product</div>
-                        <div class="footer-links">
-                            <a href="{{ url('/') }}#features" class="link ms-color-text">{{ __('marketing.features') }}</a>
-                            <a href="{{ route('docs') }}" class="link ms-color-text">{{ __('marketing.docs') }}</a>
-                            <a href="#" class="link ms-color-text">{{ __('marketing.changelog') }}</a>
-                        </div>
+                <nav aria-label="Product">
+                    <div class="footer-heading">Product</div>
+                    <div class="footer-links">
+                        <a href="{{ url('/') }}#features">{{ __('marketing.features') }}</a>
+                        <a href="{{ route('docs') }}">{{ __('marketing.docs') }}</a>
+                        <a href="#">{{ __('marketing.changelog') }}</a>
                     </div>
-                    <div>
-                        <div class="footer-heading">Company</div>
-                        <div class="footer-links">
-                            <a href="{{ route('blog') }}" class="link ms-color-text">{{ __('marketing.blog') }}</a>
-                            <a href="#" class="link ms-color-text">{{ __('marketing.github') }}</a>
-                            <a href="#" class="link ms-color-text">{{ __('marketing.license') }}</a>
-                        </div>
+                </nav>
+                <nav aria-label="Company">
+                    <div class="footer-heading">Company</div>
+                    <div class="footer-links">
+                        <a href="{{ route('blog') }}">{{ __('marketing.blog') }}</a>
+                        <a href="#">{{ __('marketing.github') }}</a>
+                        <a href="#">{{ __('marketing.license') }}</a>
                     </div>
-                </div>
+                </nav>
             </div>
             <div class="container footer-bottom">
                 <div class="text-muted ms-fs-12">© {{ date('Y') }} {{ config('app.name') }}.</div>
-                <div class="text-muted ms-fs-12">{{ __('marketing.in_memory') }}</div>
+                <span class="footer-status">{{ __('marketing.in_memory') }}</span>
             </div>
         </footer>
     </body>
