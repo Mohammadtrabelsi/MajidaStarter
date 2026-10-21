@@ -16,7 +16,7 @@ class SettingService
 
     public function dateFormat(): string
     {
-        return $this->current()->date_format;
+        return $this->current()->date_format ?? 'M j, Y';
     }
 
     public function update(Setting $setting, array $data): Setting

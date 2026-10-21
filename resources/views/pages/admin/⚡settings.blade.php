@@ -45,7 +45,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
         $this->supportEmail = $setting->support_email ?? '';
         $this->maintenanceMode = $setting->maintenance_mode;
-        $this->dateFormat = $setting->date_format;
+        $this->dateFormat = $setting->date_format ?? 'M j, Y';
     }
 
     public function save(SettingService $settings): void
