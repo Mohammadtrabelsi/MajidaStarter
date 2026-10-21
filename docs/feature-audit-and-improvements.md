@@ -1,7 +1,9 @@
 # Application Feature Audit & Roadmap
 
 > **Stack:** Laravel 13 | Livewire 4 | PHP 8.3+
-> **Audit Date:** 2026-07-24
+> **Audit Date:** 2026-07-24 · **Last verified:** 2026-10-21
+
+> **Status note (2026-10-21):** Sections 2–4 describe the codebase as it was at the audit date. Several findings have since been fixed, and the feature index in §2 has been updated to match the code. §5 is the authoritative checklist. Where §3 or §4 disagree with the code, treat the code and §5 as correct.
 
 ---
 
@@ -23,17 +25,23 @@
 
 | Module / Domain | Components / Controllers | Capabilities | Maturity / Status |
 | :--- | :--- | :--- | :--- |
-| **Auth & Sessions** | `pages/auth/⚡login`, `⚡register`, `⚡forgot-password`, `⚡reset-password`, `⚡verify-email`; `Auth\LogoutController`; `Api\AuthController` | Login (with per-email+IP rate limiting), registration, password reset, email verification, logout | Production Ready |
-| **User Management (Admin)** | `pages/admin/⚡dashboard`, `admin/users/⚡create`, `⚡edit`; `Api\UserController`; `UserService` | List/search/paginate, create, edit, delete, grant/revoke admin, role sync, self-action guards | Production Ready |
-| **Posts** | `pages/admin/posts/⚡index`, `⚡create`, `⚡edit`; `Api\PostController`; `PostService` | Translatable CRUD, unique-slug generation, draft/published status, `published_at` sync, category & author relations | Production Ready (admin only) |
-| **Categories** | `pages/admin/categories/⚡index`, `⚡create`, `⚡edit`; `Api\CategoryController`; `CategoryService` | Translatable CRUD, unique slugs, active/inactive flag, `withCount('posts')`, options list | Production Ready |
+| **Auth & Sessions** | `pages/auth/⚡login`, `⚡register`, `⚡forgot-password`, `⚡reset-password`, `⚡verify-email`, `⚡two-factor-challenge`; `Auth\LogoutController`; `Api\AuthController` | Login (per-email+IP rate limiting, two-factor step), registration, password reset (queued), email verification (queued), logout | Production Ready |
+| **Two-Factor Auth** | `pages/settings/⚡two-factor`; `TwoFactorService`; `Api\AuthController` | TOTP (RFC 6238) setup, single-use recovery codes, enforced at web and API sign-in once confirmed | Production Ready |
+| **API Tokens** | `Api\AuthController::token`/`revokeToken`; Sanctum `HasApiTokens` | Personal access tokens for bearer-token clients, alongside session auth on `/api` | Production Ready |
+| **User Management (Admin)** | `pages/admin/⚡dashboard`, `admin/users/⚡index`, `⚡create`, `⚡edit`; `Api\UserController`; `UserService` | List/search/paginate, create, edit, soft delete + trash/restore, grant/revoke admin, role sync, self-action guards | Production Ready |
+| **Posts** | `pages/admin/posts/⚡index`, `⚡create`, `⚡edit`; `Api\PostController`; `PostService`; `PostPolicy` | Translatable CRUD, unique slugs, draft/published status, `published_at`, cover images, soft delete + trash, author-only edits for non-admins | Production Ready |
+| **Public Blog** | `BlogController`, `blog`, `blog-post` | `/blog` listing with search and `/blog/{slug}` detail for published posts, with cover images | Production Ready |
+| **Categories** | `pages/admin/categories/⚡index`, `⚡create`, `⚡edit`; `Api\CategoryController`; `CategoryService`; `CategoryPolicy` | Translatable CRUD, unique slugs, active/inactive flag, `withCount('posts')`, options list, soft delete + trash | Production Ready |
 | **Profile / Account** | `pages/settings/⚡profile`; `Api\ProfileController` | Update name/email (re-verify on change), change password (`current_password` gate), resend verification, self-delete with password confirm | Production Ready |
-| **Settings** | `pages/admin/⚡settings`; `Api\SettingController`; `SettingService` | Singleton settings (`firstOrCreate`), translatable site name/description, support email, maintenance-mode flag | Production Ready |
-| **Activity Log / Audit** | `pages/admin/⚡activity-log`; `TracksUserActions`; Spatie Activitylog | Per-model change log (old/new), causer/subject, filter by log name + description search, `created_by`/`updated_by` stamping | Production Ready |
-| **Localization / i18n** | `SetLocale` middleware, `LocaleController`, `partials/locale-switcher*`, `console/Commands/SyncTranslationKeys` | Session-driven locale, RTL support, `en`/`ar`/`fr` line files + `translations:sync` tooling | Production Ready (see 3.2 defect) |
+| **Settings** | `pages/admin/⚡settings`; `Api\SettingController`; `SettingService` | Singleton settings (`firstOrCreate`), translatable site name/description, support email, date format, maintenance-mode flag (enforced by `EnforceMaintenanceMode`) | Production Ready |
+| **Activity Log / Audit** | `pages/admin/⚡activity-log`; `ActivityLogService`; `ActivityLogExportController`; `TracksUserActions`; Spatie Activitylog | Per-model change log (old/new), causer/subject, filter by log name + description search, CSV/JSON export, scheduled `activitylog:clean`, `created_by`/`updated_by` stamping | Production Ready |
+| **CRUD Notifications** | `CrudNotificationObserver`; `CrudActionNotification`; `config/crud_notifications.php` | Database notifications to admins on post/category create, update and delete (actor excluded). **No UI yet** — nothing renders the notifications | Backend only |
+| **Visit Statistics** | `TrackVisit` middleware; `VisitService`; `Visit` model | Page-view recording after the response, bot filtering, totals on the admin and user dashboards | Production Ready |
+| **System Health & Maintenance** | `SystemHealthService` (dashboard card); `/up`; `EnforceMaintenanceMode` | Database, cache and queue probes; liveness endpoint; maintenance-mode 503 for non-admins | Production Ready |
+| **Localization / i18n** | `SetLocale` middleware, `LocaleController`, `partials/locale-switcher*`, `Console/Commands/SyncTranslationKeys` | Session-driven locale, RTL support, `en`/`ar`/`fr` line files + `translations:sync` tooling | Production Ready |
 | **Theming** | `partials/theme-script`, `partials/theme-toggle` | Persisted dark/light toggle, FOUC-free inline script | Production Ready |
-| **Public / Marketing** | `welcome`, `docs`, `blog` (static `Route::view`) | Landing, docs, and a **static** blog placeholder | Placeholder / Incomplete |
-| **JSON API** | `routes/api.php`, `Api\*Controller` | Full service surface as JSON, gated by the same `can:` permissions | Beta (session-auth, un-throttled login — see 3.3) |
+| **Public / Marketing** | `welcome`, `docs` (route-linked guide), `blog` | Landing page, in-app docs with links to each feature, and the public blog | Production Ready |
+| **JSON API** | `routes/api.php`, `Api\*Controller` | Full service surface as JSON, gated by the same `can:` permissions, accepts session or Sanctum bearer auth, auth endpoints throttled | Production Ready |
 
 ---
 
@@ -117,7 +125,7 @@ The app already uses the best structural Livewire 4 feature — **view-based pag
 - [ ] Stats: collapsed into single aggregate queries (done). Caching with invalidation is still open.
 - [x] Extend `searchPaginated()` in `PostService`/`CategoryService` to match translatable titles/names in every configured locale.
 - [x] Queue email: verification was already queued; password reset is now queued too (`QueuedResetPassword`).
-- [ ] Replace duplicated `DomainException` try/catch with a renderable exception.
+- [x] Replace duplicated `DomainException` try/catch with a renderable exception (`DomainActionException::render()`; no catch sites remain).
 - [x] Add `PostPolicy` / `CategoryPolicy` and enforce them in the admin screens and the API.
 - [ ] Extract the repeated Alpine flash/toast into one reusable `wire:transition` component.
 
@@ -138,4 +146,4 @@ The app already uses the best structural Livewire 4 feature — **view-based pag
 
 ---
 
-*Audit scope: static analysis only. No application logic was modified in producing this report — all file paths, class names, routes, and component references above reflect the repository as it currently stands on branch `claude/laravel-livewire-audit-exze5x`.*
+*Audit scope: static analysis only. No application logic was modified in producing this report. The file paths, class names, routes, and component references in §§2–4 reflect the repository on 2026-07-24. The feature index in §2 and the status in §5 were re-checked on 2026-10-21 on branch `claude/zealous-cray-mnijs7`.*
