@@ -25,12 +25,12 @@
             @include('partials.theme-toggle')
         </div>
         <div class="auth-split">
-            <div class="auth-hero hatch">
-                <div class="auth-hero-tint"></div>
+            <div class="auth-hero">
                 <div class="auth-hero-body">
-                    <x-brand-mark class="ms-brand-invert" />
-                    <h2 class="ms-color-bg">{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
-                    <p class="ms-color-bg-muted">{{ __('app.auth_scaffolding') }}</p>
+                    <span class="brand-mark ms-brand-invert">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                    <p class="auth-hero-tag">{{ __('marketing.hero_tag') }}</p>
+                    <h2>{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
+                    <p>{{ __('marketing.hero_description', ['name' => config('app.name')]) }}</p>
                 </div>
             </div>
 
