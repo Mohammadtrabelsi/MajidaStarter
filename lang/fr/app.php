@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'Structure d\'authentification',
     'categories' => 'Catégories',
     'dashboard' => 'Tableau de bord',
+    'notifications' => 'Notifications',
     'logout' => 'Déconnexion',
     'posts' => 'Articles',
     'profile' => 'Profil',

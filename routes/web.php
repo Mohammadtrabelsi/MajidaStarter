@@ -77,6 +77,9 @@ Route::middleware('auth')->group(function () {
                 ->middleware('can:manage posts')
                 ->name('admin.posts.edit');
 
+            Route::livewire('/admin/notifications', 'pages::admin.notifications.index')
+                ->name('admin.notifications.index');
+
             Route::livewire('/admin/activity-log', 'pages::admin.activity-log')
                 ->middleware('can:view activity log')
                 ->name('admin.activity-log');

@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'هيكلية المصادقة',
     'categories' => 'التصنيفات',
     'dashboard' => 'لوحة التحكم',
+    'notifications' => 'الإشعارات',
     'logout' => 'تسجيل الخروج',
     'posts' => 'المنشورات',
     'profile' => 'الملف الشخصي',

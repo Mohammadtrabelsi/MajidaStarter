@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'Auth scaffolding',
     'categories' => 'Categories',
     'dashboard' => 'Dashboard',
+    'notifications' => 'Notifications',
     'logout' => 'Logout',
     'posts' => 'Posts',
     'profile' => 'Profile',
