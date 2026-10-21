@@ -11,8 +11,10 @@
 
         @include('partials.theme-script')
 
+        @include('partials.favicons')
+
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=barlow:400,500,700|barlow-condensed:400,600" rel="stylesheet">
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @livewireStyles
@@ -35,7 +37,7 @@
             <div class="auth-form-side">
                 <div class="ms-mw-360-full">
                     <a href="{{ url('/') }}" wire:navigate class="brand ms-mb-36">
-                        <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                        <x-brand-mark />
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </a>
 

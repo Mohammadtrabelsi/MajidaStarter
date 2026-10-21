@@ -9,8 +9,8 @@ class SettingService
     public function current(): Setting
     {
         return Setting::query()->firstOrCreate([], [
-            'site_name' => ['en' => config('app.name')],
-            'site_description' => ['en' => ''],
+            'site_name' => ['en' => config('app.name'), 'ar' => config('app.name'), 'fr' => config('app.name')],
+            'site_description' => ['en' => '', 'ar' => '', 'fr' => ''],
         ]);
     }
 

@@ -11,8 +11,10 @@
 
         @include('partials.theme-script')
 
+        @include('partials.favicons')
+
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=barlow:400,500,700|barlow-condensed:400,600" rel="stylesheet">
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @livewireStyles
@@ -26,62 +28,84 @@
             ></div>
 
             <aside class="shell-sidebar">
-                <a href="{{ route('dashboard') }}" wire:navigate class="brand ms-pad-x20-b22">
-                    <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                <a href="{{ auth()->user()?->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" wire:navigate class="brand ms-pad-x20-b22">
+                    <x-brand-mark />
                     <span class="brand-name">{{ config('app.name') }}</span>
                 </a>
 
                 <nav class="side-nav">
-                    <a href="{{ route('dashboard') }}" wire:navigate class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9z"></path></svg>
-                        {{ __('app.dashboard') }}
-                    </a>
-
                     @if (auth()->user()?->isAdmin())
-                        <div class="side-nav-label">{{ __('app.admin') }}</div>
-
-                        <a href="{{ route('admin.dashboard') }}" wire:navigate class="{{ request()->routeIs('admin.dashboard') || request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3"></circle><path d="M5 21c0-4 3-6 7-6s7 2 7 6"></path></svg>
-                            {{ __('app.users') }}
+                        <a href="{{ route('admin.dashboard') }}" wire:navigate class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 17v-5M12 17V8M16 17v-3"></path></svg>
+                            {{ __('app.dashboard') }}
                         </a>
 
-                        @can('manage posts')
-                            <a href="{{ route('admin.posts.index') }}" wire:navigate class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11l3 3v13a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"></path><path d="M8 10h8M8 14h8M8 18h5"></path></svg>
-                                {{ __('app.posts') }}
-                            </a>
-                        @endcan
-
-                        @can('manage categories')
-                            <a href="{{ route('admin.categories.index') }}" wire:navigate class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
-                                {{ __('app.categories') }}
+                        @can('manage users')
+                            <a href="{{ route('admin.dashboard') }}#users" wire:navigate class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.2c2 .7 3.5 2.6 3.5 5.8"></path></svg>
+                                {{ __('app.users') }}
                             </a>
                         @endcan
 
                         @can('view activity log')
                             <a href="{{ route('admin.activity-log') }}" wire:navigate class="{{ request()->routeIs('admin.activity-log') ? 'active' : '' }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 12 8 12 11 5 14 19 17 12 21 12"></polyline></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path><path d="M12 8v4l3 2"></path></svg>
                                 {{ __('app.activity_log') }}
                             </a>
                         @endcan
 
                         @can('manage settings')
                             <a href="{{ route('admin.settings') }}" wire:navigate class="{{ request()->routeIs('admin.settings') ? 'active' : '' }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2.5"></circle></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>
                                 {{ __('app.settings') }}
                             </a>
                         @endcan
+
+                        <a href="{{ route('dashboard') }}" wire:navigate class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>
+                            {{ __('app.my_dashboard') }}
+                        </a>
+
+                        <div class="side-nav-label">{{ __('app.marketing_site') }}</div>
+
+                        @can('manage posts')
+                            <a href="{{ route('admin.posts.index') }}" wire:navigate class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 8h8M8 12h8M8 16h5"></path></svg>
+                                {{ __('app.posts') }}
+                            </a>
+                        @endcan
+
+                        @can('manage categories')
+                            <a href="{{ route('admin.categories.index') }}" wire:navigate class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                                {{ __('app.categories') }}
+                            </a>
+                        @endcan
+
+                        <a href="{{ url('/') }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l5 5v13H6z"></path><path d="M14 3v5h5"></path></svg>
+                            {{ __('app.view_site') }}
+                        </a>
+                    @else
+                        <a href="{{ route('dashboard') }}" wire:navigate class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 17v-5M12 17V8M16 17v-3"></path></svg>
+                            {{ __('app.dashboard') }}
+                        </a>
+                        <a href="{{ route('profile.edit') }}" wire:navigate class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c0-3.3 3-5 7-5s7 1.7 7 5"></path></svg>
+                            {{ __('app.profile') }}
+                        </a>
                     @endif
                 </nav>
 
-                <div class="side-user">
+                <a href="{{ route('profile.edit') }}" wire:navigate class="side-user">
                     <span class="avatar">{{ Str::of(auth()->user()->name)->explode(' ')->map(fn ($p) => $p[0] ?? '')->take(2)->implode('') }}</span>
-                    <div class="ms-minw-0">
-                        <div class="ms-ellipsis-strong">{{ auth()->user()->name }}</div>
-                        <div class="text-muted ms-fs-11">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Member' }}</div>
-                    </div>
-                </div>
+                    <span class="ms-minw-0 ms-flex-1">
+                        <span class="text-muted ms-fs-12 ms-block">{{ __('app.welcome_back') }}</span>
+                        <span class="ms-ellipsis-strong ms-block">{{ auth()->user()->name }}</span>
+                    </span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+                </a>
             </aside>
 
             <div class="shell-main">
