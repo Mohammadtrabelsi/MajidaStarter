@@ -22,15 +22,17 @@
                 <x-brand-mark />
                 <span class="brand-name">{{ config('app.name') }}</span>
             </a>
-            <a href="{{ url('/') }}#features" class="link">{{ __('marketing.features') }}</a>
-            <a href="{{ route('docs') }}" class="link">{{ __('marketing.docs') }}</a>
-            <a href="{{ route('blog') }}" class="link">{{ __('marketing.blog') }}</a>
-            @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('marketing.dashboard') }}</a>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('marketing.sign_in') }}</a>
-                <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
-            @endauth
+            <div class="nav-links">
+                <a href="{{ url('/') }}#features" class="link">{{ __('marketing.features') }}</a>
+                <a href="{{ route('docs') }}" class="link">{{ __('marketing.docs') }}</a>
+                <a href="{{ route('blog') }}" class="link">{{ __('marketing.blog') }}</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('marketing.dashboard') }}</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('marketing.sign_in') }}</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
+                @endauth
+            </div>
             @include('partials.locale-switcher-static')
         </div>
 

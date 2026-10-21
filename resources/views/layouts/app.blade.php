@@ -153,6 +153,11 @@
                 <main class="shell-content">
                     {{ $slot }}
                 </main>
+
+                <footer class="shell-footer">
+                    <div class="text-muted ms-fs-12">© {{ date('Y') }} {{ config('app.name') }}.</div>
+                    <span class="footer-status">{{ __('marketing.in_memory') }}</span>
+                </footer>
             </div>
         </div>
 
