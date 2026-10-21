@@ -44,7 +44,7 @@
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </a>
                     <p class="text-muted footer-brand-copy">A Laravel Livewire starter for admin-heavy products.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary mb-4">{{ __('marketing.get_started') }}</a>
                 </div>
                 <nav aria-label="Product">
                     <div class="footer-heading">Product</div>

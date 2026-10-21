@@ -114,7 +114,7 @@
     </div>
     </div>
 
-    <div class="container ms-pb-96" id="features">
+    <div class="container ms-pt-96 ms-pb-96" id="features">
         <div class="ms-mw-560-mb44">
             <h2>{{ __('docs.features') }}</h2>
             <p class="text-muted">{{ __('docs.features_body') }}</p>
