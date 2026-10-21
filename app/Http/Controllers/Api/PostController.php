@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
@@ -21,16 +22,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            'status' => ['nullable', Rule::in(array_keys(Post::statuses()))],
-            'category_id' => ['nullable', 'integer'],
+            'status' => ['nullable', 'in:'.implode(',', array_keys(Post::statuses()))],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'trashed' => ['nullable', 'in:only,with'],
+            'sort' => ['nullable', 'in:published_at,title,created_at'],
+            'direction' => ['nullable', 'in:asc,desc'],
         ]);
 
         return response()->json(
             $this->posts->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 10,
-                $validated['status'] ?? null,
-                isset($validated['category_id']) ? (int) $validated['category_id'] : null,
+                collect($validated)->only(['status', 'category_id', 'trashed', 'sort', 'direction'])->all(),
             )
         );
     }
@@ -48,6 +51,8 @@ class PostController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Gate::authorize('create', Post::class);
+
         $validated = $this->validatePost($request);
 
         $post = $this->posts->create([
@@ -68,6 +73,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post): JsonResponse
     {
+        Gate::authorize('update', $post);
+
         $validated = $this->validatePost($request, $post);
 
         $post = $this->posts->update($post, [
@@ -87,7 +94,31 @@ class PostController extends Controller
      */
     public function destroy(Post $post): JsonResponse
     {
+        Gate::authorize('delete', $post);
+
         $this->posts->delete($post);
+
+        return response()->json(null, 204);
+    }
+
+    /**
+     * PostService::restore (route binds trashed posts)
+     */
+    public function restore(Post $post): JsonResponse
+    {
+        Gate::authorize('restore', $post);
+
+        return response()->json($this->posts->restore($post));
+    }
+
+    /**
+     * PostService::forceDelete (route binds trashed posts)
+     */
+    public function forceDestroy(Post $post): JsonResponse
+    {
+        Gate::authorize('forceDelete', $post);
+
+        $this->posts->forceDelete($post);
 
         return response()->json(null, 204);
     }

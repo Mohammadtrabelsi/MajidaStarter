@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Translatable\HasTranslations;
@@ -15,7 +17,7 @@ use Spatie\Translatable\HasTranslations;
 class Post extends Model
 {
     /** @use HasFactory<PostFactory> */
-    use HasFactory, HasTranslations, LogsActivity, TracksUserActions;
+    use HasFactory, HasTranslations, LogsActivity, SoftDeletes, TracksUserActions;
 
     public const STATUS_DRAFT = 'draft';
 
@@ -25,6 +27,7 @@ class Post extends Model
         'title',
         'excerpt',
         'body',
+        'cover_image',
         'slug',
         'status',
         'category_id',
@@ -63,6 +66,16 @@ class Post extends Model
     public function isPublished(): bool
     {
         return $this->status === self::STATUS_PUBLISHED;
+    }
+
+    /**
+     * Public URL of the cover image, or null when the post has none.
+     */
+    public function coverImageUrl(): ?string
+    {
+        return $this->cover_image
+            ? Storage::disk('public')->url($this->cover_image)
+            : null;
     }
 
     /**

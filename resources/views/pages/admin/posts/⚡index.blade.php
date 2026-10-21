@@ -16,25 +16,61 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     use InteractsWithToasts;
     use WithPagination;
 
+    /** Ability each bulk action requires on every selected post. */
+    private const BULK_ABILITIES = [
+        'publish' => 'update',
+        'draft' => 'update',
+        'delete' => 'delete',
+        'restore' => 'restore',
+        'forceDelete' => 'forceDelete',
+    ];
+
     #[Url(as: 'q', history: true)]
     public string $search = '';
 
-    /** '' for all, otherwise a key of Post::statuses(). */
+    /** all | published | draft | trashed */
     #[Url(as: 'status', history: true)]
-    public string $status = '';
+    public string $status = 'all';
 
-    /** '' for all, otherwise a category id. */
     #[Url(as: 'category', history: true)]
     public string $category = '';
 
+    /** title | published_at | created_at */
+    #[Url(as: 'sort', history: true)]
+    public string $sort = 'created_at';
+
+    #[Url(as: 'dir', history: true)]
+    public string $direction = 'desc';
+
+    /** @var array<int, string> */
+    public array $selected = [];
+
+    public string $bulkAction = '';
+
+    public ?string $notice = null;
+
     public function mount(): void
     {
-        $this->authorize('manage posts');
+        $this->authorize('viewAny', Post::class);
     }
 
-    public function updatedSearch(): void
+    public function updated(string $property): void
     {
-        $this->resetPage();
+        if (in_array($property, ['search', 'status', 'category', 'sort', 'direction'], true)) {
+            $this->resetPage();
+            $this->selected = [];
+        }
+    }
+
+    public function sortBy(string $column): void
+    {
+        $this->direction = $this->sort === $column && $this->direction === 'asc' ? 'desc' : 'asc';
+        $this->sort = $column;
+    }
+
+    public function selectPage(): void
+    {
+        $this->selected = $this->posts->getCollection()->pluck('id')->map(fn ($id) => (string) $id)->all();
     }
 
     public function updatedStatus(): void
@@ -49,11 +85,70 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 
     public function deletePost(int $postId, PostService $posts): void
     {
-        $this->authorize('manage posts');
+        $post = Post::findOrFail($postId);
+        $this->authorize('delete', $post);
 
-        $posts->delete(Post::findOrFail($postId));
+        $posts->delete($post);
 
-        $this->toast('Post deleted successfully.');
+        $this->toast('Post moved to the trash.');
+    }
+
+    public function restorePost(int $postId, PostService $posts): void
+    {
+        $post = Post::onlyTrashed()->findOrFail($postId);
+        $this->authorize('restore', $post);
+
+        $posts->restore($post);
+
+        $this->toast('Post restored.');
+    }
+
+    public function forceDeletePost(int $postId, PostService $posts): void
+    {
+        $post = Post::onlyTrashed()->findOrFail($postId);
+        $this->authorize('forceDelete', $post);
+
+        $posts->forceDelete($post);
+
+        $this->toast('Post permanently deleted.');
+    }
+
+    public function applyBulk(PostService $posts): void
+    {
+        $action = $this->bulkAction;
+
+        if (! array_key_exists($action, self::BULK_ABILITIES) || $this->selected === []) {
+            return;
+        }
+
+        $ability = self::BULK_ABILITIES[$action];
+        $user = auth()->user();
+        $done = 0;
+
+        foreach (Post::withTrashed()->whereIn('id', $this->selected)->get() as $post) {
+            if ($user->cannot($ability, $post)) {
+                continue;
+            }
+
+            // Trashed posts can only be restored or removed for good, never edited in bulk.
+            if ($post->trashed() && in_array($action, ['publish', 'draft', 'delete'], true)) {
+                continue;
+            }
+
+            match ($action) {
+                'publish' => $posts->setStatus($post, Post::STATUS_PUBLISHED),
+                'draft' => $posts->setStatus($post, Post::STATUS_DRAFT),
+                'delete' => $posts->delete($post),
+                'restore' => $post->trashed() ? $posts->restore($post) : null,
+                'forceDelete' => $posts->forceDelete($post),
+            };
+
+            $done++;
+        }
+
+        $this->selected = [];
+        $this->bulkAction = '';
+        $this->notice = "{$done} post(s) updated.";
     }
 
     #[Computed]
@@ -71,12 +166,13 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     #[Computed]
     public function posts()
     {
-        return app(PostService::class)->searchPaginated(
-            $this->search,
-            10,
-            $this->status !== '' ? $this->status : null,
-            $this->category !== '' ? (int) $this->category : null,
-        );
+        return app(PostService::class)->searchPaginated($this->search, 10, [
+            'status' => in_array($this->status, [Post::STATUS_DRAFT, Post::STATUS_PUBLISHED], true) ? $this->status : null,
+            'trashed' => $this->status === 'trashed' ? 'only' : null,
+            'category_id' => $this->category !== '' ? (int) $this->category : null,
+            'sort' => $this->sort,
+            'direction' => $this->direction,
+        ]);
     }
 
     public function render()
@@ -107,6 +203,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
             ['posts.total_posts', $this->stats['total']],
             ['posts.published', $this->stats['published']],
             ['posts.drafts', $this->stats['drafts']],
+            ['Trashed', $this->stats['trashed']],
         ] as [$label, $value])
             <div class="card">
                 <div class="card-kicker">{{ __($label) }}</div>
@@ -121,17 +218,14 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
             <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('posts.search_placeholder') }}">
         </div>
 
-        <div class="ms-mw-280">
-            <select wire:model.live="status" class="input" aria-label="{{ __('posts.status') }}">
-                <option value="">{{ __('posts.all_statuses') }}</option>
-                @foreach (\App\Models\Post::statuses() as $value => $label)
-                    <option value="{{ $value }}">{{ $label }}</option>
-                @endforeach
+        <div class="ms-row-10">
+            <select wire:model.live="status" class="input" aria-label="Status">
+                <option value="all">{{ __('posts.all_statuses') }}</option>
+                <option value="published">Published</option>
+                <option value="draft">Drafts</option>
+                <option value="trashed">Trashed</option>
             </select>
-        </div>
-
-        <div class="ms-mw-280">
-            <select wire:model.live="category" class="input" aria-label="{{ __('posts.category') }}">
+            <select wire:model.live="category" class="input" aria-label="Category">
                 <option value="">{{ __('posts.all_categories') }}</option>
                 @foreach ($this->categories as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
@@ -140,14 +234,54 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
         </div>
     </div>
 
+    @if (count($selected) > 0)
+        <div class="ms-toolbar">
+            <div class="ms-row-10">
+                <span class="text-muted ms-fs-13">{{ count($selected) }} selected</span>
+                <select wire:model="bulkAction" class="input" aria-label="Bulk action">
+                    <option value="">Choose action…</option>
+                    @if ($status === 'trashed')
+                        <option value="restore">Restore</option>
+                        <option value="forceDelete">Delete permanently</option>
+                    @else
+                        <option value="publish">Publish</option>
+                        <option value="draft">Move to drafts</option>
+                        <option value="delete">Move to trash</option>
+                    @endif
+                </select>
+                <button
+                    type="button"
+                    wire:click="applyBulk"
+                    wire:confirm="Apply this action to the selected posts?"
+                    wire:loading.attr="disabled"
+                    class="btn"
+                    @disabled($bulkAction === '')
+                >Apply</button>
+            </div>
+            <button type="button" wire:click="$set('selected', [])" class="btn ms-btn-sm">Clear selection</button>
+        </div>
+    @endif
+
+    @if ($notice)
+        <div data-autohide="3000" class="tag tag-accent ms-notice">{{ $notice }}</div>
+    @endif
+
     <div class="card ms-p-0">
         <div class="table-wrap">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>{{ __('posts.title') }}</th>
+                        <th style="width:32px">
+                            <input type="checkbox" class="checkbox" aria-label="Select all on this page" wire:click="selectPage">
+                        </th>
+                        <th>
+                            <button type="button" wire:click="sortBy('title')" class="ms-sort-btn">{{ __('posts.title') }}</button>
+                        </th>
                         <th>{{ __('posts.category') }}</th>
                         <th>{{ __('posts.author') }}</th>
+                        <th>
+                            <button type="button" wire:click="sortBy('published_at')" class="ms-sort-btn">Published</button>
+                        </th>
                         <th>{{ __('posts.status') }}</th>
                         <th class="ms-text-right">{{ __('posts.actions') }}</th>
                     </tr>
@@ -156,33 +290,55 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
                     @forelse ($this->posts as $post)
                         <tr wire:key="post-{{ $post->id }}">
                             <td>
+                                <input type="checkbox" class="checkbox" value="{{ $post->id }}" wire:model.live="selected" aria-label="Select post">
+                            </td>
+                            <td>
                                 <div class="ms-fw-500">{{ $post->title }}</div>
                                 <div class="text-muted ms-fs-12">{{ $post->slug }}</div>
                             </td>
                             <td class="text-muted">{{ $post->category?->name ?? '—' }}</td>
                             <td class="text-muted">{{ $post->author?->name ?? '—' }}</td>
+                            <td class="text-muted ms-nowrap">{{ $post->published_at?->format('M j, Y') ?? '—' }}</td>
                             <td>
-                                <span class="tag {{ $post->isPublished() ? 'tag-accent' : 'tag-neutral' }}">{{ \App\Models\Post::statuses()[$post->status] ?? $post->status }}</span>
+                                @if ($post->trashed())
+                                    <span class="tag tag-outline">Trashed</span>
+                                @else
+                                    <span class="tag {{ $post->isPublished() ? 'tag-accent' : 'tag-neutral' }}">{{ \App\Models\Post::statuses()[$post->status] ?? $post->status }}</span>
+                                @endif
                             </td>
                             <td class="ms-text-right">
                                 <div class="ms-actions-end">
-                                    <a
-                                        href="{{ route('admin.posts.edit', $post) }}"
-                                        wire:navigate
-                                        class="btn ms-btn-sm"
-                                    >Edit</a>
-                                    <button
-                                        type="button"
-                                        wire:click="deletePost({{ $post->id }})"
-                                        wire:confirm="Permanently delete this post? This cannot be undone."
-                                        class="btn ms-btn-sm-danger"
-                                    >{{ __('posts.delete') }}</button>
+                                    @if ($post->trashed())
+                                        @can('restore', $post)
+                                            <button type="button" wire:click="restorePost({{ $post->id }})" class="btn ms-btn-sm">Restore</button>
+                                        @endcan
+                                        @can('forceDelete', $post)
+                                            <button
+                                                type="button"
+                                                wire:click="forceDeletePost({{ $post->id }})"
+                                                wire:confirm="Permanently delete this post? This cannot be undone."
+                                                class="btn ms-btn-sm-danger"
+                                            >Delete permanently</button>
+                                        @endcan
+                                    @else
+                                        @can('update', $post)
+                                            <a href="{{ route('admin.posts.edit', $post) }}" wire:navigate class="btn ms-btn-sm">Edit</a>
+                                        @endcan
+                                        @can('delete', $post)
+                                            <button
+                                                type="button"
+                                                wire:click="deletePost({{ $post->id }})"
+                                                wire:confirm="Move this post to the trash?"
+                                                class="btn ms-btn-sm-danger"
+                                            >{{ __('posts.delete') }}</button>
+                                        @endcan
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-muted ms-empty">{{ __('posts.no_posts_found') }}</td>
+                            <td colspan="7" class="text-muted ms-empty">{{ __('posts.no_posts_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>

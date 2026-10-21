@@ -6,13 +6,21 @@ MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. I
 
 - **Full authentication flow** — registration, login, logout, password reset, and email verification, all built as single-file Livewire components.
 - **Admin panel** — a dedicated, permission-gated back office for managing users, posts, categories, reviewing activity, and editing site settings.
-- **Content module** — full CRUD for **posts** and **categories** in the admin panel, plus public `/blog` and `/docs` pages.
+- **Content module** — full CRUD for **posts** and **categories** in the admin panel, with a public `/blog` (listing, search, detail pages and cover images) and `/docs`. Deletes go to a **trash** and can be restored; bulk publish/delete and filters/sorting are built into the admin lists.
 - **Role & permission based access control** — powered by [spatie/laravel-permission](https://spatie.be/docs/laravel-permission), with an `admin` role seeded out of the box.
 - **Activity logging** — every meaningful change to users, posts, categories, and settings is recorded with [spatie/laravel-activitylog](https://spatie.be/docs/laravel-activitylog) and browsable from the admin panel.
 - **REST API** — every service is exposed as JSON endpoints under `/api`, protected by the same authorization gates as the web UI (see [API](#api)).
 - **Localization (i18n) with RTL support** — English, Arabic, and French ship by default, with a language switcher, per-session locale persistence, and automatic text-direction handling.
 - **Translatable settings** — site name and description are stored per-locale via [spatie/laravel-translatable](https://spatie.be/docs/laravel-translatable).
 - **Light / dark theme toggle** — a persistent, no-flash theme switcher.
+- **Two-factor authentication** — TOTP apps (RFC 6238) with single-use recovery codes, managed from **Settings → Two-factor**. No extra dependency is needed.
+- **API tokens** — Laravel Sanctum personal access tokens for bearer-token clients, alongside the session login the web UI uses.
+- **Maintenance mode** — toggle it in the admin settings; visitors get a 503 page (or JSON on `/api`), while administrators and sign-in keep working.
+- **Soft deletes & trash** — users, posts, and categories are soft-deleted, can be restored, and can be deleted permanently.
+- **Policies** — post and category access is enforced by `PostPolicy` / `CategoryPolicy` (post editors can only change their own posts unless they are admins).
+- **Queued mail** — verification and password-reset emails are sent on the queue.
+- **Activity log export & retention** — download the filtered activity log as CSV or JSON; `activitylog:clean` runs daily via the scheduler.
+- **CRUD scaffolding** — `php artisan starter:make-crud Article` generates the model, migration, factory, service, policy and a test for a new resource.
 - **Service-oriented architecture** — business logic lives in dedicated service classes (`UserService`, `PostService`, `CategoryService`, `SettingService`) instead of controllers or components.
 - **Modern front-end** — Tailwind CSS 4 and Vite 8, wired up and ready to go.
 - **Tested & analysed** — a PHPUnit feature/unit suite covering auth, profiles, admin pages, user/post/category management, the API, and localization, plus Pint (code style) and Larastan (static analysis), all run on CI.
@@ -53,6 +61,13 @@ composer dev
 ```
 
 The `composer setup` script runs `composer install`, copies `.env.example` to `.env`, generates the application key, runs migrations, and builds the front-end assets. The `composer dev` script uses [concurrently](https://www.npmjs.com/package/concurrently) to run the PHP server, queue listener, `pail` log viewer, and the Vite dev server together.
+
+### Production notes
+
+- **Cover images** are stored on the `public` disk. Run `php artisan storage:link` once per environment.
+- **Queues:** mail is queued (`QUEUE_CONNECTION=database` by default). Run `php artisan queue:work` as a long-running process; `composer dev` starts one for you locally.
+- **Scheduler:** run `php artisan schedule:work` locally, or add `* * * * * php /path/to/artisan schedule:run` to cron in production. The scheduler prunes the activity log.
+- **Maintenance mode** is controlled from **Admin → Settings**; it does not need `php artisan down`.
 
 ### Default seeded accounts
 
@@ -112,15 +127,15 @@ lang/
 
 ### Web
 
-- **Public** — `/` (landing), `/blog`, `/docs`
-- **Guest routes** — `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`
-- **Authenticated routes** — `/verify-email`, `/settings/profile`, `/logout`
+- **Public** — `/` (landing), `/blog` (listing with search), `/blog/{slug}` (post), `/docs`
+- **Guest routes** — `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`, `/two-factor-challenge` (second step of sign-in)
+- **Authenticated routes** — `/verify-email`, `/settings/profile`, `/settings/two-factor`, `/logout`
 - **Verified routes** — `/dashboard`
 - **Admin routes** (`verified` + `admin` middleware) —
   `/admin/dashboard`, `/admin/users/create`, `/admin/users/{user}/edit`,
   `/admin/categories`, `/admin/categories/create`, `/admin/categories/{category}/edit`,
   `/admin/posts`, `/admin/posts/create`, `/admin/posts/{post}/edit`,
-  `/admin/activity-log`, `/admin/settings`
+  `/admin/activity-log`, `/admin/activity-log/export/{csv|json}`, `/admin/settings`
 - **Locale switch** — `/language/{locale}` persists the chosen locale to the session
 
 ### API
@@ -155,6 +170,17 @@ establish a session.
 | `GET    /api/settings`              | `can:manage settings`  | `SettingService::current`       |
 | `PUT    /api/settings`              | `can:manage settings`  | `SettingService::update`        |
 
+#### Authentication, trash & restore
+
+| Method & path                          | Guard                   | Purpose                                              |
+| -------------------------------------- | ----------------------- | ---------------------------------------------------- |
+| `POST   /api/auth/token`               | throttled               | Issue a Sanctum token (`email`, `password`, `device_name`, and `two_factor_code` when 2FA is on) |
+| `DELETE /api/auth/token`               | bearer token or session | Revoke the token used for this request               |
+| `POST   /api/{posts,categories,users}/{id}/restore` | `can:manage …` | Restore a trashed record                             |
+| `DELETE /api/{posts,categories,users}/{id}/force`   | `can:manage …` | Permanently delete a trashed record                   |
+
+Authenticated endpoints accept either `Authorization: Bearer <token>` or the session cookie. List endpoints accept `trashed=only|with`, plus `status`/`category_id`/`role` filters and `sort`/`direction`.
+
 > Several resources also expose helper endpoints — `.../options`, `.../stats`,
 > and `users/roles` — used to populate select boxes and dashboard widgets.
 
@@ -186,6 +212,16 @@ Roles and permissions are seeded by `RolesAndPermissionsSeeder`. The `admin` rol
 - `manage settings`
 
 Check for admin access in code via `$user->isAdmin()` or the `admin` route middleware alias.
+
+Post and category actions additionally go through `App\Policies\PostPolicy` and `App\Policies\CategoryPolicy`. Editing or trashing a post requires `manage posts` and, unless the user is an admin, that they are the post's author.
+
+## Scaffolding a New Resource
+
+```bash
+php artisan starter:make-crud Article
+```
+
+This creates `Article` model, migration, factory, `ArticleService`, `ArticlePolicy` and `ArticleModuleTest`, using soft deletes and activity logging. It never overwrites existing files. Afterwards add the `manage articles` permission to `RolesAndPermissionsSeeder`, then add the routes and screens you need.
 
 ## Testing & Code Quality
 

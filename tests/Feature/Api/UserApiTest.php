@@ -75,7 +75,7 @@ class UserApiTest extends TestCase
         $this->actingAs($admin)->deleteJson("/api/users/{$user->id}")
             ->assertNoContent();
 
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 
     public function test_admin_cannot_delete_their_own_account_here(): void

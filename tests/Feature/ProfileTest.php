@@ -111,7 +111,7 @@ class ProfileTest extends TestCase
             ->assertRedirect('/');
 
         $this->assertGuest();
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 
     public function test_account_is_not_deleted_with_wrong_password(): void

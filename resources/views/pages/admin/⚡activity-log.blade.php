@@ -1,11 +1,11 @@
 <?php
 
+use App\Services\ActivityLogService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\Activitylog\Models\Activity;
 
 new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 {
@@ -34,15 +34,14 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
 
     public function logNames()
     {
-        return Activity::query()->distinct()->pluck('log_name')->filter()->values();
+        return app(ActivityLogService::class)->logNames();
     }
 
     public function activities()
     {
-        return Activity::query()
+        return app(ActivityLogService::class)
+            ->query($this->search, $this->logName)
             ->with(['causer', 'subject'])
-            ->when($this->logName, fn ($query) => $query->where('log_name', $this->logName))
-            ->when($this->search, fn ($query) => $query->where('description', 'like', "%{$this->search}%"))
             ->latest()
             ->paginate(10);
     }
@@ -73,6 +72,11 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                     {{ $name }}
                 </div>
             @endforeach
+        </div>
+
+        <div class="ms-row-10">
+            <a href="{{ route('admin.activity-log.export', ['format' => 'csv', 'q' => $search, 'log' => $logName]) }}" class="btn ms-btn-sm">Export CSV</a>
+            <a href="{{ route('admin.activity-log.export', ['format' => 'json', 'q' => $search, 'log' => $logName]) }}" class="btn ms-btn-sm">Export JSON</a>
         </div>
 
         <div class="ms-search-field-right">
