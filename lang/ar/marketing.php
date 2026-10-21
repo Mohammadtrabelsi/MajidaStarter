@@ -3,7 +3,7 @@
 return [
     'blog' => 'المدونة',
     'changelog' => 'سجل التغييرات',
-    'company' => '[TODO] Company',
+    'company' => 'الشركة',
     'dashboard' => 'لوحة التحكم',
     'docs' => 'الوثائق',
     'features' => 'الميزات',
@@ -14,7 +14,7 @@ return [
     'hero_title' => 'هيكلة الإدارة والمصادقة، على الوجه الصحيح.',
     'in_memory' => 'في الذكرى',
     'license' => 'الترخيص',
-    'product' => '[TODO] Product',
+    'product' => 'المنتج',
     'sign_in' => 'تسجيل الدخول',
     'tagline' => 'قالب انطلاق Laravel Livewire للمنتجات التي تعتمد بكثافة على لوحات الإدارة.',
     'view_on_github' => 'عرض على GitHub',

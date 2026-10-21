@@ -3,7 +3,7 @@
 return [
     'blog' => 'Blog',
     'changelog' => 'Journal des modifications',
-    'company' => '[TODO] Company',
+    'company' => 'Entreprise',
     'dashboard' => 'Tableau de bord',
     'docs' => 'Documentation',
     'features' => 'Fonctionnalités',
@@ -14,7 +14,7 @@ return [
     'hero_title' => 'Admin et authentification prêts à l\'emploi.',
     'in_memory' => 'En mémoire',
     'license' => 'Licence',
-    'product' => '[TODO] Product',
+    'product' => 'Produit',
     'sign_in' => 'Se connecter',
     'tagline' => 'Un starter Laravel Livewire pour les produits riches en administration.',
     'view_on_github' => 'Voir sur GitHub',

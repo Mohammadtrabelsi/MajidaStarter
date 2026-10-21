@@ -19,7 +19,7 @@ return [
     'days_as_member' => 'Jours en tant que membre',
     'degraded' => 'Indisponible',
     'email' => 'E-mail',
-    'health_' => '[TODO] Health ',
+    'health_' => 'Santé du système ',
     'health_cache' => 'Cache',
     'health_database' => 'Base de données',
     'health_queue' => 'File d\'attente',

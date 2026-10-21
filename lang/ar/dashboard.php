@@ -19,7 +19,7 @@ return [
     'days_as_member' => 'أيام العضوية',
     'degraded' => 'غير متاح',
     'email' => 'البريد الإلكتروني',
-    'health_' => '[TODO] Health ',
+    'health_' => 'حالة النظام ',
     'health_cache' => 'التخزين المؤقت',
     'health_database' => 'قاعدة البيانات',
     'health_queue' => 'قائمة الانتظار',

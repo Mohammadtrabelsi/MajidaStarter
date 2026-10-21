@@ -28,7 +28,7 @@ return [
     'security' => 'Authentification et rôles',
     'security_body' => 'Authentification façon Breeze avec une couche complète de rôles et permissions, protégée au niveau des routes et des composants.',
     'settings' => 'Paramètres',
-    'settings_activity_log' => 'Paramètres et journal d'activité',
+    'settings_activity_log' => 'Paramètres et journal d\'activité',
     'settings_activity_log_body' => 'Texte des paramètres et du journal d\'activité',
     'speed' => 'Prêt à être lancé',
     'speed_body' => 'Une base testée pour vous permettre de vous concentrer sur le produit, pas sur la plomberie.',
