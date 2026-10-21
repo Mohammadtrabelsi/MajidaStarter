@@ -380,6 +380,7 @@ html.theme-ready body { transition: background-color 0.2s ease, color 0.2s ease;
 .ms-block-fs12 { display: block; font-size: 12px; }
 .ms-page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
 .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.stat-cards + .stat-cards { margin-top: 16px; }
 .ms-toolbar { display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; flex-wrap: wrap; }
 .ms-search-field { position: relative; flex: 1; min-width: 220px; max-width: 320px; }
 .ms-actions-end { display: inline-flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }

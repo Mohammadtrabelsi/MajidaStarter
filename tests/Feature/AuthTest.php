@@ -121,7 +121,7 @@ class AuthTest extends TestCase
         $user = User::factory()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('toggleAdmin', $user->id)
             ->assertHasNoErrors();
 
@@ -133,7 +133,7 @@ class AuthTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('toggleAdmin', $admin->id)
             ->assertHasErrors('toggle');
 
@@ -146,7 +146,7 @@ class AuthTest extends TestCase
         $other = User::factory()->create();
 
         Livewire::actingAs($user)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('toggleAdmin', $other->id)
             ->assertForbidden();
 

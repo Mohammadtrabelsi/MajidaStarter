@@ -45,7 +45,7 @@ class UserManagementTest extends TestCase
             ->set('roles', ['admin'])
             ->call('save')
             ->assertHasNoErrors()
-            ->assertRedirect(route('admin.dashboard'));
+            ->assertRedirect(route('admin.users.index'));
 
         $created = User::where('email', 'new-person@example.com')->first();
 
@@ -64,7 +64,7 @@ class UserManagementTest extends TestCase
             ->set('roles', ['admin'])
             ->call('save')
             ->assertHasNoErrors()
-            ->assertRedirect(route('admin.dashboard'));
+            ->assertRedirect(route('admin.users.index'));
 
         $user->refresh();
 
@@ -92,7 +92,7 @@ class UserManagementTest extends TestCase
         $user = User::factory()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('deleteUser', $user->id)
             ->assertHasNoErrors();
 
@@ -105,7 +105,7 @@ class UserManagementTest extends TestCase
         User::factory()->create(['name' => 'Filter Member']);
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->set('role', 'member')
             ->assertSee('Filter Member')
             ->assertDontSee('Filter Admin')
@@ -120,7 +120,7 @@ class UserManagementTest extends TestCase
         User::factory()->create(['name' => 'Confirm User']);
 
         $this->actingAs($admin)
-            ->get('/admin/dashboard')
+            ->get('/admin/users')
             ->assertSee('wire:confirm="Permanently delete Confirm User? This cannot be undone."', false);
     }
 
@@ -129,7 +129,7 @@ class UserManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('deleteUser', $admin->id)
             ->assertHasErrors('toggle');
 
@@ -142,10 +142,20 @@ class UserManagementTest extends TestCase
         $other = User::factory()->create();
 
         Livewire::actingAs($user)
-            ->test('pages::admin.dashboard')
+            ->test('pages::admin.users.index')
             ->call('deleteUser', $other->id)
             ->assertForbidden();
 
         $this->assertNotNull($other->fresh());
+    }
+
+    public function test_users_link_points_to_users_route_and_is_active_there(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->get('/admin/users')
+            ->assertOk()
+            ->assertSee('href="'.route('admin.users.index').'" wire:navigate class="active"', false);
     }
 }
