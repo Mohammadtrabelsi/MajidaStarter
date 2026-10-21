@@ -12,4 +12,8 @@ return [
     'settings' => 'الإعدادات',
     'users' => 'المستخدمون',
     'welcome' => 'مرحباً',
+    'marketing_site' => 'الموقع التسويقي',
+    'my_dashboard' => 'لوحتي',
+    'view_site' => 'عرض الموقع',
+    'welcome_back' => 'مرحباً،',
 ];

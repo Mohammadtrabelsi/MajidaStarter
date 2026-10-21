@@ -24,12 +24,12 @@
     <div class="container ms-pb-96">
         <div class="docs-grid">
             @foreach ([
-                ['Getting started', __('docs.getting_started_body'), __('docs.readme'), 'https://github.com'],
-                ['Authentication', __('docs.authentication_body'), __('docs.auth_routes'), url('/login')],
-                ['Roles & permissions', __('docs.roles_permissions_body'), __('docs.admin_dashboard'), url('/dashboard')],
-                ['User management', __('docs.user_management_body'), __('docs.users'), url('/dashboard')],
-                ['CRUD scaffolding', __('docs.crud_scaffolding_body'), __('docs.posts_categories'), url('/dashboard')],
-                ['Settings & activity log', __('docs.settings_activity_log_body'), __('docs.settings'), url('/dashboard')],
+                [__('docs.getting_started'), __('docs.getting_started_body'), __('docs.readme'), 'https://github.com'],
+                [__('docs.authentication'), __('docs.authentication_body'), __('docs.auth_routes'), url('/login')],
+                [__('docs.roles_permissions'), __('docs.roles_permissions_body'), __('docs.admin_dashboard'), url('/dashboard')],
+                [__('docs.user_management'), __('docs.user_management_body'), __('docs.users'), url('/dashboard')],
+                [__('docs.crud_scaffolding'), __('docs.crud_scaffolding_body'), __('docs.posts_categories'), url('/dashboard')],
+                [__('docs.settings_activity_log'), __('docs.settings_activity_log_body'), __('docs.settings'), url('/dashboard')],
             ] as [$title, $body, $linkLabel, $linkUrl])
                 <div class="docs-cell">
                     <div class="card-kicker">{{ __('docs.guide') }}</div>

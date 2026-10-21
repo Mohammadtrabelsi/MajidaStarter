@@ -86,7 +86,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
             @foreach ($locales as $code => $label)
                 <div @class(['ms-locale-panel', 'active' => $activeLocale === $code])>
                     <div class="field ms-mb-0">
-                        <x-input-label :for="'siteName-'.$code" :value="'Site name ('.$label.')'" />
+                        <x-input-label :for="'siteName-'.$code" :value="__('settings.site_name', ['locale' => $label])" />
                         <x-text-input
                             wire:model="siteName.{{ $code }}"
                             id="siteName-{{ $code }}"
@@ -96,7 +96,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                     </div>
 
                     <div class="field ms-mb-0">
-                        <x-input-label :for="'siteDescription-'.$code" :value="'Site description ('.$label.')'" />
+                        <x-input-label :for="'siteDescription-'.$code" :value="__('settings.site_description', ['locale' => $label])" />
                         <textarea
                             wire:model="siteDescription.{{ $code }}"
                             id="siteDescription-{{ $code }}"
@@ -110,7 +110,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         </div>
 
         <div class="field ms-section-top">
-            <x-input-label for="supportEmail" value="Support email" />
+            <x-input-label for="supportEmail" :value="__('settings.support_email')" />
             <x-text-input
                 wire:model="supportEmail"
                 id="supportEmail"

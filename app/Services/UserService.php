@@ -6,7 +6,9 @@ use App\Exceptions\DomainActionException;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -209,5 +211,59 @@ class UserService
             'newToday' => (int) ($counts->new_today ?? 0),
             'trashed' => User::onlyTrashed()->count(),
         ];
+    }
+
+    /**
+     * Sign-ups per day for the last $days days (oldest first), zero-filled.
+     *
+     * @return array<int, array{date: Carbon, count: int}>
+     */
+    public function dailySignups(int $days = 14): array
+    {
+        $start = now()->subDays($days - 1)->startOfDay();
+
+        $counts = User::query()
+            ->where('created_at', '>=', $start)
+            ->selectRaw('date(created_at) as day, count(*) as total')
+            ->groupBy(DB::raw('date(created_at)'))
+            ->pluck('total', 'day');
+
+        return collect(range(0, $days - 1))
+            ->map(function (int $offset) use ($start, $counts) {
+                $date = $start->copy()->addDays($offset);
+
+                return ['date' => $date, 'count' => (int) ($counts[$date->toDateString()] ?? 0)];
+            })
+            ->all();
+    }
+
+    public function newThisMonth(): int
+    {
+        return User::query()->where('created_at', '>=', now()->startOfMonth())->count();
+    }
+
+    /**
+     * Users per role, plus users holding no role at all (reported as null).
+     * A user with several roles is counted once per role.
+     *
+     * @return array<int, array{role: string|null, count: int}>
+     */
+    public function roleDistribution(): array
+    {
+        $rows = Role::query()
+            ->withCount('users')
+            ->orderByDesc('users_count')
+            ->orderBy('name')
+            ->get()
+            ->map(fn (Role $role) => ['role' => $role->name, 'count' => (int) $role->getAttribute('users_count')])
+            ->all();
+
+        $withoutRole = User::query()->doesntHave('roles')->count();
+
+        if ($withoutRole > 0) {
+            $rows[] = ['role' => null, 'count' => $withoutRole];
+        }
+
+        return $rows;
     }
 }
