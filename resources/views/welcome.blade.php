@@ -73,7 +73,7 @@
                     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
                     {{ __('marketing.get_started') }}
                 </a>
-                <a href="https://github.com" class="btn">{{ __('marketing.view_on_github') }}</a>
+                <a href="{{ config('app.github_url') }}" class="btn">{{ __('marketing.view_on_github') }}</a>
             </div>
         </div>
         <figure class="blueprint ms-p-6">

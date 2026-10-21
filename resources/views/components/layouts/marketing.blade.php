@@ -60,7 +60,7 @@
                     <div class="footer-heading">{{ __('marketing.company') }}</div>
                     <div class="footer-links">
                         <a href="{{ route('blog') }}">{{ __('marketing.blog') }}</a>
-                        <a href="https://github.com/Mohammadtrabelsi/MajidaStarter" target="_blank" rel="noopener">{{ __('marketing.github') }}</a>
+                        <a href="{{ config('app.github_url') }}" target="_blank" rel="noopener">{{ __('marketing.github') }}</a>
                         <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">{{ __('marketing.license') }}</a>
                     </div>
                 </nav>
