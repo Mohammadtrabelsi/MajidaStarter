@@ -39,7 +39,7 @@ class CategoryManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.categories.create')
+            ->test('admin.categories.form')
             ->set('name.en', 'News')
             ->set('name.ar', 'أخبار')
             ->set('description.en', 'Latest news')
@@ -60,7 +60,7 @@ class CategoryManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.categories.create')
+            ->test('admin.categories.form')
             ->set('name.en', '')
             ->call('save')
             ->assertHasErrors(['name.en' => 'required']);
@@ -72,7 +72,7 @@ class CategoryManagementTest extends TestCase
         $category = Category::factory()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.categories.edit', ['category' => $category])
+            ->test('admin.categories.form', ['category' => $category])
             ->set('name.en', 'Updated')
             ->set('slug', 'updated-slug')
             ->set('isActive', false)
@@ -106,11 +106,34 @@ class CategoryManagementTest extends TestCase
         Category::factory()->create(['slug' => 'news']);
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.categories.create')
+            ->test('admin.categories.form')
             ->set('name.en', 'News')
             ->call('save')
             ->assertHasNoErrors();
 
         $this->assertDatabaseHas('categories', ['slug' => 'news-2']);
+    }
+
+    public function test_categories_index_can_be_filtered_by_active_status(): void
+    {
+        $admin = User::factory()->admin()->create();
+        Category::factory()->create(['name' => ['en' => 'Visible Category'], 'is_active' => true]);
+        Category::factory()->create(['name' => ['en' => 'Hidden Category'], 'is_active' => false]);
+
+        Livewire::actingAs($admin)
+            ->test('pages::admin.categories.index')
+            ->set('status', 'inactive')
+            ->assertSee('Hidden Category')
+            ->assertDontSee('Visible Category');
+    }
+
+    public function test_delete_button_asks_for_confirmation(): void
+    {
+        $admin = User::factory()->admin()->create();
+        Category::factory()->create(['name' => ['en' => 'Confirm Me']]);
+
+        $this->actingAs($admin)
+            ->get('/admin/categories')
+            ->assertSee('wire:confirm="Permanently delete this category? This cannot be undone."', false);
     }
 }

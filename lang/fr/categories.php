@@ -3,6 +3,7 @@
 return [
     'actions' => 'Actions',
     'active' => 'Actif',
+    'all_statuses' => 'Tous les statuts',
     'cancel' => 'Annuler',
     'categories' => 'Catégories',
     'create_a_category_to_group_related_posts' => 'Créez une catégorie pour regrouper les articles connexes',

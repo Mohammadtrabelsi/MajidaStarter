@@ -45,6 +45,11 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
         $this->sort = $column;
     }
 
+    public function updatedRole(): void
+    {
+        $this->resetPage();
+    }
+
     public function toggleAdmin(int $userId, UserService $users): void
     {
         $this->authorize('manage users');
@@ -183,9 +188,9 @@ new #[Layout('layouts::app')] #[Title('Admin Dashboard')] class extends Componen
                 <option value="trashed">Trashed users</option>
             </select>
             <select wire:model.live="role" class="input" aria-label="Role">
-                <option value="all">All roles</option>
+                <option value="all">{{ __('dashboard.all_roles') }}</option>
                 <option value="admin">Administrators</option>
-                <option value="member">Members</option>
+                <option value="member">{{ __('dashboard.member') }}</option>
             </select>
         </div>
     </div>

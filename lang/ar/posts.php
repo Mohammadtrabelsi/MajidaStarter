@@ -2,6 +2,8 @@
 
 return [
     'actions' => 'الإجراءات',
+    'all_categories' => 'كل التصنيفات',
+    'all_statuses' => 'كل الحالات',
     'author' => 'الكاتب',
     'back_to_posts' => 'العودة إلى المنشورات',
     'cancel' => 'إلغاء',

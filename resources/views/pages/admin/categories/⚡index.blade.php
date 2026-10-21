@@ -69,6 +69,11 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
         $this->selected = $this->categories->getCollection()->pluck('id')->map(fn ($id) => (string) $id)->all();
     }
 
+    public function updatedActive(): void
+    {
+        $this->resetPage();
+    }
+
     public function deleteCategory(int $categoryId, CategoryService $categories): void
     {
         $category = Category::findOrFail($categoryId);
@@ -198,9 +203,9 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 
         <div class="ms-row-10">
             <select wire:model.live="status" class="input" aria-label="Status">
-                <option value="all">All statuses</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="all">{{ __('categories.all_statuses') }}</option>
+                <option value="active">{{ __('categories.active') }}</option>
+                <option value="inactive">{{ __('categories.inactive') }}</option>
                 <option value="trashed">Trashed</option>
             </select>
         </div>

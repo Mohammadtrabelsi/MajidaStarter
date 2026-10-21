@@ -73,6 +73,16 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
         $this->selected = $this->posts->getCollection()->pluck('id')->map(fn ($id) => (string) $id)->all();
     }
 
+    public function updatedStatus(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedCategory(): void
+    {
+        $this->resetPage();
+    }
+
     public function deletePost(int $postId, PostService $posts): void
     {
         $post = Post::findOrFail($postId);
@@ -210,13 +220,13 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
 
         <div class="ms-row-10">
             <select wire:model.live="status" class="input" aria-label="Status">
-                <option value="all">All statuses</option>
+                <option value="all">{{ __('posts.all_statuses') }}</option>
                 <option value="published">Published</option>
                 <option value="draft">Drafts</option>
                 <option value="trashed">Trashed</option>
             </select>
             <select wire:model.live="category" class="input" aria-label="Category">
-                <option value="">All categories</option>
+                <option value="">{{ __('posts.all_categories') }}</option>
                 @foreach ($this->categories as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
                 @endforeach

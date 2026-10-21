@@ -2,6 +2,8 @@
 
 return [
     'actions' => 'Actions',
+    'all_categories' => 'Toutes les catégories',
+    'all_statuses' => 'Tous les statuts',
     'author' => 'Auteur',
     'back_to_posts' => 'Retour aux articles',
     'cancel' => 'Annuler',

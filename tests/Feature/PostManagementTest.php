@@ -41,7 +41,7 @@ class PostManagementTest extends TestCase
         $category = Category::factory()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.posts.create')
+            ->test('admin.posts.form')
             ->set('title.en', 'Hello World')
             ->set('title.ar', 'مرحبا')
             ->set('body.en', 'This is the body.')
@@ -67,7 +67,7 @@ class PostManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.posts.create')
+            ->test('admin.posts.form')
             ->set('title.en', '')
             ->set('body.en', '')
             ->call('save')
@@ -79,7 +79,7 @@ class PostManagementTest extends TestCase
         $admin = User::factory()->admin()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.posts.create')
+            ->test('admin.posts.form')
             ->set('title.en', 'Draft Post')
             ->set('body.en', 'Draft body.')
             ->set('status', Post::STATUS_DRAFT)
@@ -98,7 +98,7 @@ class PostManagementTest extends TestCase
         $post = Post::factory()->create();
 
         Livewire::actingAs($admin)
-            ->test('pages::admin.posts.edit', ['post' => $post])
+            ->test('admin.posts.form', ['post' => $post])
             ->set('title.en', 'Changed Title')
             ->set('status', Post::STATUS_PUBLISHED)
             ->call('save')
@@ -123,6 +123,38 @@ class PostManagementTest extends TestCase
             ->assertHasNoErrors();
 
         $this->assertSoftDeleted($post);
+    }
+
+    public function test_posts_index_can_be_filtered_by_status_and_category(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $category = Category::factory()->create();
+        $otherCategory = Category::factory()->create();
+
+        Post::factory()->create(['title' => ['en' => 'Wanted Post'], 'status' => Post::STATUS_PUBLISHED, 'category_id' => $category->id]);
+        Post::factory()->create(['title' => ['en' => 'Other Category Post'], 'status' => Post::STATUS_PUBLISHED, 'category_id' => $otherCategory->id]);
+        Post::factory()->create(['title' => ['en' => 'Draft Post Filtered'], 'status' => Post::STATUS_DRAFT, 'category_id' => $category->id]);
+
+        Livewire::actingAs($admin)
+            ->test('pages::admin.posts.index')
+            ->set('status', Post::STATUS_PUBLISHED)
+            ->assertSee('Wanted Post')
+            ->assertSee('Other Category Post')
+            ->assertDontSee('Draft Post Filtered')
+            ->set('category', (string) $category->id)
+            ->assertSee('Wanted Post')
+            ->assertDontSee('Other Category Post')
+            ->assertDontSee('Draft Post Filtered');
+    }
+
+    public function test_delete_button_asks_for_confirmation(): void
+    {
+        $admin = User::factory()->admin()->create();
+        Post::factory()->create(['title' => ['en' => 'Confirm Post']]);
+
+        $this->actingAs($admin)
+            ->get('/admin/posts')
+            ->assertSee('wire:confirm="Permanently delete this post? This cannot be undone."', false);
     }
 
     public function test_deleting_category_nulls_post_category(): void

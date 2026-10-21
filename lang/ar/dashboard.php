@@ -12,6 +12,7 @@ return [
     'admin_panel' => 'لوحة المسؤول',
     'admin_permissions_note' => 'لديك صلاحيات مسؤول كاملة في جميع أنحاء التطبيق.',
     'administrator' => 'المدير',
+    'all_roles' => 'كل الأدوار',
     'all_time' => 'منذ البداية',
     'categories' => 'التصنيفات',
     'days_as_member' => 'أيام العضوية',
