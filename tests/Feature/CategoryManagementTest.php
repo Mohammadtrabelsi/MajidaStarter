@@ -97,7 +97,7 @@ class CategoryManagementTest extends TestCase
             ->call('deleteCategory', $category->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($category);
+        $this->assertSoftDeleted($category);
     }
 
     public function test_slug_is_generated_uniquely(): void
@@ -122,7 +122,7 @@ class CategoryManagementTest extends TestCase
 
         Livewire::actingAs($admin)
             ->test('pages::admin.categories.index')
-            ->set('active', '0')
+            ->set('status', 'inactive')
             ->assertSee('Hidden Category')
             ->assertDontSee('Visible Category');
     }

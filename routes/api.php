@@ -24,9 +24,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('throttle:auth')->group(function () {
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::post('auth/login', [AuthController::class, 'login']);
+    Route::post('auth/token', [AuthController::class, 'token']);
 });
 
-Route::middleware('auth')->group(function () {
+// Accepts either a bearer token (Sanctum personal access token) or the session cookie.
+Route::middleware('auth:sanctum,web')->group(function () {
+    Route::delete('auth/token', [AuthController::class, 'revokeToken']);
+
     // ---------------------------------------------------------------------
     // ProfileService actions (UserService, acting on the current user)
     // ---------------------------------------------------------------------
@@ -45,6 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::post('categories', [CategoryController::class, 'store']);          // CategoryService::create
         Route::put('categories/{category}', [CategoryController::class, 'update']); // CategoryService::update
         Route::delete('categories/{category}', [CategoryController::class, 'destroy']); // CategoryService::delete
+        Route::post('categories/{category}/restore', [CategoryController::class, 'restore'])->withTrashed();       // CategoryService::restore
+        Route::delete('categories/{category}/force', [CategoryController::class, 'forceDestroy'])->withTrashed(); // CategoryService::forceDelete
     });
 
     // ---------------------------------------------------------------------
@@ -56,6 +62,8 @@ Route::middleware('auth')->group(function () {
         Route::post('posts', [PostController::class, 'store']);        // PostService::create
         Route::put('posts/{post}', [PostController::class, 'update']); // PostService::update
         Route::delete('posts/{post}', [PostController::class, 'destroy']); // PostService::delete
+        Route::post('posts/{post}/restore', [PostController::class, 'restore'])->withTrashed();       // PostService::restore
+        Route::delete('posts/{post}/force', [PostController::class, 'forceDestroy'])->withTrashed(); // PostService::forceDelete
     });
 
     // ---------------------------------------------------------------------
@@ -68,6 +76,8 @@ Route::middleware('auth')->group(function () {
         Route::post('users', [UserController::class, 'store']);      // UserService::create
         Route::put('users/{user}', [UserController::class, 'update']); // UserService::updateUser
         Route::delete('users/{user}', [UserController::class, 'destroy']); // UserService::delete
+        Route::post('users/{user}/restore', [UserController::class, 'restore'])->withTrashed();       // UserService::restore
+        Route::delete('users/{user}/force', [UserController::class, 'forceDestroy'])->withTrashed(); // UserService::forceDelete
         Route::post('users/{user}/toggle-admin', [UserController::class, 'toggleAdmin']); // UserService::toggleAdminRole
     });
 

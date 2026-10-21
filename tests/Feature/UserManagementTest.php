@@ -96,7 +96,7 @@ class UserManagementTest extends TestCase
             ->call('deleteUser', $user->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($user);
+        $this->assertSoftDeleted($user);
     }
 
     public function test_user_list_can_be_filtered_by_role(): void

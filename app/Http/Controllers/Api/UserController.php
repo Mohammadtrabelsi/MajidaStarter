@@ -22,14 +22,17 @@ class UserController extends Controller
         $validated = $request->validate([
             'search' => ['nullable', 'string'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            'role' => ['nullable', Rule::in(['admin', 'member'])],
+            'role' => ['nullable', 'in:admin,member'],
+            'trashed' => ['nullable', 'in:only,with'],
+            'sort' => ['nullable', 'in:name,created_at'],
+            'direction' => ['nullable', 'in:asc,desc'],
         ]);
 
         return response()->json(
             $this->users->searchPaginated(
                 $validated['search'] ?? null,
                 $validated['per_page'] ?? 8,
-                $validated['role'] ?? null,
+                collect($validated)->only(['role', 'trashed', 'sort', 'direction'])->all(),
             )
         );
     }
@@ -94,6 +97,24 @@ class UserController extends Controller
         // Guard-rail violations throw DomainActionException, which renders
         // itself as a 422 JSON response (see App\Exceptions).
         $this->users->delete($request->user(), $user);
+
+        return response()->json(null, 204);
+    }
+
+    /**
+     * UserService::restore (route binds trashed users)
+     */
+    public function restore(User $user): JsonResponse
+    {
+        return response()->json($this->users->restore($user)->load('roles'));
+    }
+
+    /**
+     * UserService::forceDelete (route binds trashed users)
+     */
+    public function forceDestroy(Request $request, User $user): JsonResponse
+    {
+        $this->users->forceDelete($request->user(), $user);
 
         return response()->json(null, 204);
     }

@@ -158,6 +158,16 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     </form>
 
     {{-- Delete account --}}
+    <div class="card ms-mt16-stack-16">
+        <div class="ms-row-between">
+            <div>
+                <h3 class="ms-fs-18">{{ __('two_factor.settings_title') }}</h3>
+                <p class="text-muted ms-note">{{ __('two_factor.settings_description') }}</p>
+            </div>
+            <a href="{{ route('two-factor.settings') }}" wire:navigate class="btn">{{ __('two_factor.settings_title') }}</a>
+        </div>
+    </div>
+
     <div class="card ms-mt16-danger-stack">
         <div>
             <h3 class="ms-fs-18">{{ __('profile.delete_account') }}</h3>

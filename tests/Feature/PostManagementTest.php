@@ -122,7 +122,7 @@ class PostManagementTest extends TestCase
             ->call('deletePost', $post->id)
             ->assertHasNoErrors();
 
-        $this->assertModelMissing($post);
+        $this->assertSoftDeleted($post);
     }
 
     public function test_posts_index_can_be_filtered_by_status_and_category(): void

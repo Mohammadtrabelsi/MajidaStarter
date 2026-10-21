@@ -1,6 +1,8 @@
 <?php
 
+use App\Services\TwoFactorService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -33,7 +35,9 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
             ]);
         }
 
-        if (! app(UserService::class)->attempt($this->email, $this->password, $this->remember)) {
+        $user = app(UserService::class)->authenticate($this->email, $this->password);
+
+        if ($user === null) {
             RateLimiter::hit($throttleKey);
 
             throw ValidationException::withMessages([
@@ -43,11 +47,26 @@ new #[Layout('layouts::guest')] #[Title('Log in')] class extends Component
 
         RateLimiter::clear($throttleKey);
 
+        // With two-factor enabled the session is not established yet: the user
+        // must first prove possession of the second factor on the challenge page.
+        if ($user->hasTwoFactorEnabled()) {
+            session()->put(TwoFactorService::CHALLENGE_SESSION_KEY, [
+                'id' => $user->id,
+                'remember' => $this->remember,
+            ]);
+
+            $this->redirect(route('two-factor.challenge'), navigate: true);
+
+            return;
+        }
+
+        Auth::login($user, $this->remember);
+
         if (request()->hasSession()) {
             request()->session()->regenerate();
         }
 
-        $this->redirect(auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard'), navigate: true);
+        $this->redirect($user->isAdmin() ? route('admin.dashboard') : route('dashboard'), navigate: true);
     }
 };
 ?>

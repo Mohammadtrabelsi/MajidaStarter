@@ -15,21 +15,58 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
     use InteractsWithToasts;
     use WithPagination;
 
+    /** Ability each bulk action requires on every selected category. */
+    private const BULK_ABILITIES = [
+        'activate' => 'update',
+        'deactivate' => 'update',
+        'delete' => 'delete',
+        'restore' => 'restore',
+        'forceDelete' => 'forceDelete',
+    ];
+
     #[Url(as: 'q', history: true)]
     public string $search = '';
 
-    /** '' for all, '1' for active only, '0' for inactive only. */
-    #[Url(as: 'active', history: true)]
-    public string $active = '';
+    /** all | active | inactive | trashed */
+    #[Url(as: 'status', history: true)]
+    public string $status = 'all';
+
+    /** name | created_at */
+    #[Url(as: 'sort', history: true)]
+    public string $sort = 'created_at';
+
+    #[Url(as: 'dir', history: true)]
+    public string $direction = 'desc';
+
+    /** @var array<int, string> */
+    public array $selected = [];
+
+    public string $bulkAction = '';
+
+    public ?string $notice = null;
 
     public function mount(): void
     {
-        $this->authorize('manage categories');
+        $this->authorize('viewAny', Category::class);
     }
 
-    public function updatedSearch(): void
+    public function updated(string $property): void
     {
-        $this->resetPage();
+        if (in_array($property, ['search', 'status', 'sort', 'direction'], true)) {
+            $this->resetPage();
+            $this->selected = [];
+        }
+    }
+
+    public function sortBy(string $column): void
+    {
+        $this->direction = $this->sort === $column && $this->direction === 'asc' ? 'desc' : 'asc';
+        $this->sort = $column;
+    }
+
+    public function selectPage(): void
+    {
+        $this->selected = $this->categories->getCollection()->pluck('id')->map(fn ($id) => (string) $id)->all();
     }
 
     public function updatedActive(): void
@@ -39,11 +76,69 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
 
     public function deleteCategory(int $categoryId, CategoryService $categories): void
     {
-        $this->authorize('manage categories');
+        $category = Category::findOrFail($categoryId);
+        $this->authorize('delete', $category);
 
-        $categories->delete(Category::findOrFail($categoryId));
+        $categories->delete($category);
 
-        $this->toast('Category deleted successfully.');
+        $this->toast('Category moved to the trash.');
+    }
+
+    public function restoreCategory(int $categoryId, CategoryService $categories): void
+    {
+        $category = Category::onlyTrashed()->findOrFail($categoryId);
+        $this->authorize('restore', $category);
+
+        $categories->restore($category);
+
+        $this->toast('Category restored.');
+    }
+
+    public function forceDeleteCategory(int $categoryId, CategoryService $categories): void
+    {
+        $category = Category::onlyTrashed()->findOrFail($categoryId);
+        $this->authorize('forceDelete', $category);
+
+        $categories->forceDelete($category);
+
+        $this->toast('Category permanently deleted.');
+    }
+
+    public function applyBulk(CategoryService $categories): void
+    {
+        $action = $this->bulkAction;
+
+        if (! array_key_exists($action, self::BULK_ABILITIES) || $this->selected === []) {
+            return;
+        }
+
+        $ability = self::BULK_ABILITIES[$action];
+        $user = auth()->user();
+        $done = 0;
+
+        foreach (Category::withTrashed()->whereIn('id', $this->selected)->get() as $category) {
+            if ($user->cannot($ability, $category)) {
+                continue;
+            }
+
+            if ($category->trashed() && in_array($action, ['activate', 'deactivate', 'delete'], true)) {
+                continue;
+            }
+
+            match ($action) {
+                'activate' => $categories->setActive($category, true),
+                'deactivate' => $categories->setActive($category, false),
+                'delete' => $categories->delete($category),
+                'restore' => $category->trashed() ? $categories->restore($category) : null,
+                'forceDelete' => $categories->forceDelete($category),
+            };
+
+            $done++;
+        }
+
+        $this->selected = [];
+        $this->bulkAction = '';
+        $this->notice = "{$done} categor(y/ies) updated.";
     }
 
     #[Computed]
@@ -55,11 +150,12 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
     #[Computed]
     public function categories()
     {
-        return app(CategoryService::class)->searchPaginated($this->search, 10, match ($this->active) {
-            '1' => true,
-            '0' => false,
-            default => null,
-        });
+        return app(CategoryService::class)->searchPaginated($this->search, 10, [
+            'status' => in_array($this->status, ['active', 'inactive'], true) ? $this->status : null,
+            'trashed' => $this->status === 'trashed' ? 'only' : null,
+            'sort' => $this->sort,
+            'direction' => $this->direction,
+        ]);
     }
 
     public function render()
@@ -90,6 +186,7 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
             ['categories.total_categories', $this->stats['total']],
             ['categories.active', $this->stats['active']],
             ['categories.inactive', $this->stats['inactive']],
+            ['Trashed', $this->stats['trashed']],
         ] as [$label, $value])
             <div class="card">
                 <div class="card-kicker">{{ __($label) }}</div>
@@ -104,21 +201,59 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
             <input wire:model.live.debounce.300ms="search" class="input ms-pl-32" placeholder="{{ __('categories.search_placeholder') }}">
         </div>
 
-        <div class="ms-mw-280">
-            <select wire:model.live="active" class="input" aria-label="{{ __('categories.status') }}">
-                <option value="">{{ __('categories.all_statuses') }}</option>
-                <option value="1">{{ __('categories.active') }}</option>
-                <option value="0">{{ __('categories.inactive') }}</option>
+        <div class="ms-row-10">
+            <select wire:model.live="status" class="input" aria-label="Status">
+                <option value="all">{{ __('categories.all_statuses') }}</option>
+                <option value="active">{{ __('categories.active') }}</option>
+                <option value="inactive">{{ __('categories.inactive') }}</option>
+                <option value="trashed">Trashed</option>
             </select>
         </div>
     </div>
+
+    @if (count($selected) > 0)
+        <div class="ms-toolbar">
+            <div class="ms-row-10">
+                <span class="text-muted ms-fs-13">{{ count($selected) }} selected</span>
+                <select wire:model="bulkAction" class="input" aria-label="Bulk action">
+                    <option value="">Choose action…</option>
+                    @if ($status === 'trashed')
+                        <option value="restore">Restore</option>
+                        <option value="forceDelete">Delete permanently</option>
+                    @else
+                        <option value="activate">Activate</option>
+                        <option value="deactivate">Deactivate</option>
+                        <option value="delete">Move to trash</option>
+                    @endif
+                </select>
+                <button
+                    type="button"
+                    wire:click="applyBulk"
+                    wire:confirm="Apply this action to the selected categories?"
+                    wire:loading.attr="disabled"
+                    class="btn"
+                    @disabled($bulkAction === '')
+                >Apply</button>
+            </div>
+            <button type="button" wire:click="$set('selected', [])" class="btn ms-btn-sm">Clear selection</button>
+        </div>
+    @endif
+
+    @if ($notice)
+        <div data-autohide="3000" class="tag tag-accent ms-notice">{{ $notice }}</div>
+    @endif
 
     <div class="card ms-p-0">
         <div class="table-wrap">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>{{ __('categories.name') }}</th>
+                        <th style="width:32px">
+                            <input type="checkbox" class="checkbox" aria-label="Select all on this page" wire:click="selectPage">
+                        </th>
+                        <th>
+                            <button type="button" wire:click="sortBy('name')" class="ms-sort-btn">{{ __('categories.name') }}</button>
+                        </th>
                         <th>{{ __('categories.slug') }}</th>
                         <th>{{ __('categories.posts') }}</th>
                         <th>{{ __('categories.status') }}</th>
@@ -128,31 +263,52 @@ new #[Layout('layouts::app')] #[Title('Categories')] class extends Component
                 <tbody>
                     @forelse ($this->categories as $category)
                         <tr wire:key="category-{{ $category->id }}">
+                            <td>
+                                <input type="checkbox" class="checkbox" value="{{ $category->id }}" wire:model.live="selected" aria-label="Select category">
+                            </td>
                             <td class="ms-fw-500">{{ $category->name }}</td>
                             <td class="text-muted">{{ $category->slug }}</td>
                             <td class="text-muted">{{ $category->posts_count }}</td>
                             <td>
-                                <span class="tag {{ $category->is_active ? 'tag-accent' : 'tag-neutral' }}">{{ $category->is_active ? 'Active' : 'Inactive' }}</span>
+                                @if ($category->trashed())
+                                    <span class="tag tag-outline">Trashed</span>
+                                @else
+                                    <span class="tag {{ $category->is_active ? 'tag-accent' : 'tag-neutral' }}">{{ $category->is_active ? 'Active' : 'Inactive' }}</span>
+                                @endif
                             </td>
                             <td class="ms-text-right">
                                 <div class="ms-actions-end">
-                                    <a
-                                        href="{{ route('admin.categories.edit', $category) }}"
-                                        wire:navigate
-                                        class="btn ms-btn-sm"
-                                    >{{ __('categories.edit') }}</a>
-                                    <button
-                                        type="button"
-                                        wire:click="deleteCategory({{ $category->id }})"
-                                        wire:confirm="Permanently delete this category? This cannot be undone."
-                                        class="btn ms-btn-sm-danger"
-                                    >{{ __('categories.delete') }}</button>
+                                    @if ($category->trashed())
+                                        @can('restore', $category)
+                                            <button type="button" wire:click="restoreCategory({{ $category->id }})" class="btn ms-btn-sm">Restore</button>
+                                        @endcan
+                                        @can('forceDelete', $category)
+                                            <button
+                                                type="button"
+                                                wire:click="forceDeleteCategory({{ $category->id }})"
+                                                wire:confirm="Permanently delete this category? This cannot be undone."
+                                                class="btn ms-btn-sm-danger"
+                                            >Delete permanently</button>
+                                        @endcan
+                                    @else
+                                        @can('update', $category)
+                                            <a href="{{ route('admin.categories.edit', $category) }}" wire:navigate class="btn ms-btn-sm">{{ __('categories.edit') }}</a>
+                                        @endcan
+                                        @can('delete', $category)
+                                            <button
+                                                type="button"
+                                                wire:click="deleteCategory({{ $category->id }})"
+                                                wire:confirm="Move this category to the trash?"
+                                                class="btn ms-btn-sm-danger"
+                                            >{{ __('categories.delete') }}</button>
+                                        @endcan
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-muted ms-empty">{{ __('categories.no_categories_found') }}</td>
+                            <td colspan="6" class="text-muted ms-empty">{{ __('categories.no_categories_found') }}</td>
                         </tr>
                     @endforelse
                 </tbody>

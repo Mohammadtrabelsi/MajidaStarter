@@ -89,7 +89,7 @@ class CategoryServiceTest extends TestCase
 
         $this->service->delete($category);
 
-        $this->assertModelMissing($category);
+        $this->assertSoftDeleted($category);
     }
 
     public function test_options_returns_id_keyed_names_ordered_by_slug(): void
@@ -120,7 +120,7 @@ class CategoryServiceTest extends TestCase
     public function test_stats_returns_zeroes_when_empty(): void
     {
         $this->assertSame(
-            ['total' => 0, 'active' => 0, 'inactive' => 0],
+            ['total' => 0, 'active' => 0, 'inactive' => 0, 'trashed' => 0],
             $this->service->stats()
         );
     }

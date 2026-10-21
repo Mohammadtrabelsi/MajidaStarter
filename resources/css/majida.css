@@ -476,3 +476,7 @@ html.dark .theme-icon-light { display: none; }
 .ms-toast-dot { flex-shrink: 0; width: 0.6rem; height: 0.6rem; border-radius: 9999px; margin-top: 0.35rem; }
 .ms-toast-message { flex: 1; font-size: 0.875rem; line-height: 1.3; }
 .ms-toast-close { flex-shrink: 0; border: 0; background: transparent; cursor: pointer; color: #6b7280; font-size: 1rem; line-height: 1; }
+
+/* Sortable column headers in admin tables */
+.ms-sort-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: inherit; }
+.ms-sort-btn:hover { text-decoration: underline; }

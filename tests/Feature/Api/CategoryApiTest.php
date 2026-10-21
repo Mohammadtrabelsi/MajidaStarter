@@ -88,7 +88,7 @@ class CategoryApiTest extends TestCase
         $this->actingAs($admin)->deleteJson("/api/categories/{$category->id}")
             ->assertNoContent();
 
-        $this->assertModelMissing($category);
+        $this->assertSoftDeleted($category);
     }
 
     public function test_admin_can_fetch_category_options(): void

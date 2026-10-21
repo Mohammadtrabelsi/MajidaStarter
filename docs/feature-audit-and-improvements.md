@@ -102,31 +102,39 @@ The app already uses the best structural Livewire 4 feature — **view-based pag
 
 ## 5. Prioritized Action Plan & Next Steps
 
+> **Status update (2026-10-20):** items marked `[x]` are implemented and were checked against the code. Items marked `[ ]` are still open. Several Phase 1 items had already landed before this update; they are marked done after verification.
+
 ### Phase 1 (Immediate Fixes) — low effort, high impact
-- [ ] Rename `app/console/Commands/` → `app/Console/Commands/` so `App\Console\Commands\SyncTranslationKeys` autoloads and registers on Linux/CI.
-- [ ] Add throttle middleware to `POST /api/auth/login` and `/api/auth/register` in `routes/api.php`.
-- [ ] Add a migration indexing `posts.status`, `posts.published_at`, `categories.is_active`, and `users.created_at`.
-- [ ] Centralize password rules via `Password::defaults()` in `AppServiceProvider::boot()`; apply to login/register/reset/profile/user-create.
-- [ ] Harden `UserService::deleteOwnAccount()` with `session()->invalidate()` + `regenerateToken()`.
+- [x] Rename `app/console/Commands/` → `app/Console/Commands/` so `App\Console\Commands\SyncTranslationKeys` autoloads and registers on Linux/CI.
+- [x] Add throttle middleware to the API auth routes (`routes/api.php`).
+- [x] Add a migration indexing `posts.status`/`published_at`, `categories.is_active`, and `users.created_at`.
+- [x] Centralize password rules via `Password::defaults()` in `AppServiceProvider::boot()`.
+- [x] Harden `UserService::deleteOwnAccount()` with `session()->invalidate()` + `regenerateToken()`.
 
 ### Phase 2 (Architectural & Performance Refactoring)
-- [ ] Move `activeLocale` tab state client-side (`wire:show`/`$js`) in `posts/⚡create`, `posts/⚡edit`, `⚡settings`; remove the `$set` round-trips.
-- [ ] Introduce `@island` boundaries around the results tables + stat cards in `posts/⚡index`, `categories/⚡index`, admin `⚡dashboard`.
-- [ ] Collapse `*Service::stats()` into single aggregate queries and cache them; bust on model `saved`/`deleted`.
-- [ ] Extend `searchPaginated()` in `PostService`/`CategoryService` to match translatable `title`/`name`, not just `slug`.
-- [ ] Convert email verification/reset to `ShouldQueue`; add a `Registered` queued listener.
+- [ ] Move `activeLocale` tab state client-side (`wire:show`/`$js`) in `posts/⚡create`, `posts/⚡edit`, `⚡settings`.
+- [ ] Introduce `@island` boundaries around the results tables + stat cards.
+- [ ] Stats: collapsed into single aggregate queries (done). Caching with invalidation is still open.
+- [x] Extend `searchPaginated()` in `PostService`/`CategoryService` to match translatable titles/names in every configured locale.
+- [x] Queue email: verification was already queued; password reset is now queued too (`QueuedResetPassword`).
 - [ ] Replace duplicated `DomainException` try/catch with a renderable exception.
-- [ ] Add `PostPolicy`/`CategoryPolicy` (even if permissive today) to make ownership rules a one-line change later.
+- [x] Add `PostPolicy` / `CategoryPolicy` and enforce them in the admin screens and the API.
 - [ ] Extract the repeated Alpine flash/toast into one reusable `wire:transition` component.
 
 ### Phase 3 (New Feature Rollouts)
-- [ ] Public post index + detail pages driven by `scopePublished()`, locale, and `published_at` (replaces the static `/blog`).
-- [ ] Soft deletes + trash/restore for users, posts, categories.
-- [ ] Admin table upgrades: status/category/date filters, sortable columns, bulk publish/delete.
-- [ ] Wire `Setting::maintenance_mode` to real maintenance-mode enforcement middleware.
-- [ ] Activity-log export (CSV/JSON) + scheduled `activitylog:clean` retention.
-- [ ] Media/cover-image support for posts.
+- [x] Public post index + detail pages (`/blog`, `/blog/{slug}`) driven by `published` status, locale, and `published_at`.
+- [x] Soft deletes + trash/restore for users, posts, categories (admin UI and API).
+- [x] Admin table upgrades: status/category/role filters, sortable columns, bulk actions on posts and categories.
+- [x] Wire `Setting::maintenance_mode` to real enforcement (`EnforceMaintenanceMode`).
+- [x] Activity-log export (CSV/JSON, honouring the screen's filters) + scheduled `activitylog:clean`.
+- [x] Cover-image support for posts (upload, replace, remove; stored on the `public` disk).
 - [ ] AI assists (queued): excerpt generation, slug suggestion, seed-translation of `[TODO]` locale placeholders.
+
+### Added beyond the audit
+- [x] Two-factor authentication (TOTP + recovery codes), enforced at web and API sign-in.
+- [x] Sanctum personal access tokens for bearer-token API clients.
+- [x] Visit statistics shown on the admin users screen (the `/dashboard` already had them).
+- [x] `php artisan starter:make-crud` scaffolding command.
 
 ---
 

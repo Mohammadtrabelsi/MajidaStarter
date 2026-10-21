@@ -30,6 +30,19 @@ class UserService
         return Auth::attempt(['email' => $email, 'password' => $password], $remember);
     }
 
+    /**
+     * Checks the credentials without logging the user in. Used by flows that
+     * must verify a second factor before the session is established.
+     */
+    public function authenticate(string $email, string $password): ?User
+    {
+        if (! Auth::validate(['email' => $email, 'password' => $password])) {
+            return null;
+        }
+
+        return User::query()->where('email', $email)->first();
+    }
+
     public function toggleAdminRole(User $actor, User $target): void
     {
         if ($actor->is($target)) {
@@ -75,6 +88,9 @@ class UserService
         return $user;
     }
 
+    /**
+     * Soft delete: the account is moved to the trash and cannot sign in until restored.
+     */
     public function delete(User $actor, User $target): void
     {
         if ($actor->is($target)) {
@@ -82,6 +98,22 @@ class UserService
         }
 
         $target->delete();
+    }
+
+    public function restore(User $target): User
+    {
+        $target->restore();
+
+        return $target;
+    }
+
+    public function forceDelete(User $actor, User $target): void
+    {
+        if ($actor->is($target)) {
+            throw new DomainActionException('You cannot delete your own account here.');
+        }
+
+        $target->forceDelete();
     }
 
     public function updateProfile(User $user, array $data): User
@@ -133,21 +165,28 @@ class UserService
     }
 
     /**
-     * @param  string|null  $role  'admin' for administrators, 'member' for everyone else.
+     * Admin listing. Supported filters: role (admin|member), trashed (only|with),
+     * sort (name|created_at) and direction (asc|desc).
+     *
+     * @param  array<string, mixed>  $filters
      */
-    public function searchPaginated(?string $search, int $perPage = 8, ?string $role = null): LengthAwarePaginator
+    public function searchPaginated(?string $search, int $perPage = 8, array $filters = []): LengthAwarePaginator
     {
+        $sort = ($filters['sort'] ?? null) === 'name' ? 'name' : 'created_at';
+        $direction = ($filters['direction'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
+
         return User::query()
             ->with('roles')
+            ->when(($filters['trashed'] ?? null) === 'only', fn ($query) => $query->onlyTrashed())
+            ->when(($filters['trashed'] ?? null) === 'with', fn ($query) => $query->withTrashed())
+            ->when(($filters['role'] ?? null) === 'admin', fn ($query) => $query->role('admin'))
+            ->when(($filters['role'] ?? null) === 'member', fn ($query) => $query->whereDoesntHave('roles', fn ($q) => $q->where('name', 'admin')))
             ->when($search, fn ($query) => $query->where(
                 fn ($q) => $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
             ))
-            ->when($role === 'admin', fn ($query) => $query->role('admin'))
-            ->when($role === 'member', fn ($query) => $query->whereDoesntHave(
-                'roles', fn ($q) => $q->where('name', 'admin')
-            ))
-            ->latest()
+            ->orderBy($sort, $direction)
+            ->orderByDesc('id')
             ->paginate($perPage)
             ->withQueryString();
     }
@@ -168,6 +207,7 @@ class UserService
             'admins' => User::role('admin')->count(),
             'newThisWeek' => (int) ($counts->new_this_week ?? 0),
             'newToday' => (int) ($counts->new_today ?? 0),
+            'trashed' => User::onlyTrashed()->count(),
         ];
     }
 }

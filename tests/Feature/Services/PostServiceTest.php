@@ -120,7 +120,7 @@ class PostServiceTest extends TestCase
 
         $this->service->delete($post);
 
-        $this->assertModelMissing($post);
+        $this->assertSoftDeleted($post);
     }
 
     public function test_search_paginated_returns_all_for_null_search(): void
@@ -141,7 +141,7 @@ class PostServiceTest extends TestCase
     public function test_stats_returns_zeroes_when_empty(): void
     {
         $this->assertSame(
-            ['total' => 0, 'published' => 0, 'drafts' => 0],
+            ['total' => 0, 'published' => 0, 'drafts' => 0, 'trashed' => 0],
             $this->service->stats()
         );
     }
