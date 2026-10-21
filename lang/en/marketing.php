@@ -14,6 +14,7 @@ return [
     'hero_title' => 'Admin & auth scaffolding, done right.',
     'in_memory' => 'In memory',
     'license' => 'License',
+    'menu' => 'Menu',
     'product' => 'Product',
     'sign_in' => 'Sign in',
     'tagline' => 'A Laravel Livewire starter for admin-heavy products.',

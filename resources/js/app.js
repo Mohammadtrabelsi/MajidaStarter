@@ -84,6 +84,39 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('livewire:navigated', () => setSidebar(false));
 
 /* ------------------------------------------------------------------ *
+ * Marketing navbar (collapsed menu on small screens)
+ *
+ *   <button data-nav-toggle aria-controls="site-nav" aria-expanded="false">
+ *   <div id="site-nav" data-nav-panel>…</div>
+ *
+ * Choosing a link in the panel, pressing Escape, or navigating closes it.
+ * ------------------------------------------------------------------ */
+function setNavMenu(open) {
+    document.querySelectorAll('[data-nav-toggle]').forEach((btn) => {
+        btn.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('[data-nav-panel]').forEach((panel) => {
+        panel.classList.toggle('is-open', open);
+    });
+}
+
+document.addEventListener('click', (event) => {
+    const toggle = event.target.closest('[data-nav-toggle]');
+
+    if (toggle) {
+        setNavMenu(toggle.getAttribute('aria-expanded') !== 'true');
+    } else if (event.target.closest('[data-nav-panel] a')) {
+        setNavMenu(false);
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setNavMenu(false);
+});
+
+document.addEventListener('livewire:navigated', () => setNavMenu(false));
+
+/* ------------------------------------------------------------------ *
  * Theme toggle (light / dark)
  *
  *   <button data-theme-toggle> … icons: .theme-icon-light / .theme-icon-dark

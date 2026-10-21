@@ -14,6 +14,7 @@ return [
     'hero_title' => 'Admin et authentification prêts à l\'emploi.',
     'in_memory' => 'En mémoire',
     'license' => 'Licence',
+    'menu' => 'Menu',
     'product' => 'Produit',
     'sign_in' => 'Se connecter',
     'tagline' => 'Un starter Laravel Livewire pour les produits riches en administration.',

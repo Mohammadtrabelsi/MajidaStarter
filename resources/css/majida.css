@@ -10,6 +10,7 @@
 
     --color-bg: #f5f7f9;
     --color-surface: #ffffff;
+    --color-nav-bg: rgba(245, 247, 249, 0.9);
     --color-text: #1b2430;
     --color-accent: #1f7a7e;
     --color-accent-100: #dcefed;
@@ -121,13 +122,24 @@ a:hover { color: var(--color-accent-600); }
 
 /* — nav (marketing) — */
 .nav {
+    position: sticky; top: 0; z-index: 40;
     display: flex; align-items: center; gap: 32px;
     padding: 18px 48px; border-bottom: 1px solid var(--color-divider);
+    background: var(--color-nav-bg);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
 .nav .brand { margin-inline-end: auto; }
+.nav-panel { display: flex; align-items: center; gap: 32px; }
 .nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
 .nav a.link { color: var(--color-text); font-size: 14px; }
 .nav a.link:hover { color: var(--color-accent); }
+.nav a.link[aria-current="page"] { color: var(--color-accent); font-weight: 500; }
+/* Specific selectors: `.icon-btn` (declared later) would otherwise win on display. */
+.nav .nav-toggle { display: none; }
+.nav-toggle .nav-icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-open { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-close { display: block; }
 
 /* — sidebar nav (admin) — */
 .side-nav { display: flex; flex-direction: column; gap: 4px; padding: 0 12px; }
@@ -275,15 +287,29 @@ a:hover { color: var(--color-accent-600); }
 .text-muted { color: rgba(var(--ink), 0.6); }
 .container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
 .hatch { background: var(--color-navy); }
+/* Keep in-page anchor targets clear of the sticky marketing navbar. */
+[id] { scroll-margin-top: 80px; }
 
 @media (max-width: 767px) {
     h1 { font-size: 34px; }
     h2 { font-size: 26px; }
     .container { padding: 0 24px; }
-    .nav { padding: 16px 24px; gap: 14px; flex-wrap: wrap; }
-    .nav-links { order: 1; flex-basis: 100%; flex-wrap: wrap; justify-content: space-between; gap: 14px 18px; }
-    .nav .brand { margin-inline-end: 0; }
-    .nav .locale-switcher { margin-inline-start: auto; }
+    /* Collapsed navbar: brand, language and menu toggle share the first row;
+       the menu panel drops to its own full-width row when opened. */
+    .nav { padding: 14px 24px; gap: 12px; flex-wrap: wrap; }
+    .nav .locale-switcher { order: 1; }
+    .nav .nav-toggle { display: inline-flex; order: 2; }
+    .nav-panel {
+        display: none; order: 3; flex: 0 0 100%;
+        flex-direction: column; align-items: stretch; gap: 8px;
+        max-height: calc(100vh - 72px); overflow-y: auto;
+        padding-top: 12px; border-top: 1px solid var(--color-divider);
+    }
+    .nav-panel.is-open { display: flex; }
+    .nav-links { flex-direction: column; align-items: stretch; gap: 0; }
+    .nav a.link { display: block; padding: 12px 0; border-bottom: 1px solid var(--color-divider); font-size: 15px; }
+    .nav-actions { flex-direction: column; align-items: stretch; padding-top: 12px; }
+    .nav-actions .btn { justify-content: center; }
     .stat-band { padding: 44px 24px; }
 }
 
@@ -296,6 +322,7 @@ html.dark {
 
     --color-bg: #13171c;
     --color-surface: #1b2128;
+    --color-nav-bg: rgba(19, 23, 28, 0.9);
     --color-text: #e4e9ef;
     --color-accent: #2a9a9e;
     --color-accent-100: rgba(69, 175, 166, 0.16);
