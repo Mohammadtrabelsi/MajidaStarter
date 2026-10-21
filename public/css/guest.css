@@ -1,7 +1,12 @@
 .auth-split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
-.auth-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 48px; }
-.auth-hero-tint { position: absolute; inset: 0; background: var(--color-accent); mix-blend-mode: color; }
-.auth-hero-body { position: relative; color: var(--color-bg); max-width: 420px; }
+/* The hero is a fixed brand panel: it keeps the same dark palette in light and
+   dark themes so its light text always has contrast. */
+.auth-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 48px; background: #1d2d3d; color: #f2f2f3; }
+.auth-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 10px, transparent 10px, transparent 20px); }
+.auth-hero-body { position: relative; max-width: 420px; }
+.auth-hero-tag { margin: 0 0 20px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #9cbfdd; }
+.auth-hero h2 { margin: 0 0 16px; color: #f2f2f3; }
+.auth-hero p { margin: 0; line-height: 1.6; color: rgba(242, 242, 243, 0.8); }
 .auth-form-side { display: flex; align-items: center; justify-content: center; padding: 48px; }
 @media (max-width: 767px) {
     .auth-split { grid-template-columns: 1fr; }
