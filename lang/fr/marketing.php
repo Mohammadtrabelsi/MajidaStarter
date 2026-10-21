@@ -7,6 +7,7 @@ return [
     'auth_highlight_roles' => 'Rôles et permissions pour chaque section d\'administration',
     'auth_highlight_security' => 'Authentification à deux facteurs et vérification de l\'e-mail',
     'auth_highlights_title' => 'Ce que vous obtenez',
+    'about' => 'À propos',
     'blog' => 'Blog',
     'changelog' => 'Journal des modifications',
     'company' => 'Entreprise',

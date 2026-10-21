@@ -11,6 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/about', 'about')->name('about');
 Route::view('/docs', 'docs')->name('docs');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
