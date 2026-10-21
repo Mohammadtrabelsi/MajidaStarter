@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'auth_highlight_' => 'Auth highlight ',
     'auth_highlight_activity' => 'Activity log with CSV and JSON export',
     'auth_highlight_i18n' => 'English, Arabic and French, with right-to-left layouts',
     'auth_highlight_roles' => 'Roles and permissions for every admin area',
