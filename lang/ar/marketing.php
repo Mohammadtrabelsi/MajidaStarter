@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'auth_highlight_activity' => 'سجل نشاط مع تصدير CSV وJSON',
+    'auth_highlight_i18n' => 'الإنجليزية والعربية والفرنسية مع دعم الاتجاه من اليمين إلى اليسار',
+    'auth_highlight_roles' => 'أدوار وصلاحيات لكل قسم في لوحة الإدارة',
+    'auth_highlight_security' => 'المصادقة الثنائية والتحقق من البريد الإلكتروني',
+    'auth_highlights_title' => 'ما ستحصل عليه',
     'blog' => 'المدونة',
     'changelog' => 'سجل التغييرات',
     'company' => 'الشركة',

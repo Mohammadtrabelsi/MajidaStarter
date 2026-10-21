@@ -594,3 +594,27 @@ html.dark .ov-bad { color: #f6b26b; }
 /* white-on-teal needs the deeper teal to stay above 4.5:1 in dark mode */
 html.dark .btn-primary, html.dark .side-nav a.active, html.dark .ms-logfilter.active { background: #1f7a7e; border-color: #1f7a7e; }
 html.dark .btn-primary:hover { background: #196a6e; }
+
+/* — guest layout (login, register, password flows) —
+   The brand panel keeps one dark palette in light and dark themes so its
+   light text always has contrast. Bundled with the app CSS, so it cannot go
+   missing or stale the way a separately linked stylesheet can. */
+.auth-split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
+.auth-hero { position: relative; overflow: hidden; display: flex; align-items: center; padding: 64px 56px; background: #1d2d3d; color: #f2f2f3; }
+.auth-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 10px, transparent 10px, transparent 20px); }
+.auth-hero-body { position: relative; max-width: 460px; }
+.auth-hero-tag { margin: 0 0 20px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #9cbfdd; }
+.auth-hero h2 { margin: 0 0 16px; color: #f2f2f3; }
+.auth-hero p { margin: 0; line-height: 1.6; color: rgba(242, 242, 243, 0.8); }
+.auth-hero-subtitle { margin: 40px 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9cbfdd; }
+.auth-hero-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.auth-hero-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; color: rgba(242, 242, 243, 0.92); }
+.auth-hero-list svg { width: 18px; height: 18px; flex: none; margin-top: 3px; color: #6cc8c0; }
+.auth-hero-link { display: inline-flex; margin-top: 32px; font-size: 14px; font-weight: 500; color: #9cbfdd; text-decoration: none; }
+.auth-hero-link:hover { color: #ffffff; }
+.auth-form-side { display: flex; align-items: center; justify-content: center; padding: 48px; }
+@media (max-width: 767px) {
+    .auth-split { grid-template-columns: 1fr; }
+    .auth-hero { display: none; }
+    .auth-form-side { padding: 40px 24px; align-items: flex-start; }
+}
