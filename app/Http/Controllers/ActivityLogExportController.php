@@ -28,6 +28,7 @@ class ActivityLogExportController extends Controller
         return match ($format) {
             'csv' => response()->streamDownload($this->csv($query), $filename, ['Content-Type' => 'text/csv']),
             'json' => response()->streamDownload($this->json($query), $filename, ['Content-Type' => 'application/json']),
+            default => abort(404),
         };
     }
 
@@ -51,7 +52,7 @@ class ActivityLogExportController extends Controller
                         $activity->description,
                         $activity->subject_type,
                         $activity->subject_id,
-                        $activity->causer?->email,
+                        $activity->causer?->getAttribute('email'),
                         json_encode($activity->properties),
                     ]);
                 }
@@ -81,7 +82,7 @@ class ActivityLogExportController extends Controller
                         'description' => $activity->description,
                         'subject_type' => $activity->subject_type,
                         'subject_id' => $activity->subject_id,
-                        'causer_email' => $activity->causer?->email,
+                        'causer_email' => $activity->causer?->getAttribute('email'),
                         'properties' => $activity->properties,
                     ]);
 

@@ -20,7 +20,7 @@ class SystemHealthService
     public function checks(): array
     {
         return [
-            $this->probe('database', function (): ?string {
+            $this->probe('database', function (): string {
                 DB::connection()->select('select 1');
 
                 return DB::connection()->getDriverName();
@@ -36,7 +36,7 @@ class SystemHealthService
 
                 return config('cache.default');
             }),
-            $this->probe('queue', function (): ?string {
+            $this->probe('queue', function (): string {
                 $connection = config('queue.default');
 
                 if ($connection === 'sync') {
