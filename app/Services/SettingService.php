@@ -14,6 +14,11 @@ class SettingService
         ]);
     }
 
+    public function dateFormat(): string
+    {
+        return $this->current()->date_format;
+    }
+
     public function update(Setting $setting, array $data): Setting
     {
         $setting->fill($data);

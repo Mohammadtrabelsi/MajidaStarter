@@ -12,11 +12,15 @@ class Setting extends Model
 {
     use HasTranslations, LogsActivity, TracksUserActions;
 
+    /** PHP date() formats an admin can pick from for displayed dates. */
+    public const DATE_FORMATS = ['M j, Y', 'j M Y', 'Y-m-d', 'd/m/Y', 'm/d/Y', 'd.m.Y'];
+
     protected $fillable = [
         'site_name',
         'site_description',
         'support_email',
         'maintenance_mode',
+        'date_format',
     ];
 
     public array $translatable = [
@@ -26,6 +30,7 @@ class Setting extends Model
 
     protected $attributes = [
         'maintenance_mode' => false,
+        'date_format' => 'M j, Y',
     ];
 
     protected function casts(): array
@@ -38,7 +43,7 @@ class Setting extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['site_name', 'site_description', 'support_email', 'maintenance_mode'])
+            ->logOnly(['site_name', 'site_description', 'support_email', 'maintenance_mode', 'date_format'])
             ->logOnlyDirty()
             ->useLogName('settings');
     }

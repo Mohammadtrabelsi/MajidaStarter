@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Setting;
 use App\Services\SettingService;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -19,7 +21,16 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
     public bool $maintenanceMode = false;
 
+    public string $dateFormat = 'M j, Y';
+
     public array $locales = ['en' => 'English', 'ar' => 'العربية', 'fr' => 'Français'];
+
+    protected function rules(): array
+    {
+        return [
+            'dateFormat' => ['required', Rule::in(Setting::DATE_FORMATS)],
+        ];
+    }
 
     public function mount(SettingService $settings): void
     {
@@ -34,6 +45,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 
         $this->supportEmail = $setting->support_email ?? '';
         $this->maintenanceMode = $setting->maintenance_mode;
+        $this->dateFormat = $setting->date_format;
     }
 
     public function save(SettingService $settings): void
@@ -52,6 +64,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
         $settings->update($setting, [
             'support_email' => $this->supportEmail ?: null,
             'maintenance_mode' => $this->maintenanceMode,
+            'date_format' => $this->dateFormat,
         ]);
 
         $this->dispatch('settings-saved');
@@ -59,7 +72,7 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
 };
 ?>
 
-<div class="ms-mw-720">
+<div>
     <div class="ms-mb-24">
         <h2>{{ __('settings.title') }}</h2>
         <p class="text-muted ms-note">{{ __('settings.description') }}</p>
@@ -119,6 +132,16 @@ new #[Layout('layouts::app')] #[Title('Settings')] class extends Component
                 :error="$errors->first('supportEmail')"
             />
             <x-input-error :message="$errors->first('supportEmail')" />
+        </div>
+
+        <div class="field">
+            <x-input-label for="dateFormat" :value="__('settings.date_format')" />
+            <select wire:model="dateFormat" id="dateFormat" class="input">
+                @foreach (Setting::DATE_FORMATS as $format)
+                    <option value="{{ $format }}">{{ now()->format($format) }}</option>
+                @endforeach
+            </select>
+            <x-input-error :message="$errors->first('dateFormat')" />
         </div>
 
         <label class="ms-option-card">

@@ -3,6 +3,7 @@
 use App\Models\Post;
 use App\Services\CategoryService;
 use App\Services\PostService;
+use App\Services\SettingService;
 use App\Support\Livewire\InteractsWithToasts;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -52,6 +53,12 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
     public function mount(): void
     {
         $this->authorize('viewAny', Post::class);
+    }
+
+    #[Computed]
+    public function dateFormat(): string
+    {
+        return app(SettingService::class)->dateFormat();
     }
 
     public function updated(string $property): void
@@ -298,7 +305,7 @@ new #[Layout('layouts::app')] #[Title('Posts')] class extends Component
                             </td>
                             <td class="text-muted">{{ $post->category?->name ?? '—' }}</td>
                             <td class="text-muted">{{ $post->author?->name ?? '—' }}</td>
-                            <td class="text-muted ms-nowrap">{{ $post->published_at?->format('M j, Y') ?? '—' }}</td>
+                            <td class="text-muted ms-nowrap">{{ $post->published_at?->format($this->dateFormat) ?? '—' }}</td>
                             <td>
                                 @if ($post->trashed())
                                     <span class="tag tag-outline">Trashed</span>

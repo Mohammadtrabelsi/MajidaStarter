@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Services\SettingService;
 use App\Services\UserService;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -95,6 +96,12 @@ new #[Layout('layouts::app')] #[Title('Users')] class extends Component
     }
 
     #[Computed]
+    public function dateFormat(): string
+    {
+        return app(SettingService::class)->dateFormat();
+    }
+
+    #[Computed]
     public function users()
     {
         return app(UserService::class)->searchPaginated($this->search, 8, [
@@ -180,7 +187,7 @@ new #[Layout('layouts::app')] #[Title('Users')] class extends Component
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-muted ms-nowrap">{{ $user->created_at->format('M j, Y') }}</td>
+                            <td class="text-muted ms-nowrap">{{ $user->created_at->format($this->dateFormat) }}</td>
                             <td>
                                 @if ($user->trashed())
                                     <span class="tag tag-outline">Trashed</span>

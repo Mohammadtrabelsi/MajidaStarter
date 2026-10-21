@@ -14,6 +14,7 @@ return [
     'welcome' => 'Welcome',
     'marketing_site' => 'Marketing site',
     'my_dashboard' => 'My dashboard',
+    'my_space' => 'My space',
     'view_site' => 'View site',
     'welcome_back' => 'Welcome,',
 ];
