@@ -618,3 +618,9 @@ html.dark .btn-primary:hover { background: #196a6e; }
     .auth-hero { display: none; }
     .auth-form-side { padding: 40px 24px; align-items: flex-start; }
 }
+
+/* — notifications — */
+.notification-row { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 14px 16px; border-bottom: 1px solid rgba(var(--ink), 0.08); }
+.notification-row:last-child { border-bottom: none; }
+.notification-row.is-unread { background: rgba(var(--ink), 0.03); }
+.notification-empty { padding: 20px 16px; margin: 0; }

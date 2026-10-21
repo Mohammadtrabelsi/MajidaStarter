@@ -11,7 +11,7 @@ MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. I
 - **Role & permission based access control** — powered by [spatie/laravel-permission](https://spatie.be/docs/laravel-permission), with an `admin` role seeded out of the box.
 - **Activity logging** — every meaningful change to users, posts, categories, and settings is recorded with [spatie/laravel-activitylog](https://spatie.be/docs/laravel-activitylog) and browsable from the admin panel.
 - **Activity log export & retention** — download the filtered activity log as CSV or JSON; `activitylog:clean` runs daily via the scheduler.
-- **CRUD notifications** — admins receive a stored notification when posts or categories are created, updated or deleted. The acting user is never notified about their own change. See [Feature notes](#feature-notes).
+- **CRUD notifications** — admins receive a stored notification when posts, categories, users or settings are created, updated, deleted or restored, and can review them in a bell-linked notifications page. The acting user is never notified about their own change. See [Feature notes](#feature-notes).
 - **Visit statistics** — page views on the public site are counted (bots, admin, API and asset requests are excluded) and shown on the dashboards.
 - **System health** — the admin dashboard checks the database, cache and queue, and `/up` exposes a liveness endpoint for uptime monitors.
 - **REST API** — every service is exposed as JSON endpoints under `/api`, protected by the same authorization gates as the web UI. Sessions and Sanctum personal access tokens are both accepted (see [API](#api)).
@@ -98,7 +98,7 @@ These are the keys that change the starter kit's own behaviour. Everything else 
 | `CACHE_STORE` | `database` | Cache store, used by the health probes and rate limiting |
 | `SESSION_DRIVER` | `database` | Session store behind the web login |
 | `MAIL_MAILER` | `log` in `.env.example` | Set to a real mailer before sending verification or reset emails |
-| `CRUD_NOTIFICATIONS_ENABLED` | `true` | Turns the post/category notification observers on or off |
+| `CRUD_NOTIFICATIONS_ENABLED` | `true` | Turns the CRUD notification observers on or off |
 | `ADMIN_EMAIL` / `ADMIN_NAME` / `ADMIN_PASSWORD` | `admin@majidastarter.com` / `Admin User` / `password` | Read by `AdminUserSeeder` only |
 
 ### Admin login
@@ -214,7 +214,7 @@ docs/
   `/admin/users`, `/admin/users/create`, `/admin/users/{user}/edit`,
   `/admin/categories`, `/admin/categories/create`, `/admin/categories/{category}/edit`,
   `/admin/posts`, `/admin/posts/create`, `/admin/posts/{post}/edit`,
-  `/admin/activity-log`, `/admin/activity-log/export/{csv|json}`, `/admin/settings`
+  `/admin/activity-log`, `/admin/activity-log/export/{csv|json}`, `/admin/settings`, `/admin/notifications`
 - **Locale switch** — `/language/{locale}` persists the chosen locale to the session
 
 ### API
@@ -274,7 +274,7 @@ Errors on `/api` are always JSON. A site in maintenance mode returns `503` to ev
 These features work out of the box, but are easy to miss in the code.
 
 - **Visit statistics.** `TrackVisit` records successful `GET` page requests after the response is sent, so tracking never slows a page. It skips the admin area, `/api`, Livewire requests, language switches, logout, `/up` and common bots. Totals are shown on the admin and user dashboards.
-- **CRUD notifications.** `CrudNotificationObserver` watches the models listed in `config/crud_notifications.php` (posts and categories by default). On create, update or delete it stores a `CrudActionNotification` in the `notifications` table for every user with the `admin` role, except the person who made the change. To watch another model, add it to that config file. **There is no notification bell or list in the UI yet**, so the records can be read from the database or your own view.
+- **CRUD notifications.** `CrudNotificationObserver` watches the models listed in `config/crud_notifications.php` (posts, categories, users and settings by default). On create, update, delete or restore it stores a `CrudActionNotification` in the `notifications` table for every user with the `admin` role, except the person who made the change. Updates that only touch `updated_at`, `updated_by`, `remember_token` or `deleted_at` are skipped, so a "remember me" login does not notify anyone. Admins see the unread count in the topbar bell and manage the list at `/admin/notifications` (filter, mark one or all as read). To watch another model, add it to that config file.
 - **System health.** `SystemHealthService` runs independent probes for the database, cache and queue and shows them in the admin dashboard's system-health card. A failing probe does not break the page.
 - **Maintenance mode.** Toggled from **Admin → Settings**. `EnforceMaintenanceMode` serves a 503 page to visitors and JSON on `/api`. Administrators, the login and two-factor pages, language switching and `/up` stay reachable.
 - **Date format.** The admin settings choose one format for dates shown in the activity log and the users list. The choices are defined in `Setting::DATE_FORMATS`.

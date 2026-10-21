@@ -2,6 +2,8 @@
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Setting;
+use App\Models\User;
 
 return [
 
@@ -24,8 +26,9 @@ return [
 
     /*
     | Channels used by the notification. 'database' persists to the
-    | notifications table. Add 'broadcast' once Reverb/Pusher is configured to
-    | push the same payload to Laravel Echo in real time.
+    | notifications table and is listed on the admin notifications page. Add
+    | 'broadcast' once Reverb/Pusher is configured to push the same payload to
+    | Laravel Echo in real time.
     */
     'channels' => ['database'],
 
@@ -39,20 +42,33 @@ return [
     ],
 
     /*
+    | An update that only touches these attributes does not notify. Laravel
+    | rotates the remember token on every "remember me" login, and timestamps
+    | and the audit column change on any save. Restoring a soft-deleted record
+    | saves it with deleted_at cleared, which would otherwise notify twice
+    | (once as "updated", once as "restored").
+    */
+    'ignored_attributes' => ['updated_at', 'updated_by', 'remember_token', 'deleted_at'],
+
+    /*
     | Models to watch. Each entry describes how to render the notification
     | payload for that resource:
-    |   - label:           human friendly resource name
+    |   - label:           translation key (or plain text) for the resource name
     |   - title_attribute: attribute used to name the specific record
-    |   - events:          which CRUD events fire a notification
-    |   - routes.view:     named route to the record (created/updated)
+    |   - events:          which events fire a notification: created, updated,
+    |                      deleted, restored
+    |   - routes.view:     named route to the record (created/updated/restored)
     |   - routes.index:    named route used after a record is deleted
+    |
+    | A route that takes the model as a parameter receives it; a route without
+    | parameters (such as the settings page) is linked as-is.
     */
     'models' => [
 
         Post::class => [
-            'label' => 'Post',
+            'label' => 'notifications.resources.post',
             'title_attribute' => 'title',
-            'events' => ['created', 'updated', 'deleted'],
+            'events' => ['created', 'updated', 'deleted', 'restored'],
             'routes' => [
                 'view' => 'admin.posts.edit',
                 'index' => 'admin.posts.index',
@@ -60,12 +76,32 @@ return [
         ],
 
         Category::class => [
-            'label' => 'Category',
+            'label' => 'notifications.resources.category',
             'title_attribute' => 'name',
-            'events' => ['created', 'updated', 'deleted'],
+            'events' => ['created', 'updated', 'deleted', 'restored'],
             'routes' => [
                 'view' => 'admin.categories.edit',
                 'index' => 'admin.categories.index',
+            ],
+        ],
+
+        User::class => [
+            'label' => 'notifications.resources.user',
+            'title_attribute' => 'name',
+            'events' => ['created', 'updated', 'deleted', 'restored'],
+            'routes' => [
+                'view' => 'admin.users.edit',
+                'index' => 'admin.users.index',
+            ],
+        ],
+
+        Setting::class => [
+            'label' => 'notifications.resources.settings',
+            'title_attribute' => 'site_name',
+            'events' => ['updated'],
+            'routes' => [
+                'view' => 'admin.settings',
+                'index' => 'admin.settings',
             ],
         ],
 
