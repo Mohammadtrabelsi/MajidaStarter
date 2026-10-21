@@ -86,7 +86,7 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     {{-- Profile information --}}
     <form wire:submit="updateProfile" class="card ms-stack-16">
         <div>
-            <h3 class="ms-fs-18">Account information</h3>
+            <h3 class="ms-fs-18">{{ __('profile.account_information') }}</h3>
             <p class="text-muted ms-note">{{ __('profile.update_name_email') }}</p>
         </div>
 
@@ -107,9 +107,9 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
 
             @if (! auth()->user()->hasVerifiedEmail())
                 <p class="text-muted ms-fs12-mt8">
-                    Your email address is unverified.
+                    {{ __('profile.unverified_email') }}
                     <button type="button" wire:click="resendVerification" class="btn-ghost ms-linkbtn">
-                        Resend verification email
+                        {{ __('profile.resend_verification') }}
                     </button>
                     <span
                         data-show-on="verification-sent"
@@ -127,8 +127,8 @@ new #[Layout('layouts::app')] #[Title('Profile')] class extends Component
     {{-- Update password --}}
     <form wire:submit="updatePassword" class="card ms-mt16-stack-16">
         <div>
-            <h3 class="ms-fs-18">Update password</h3>
-            <p class="text-muted ms-note">Use a long, random password to keep your account secure.</p>
+            <h3 class="ms-fs-18">{{ __('profile.update_password') }}</h3>
+            <p class="text-muted ms-note">{{ __('profile.update_password_description') }}</p>
         </div>
 
         <div data-show-on="password-updated" class="tag tag-accent">
