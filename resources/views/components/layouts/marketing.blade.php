@@ -10,14 +10,14 @@
         <title>{{ $title ?? config('app.name').' — Laravel Livewire admin starter' }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=barlow:400,500,700|barlow-condensed:400,600" rel="stylesheet">
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('styles')
     </head>
     <body class="antialiased">
         <div class="nav">
             <a href="{{ url('/') }}" class="brand">
-                <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                <x-brand-mark />
                 <span class="brand-name">{{ config('app.name') }}</span>
             </a>
             <a href="{{ url('/') }}#features" class="link">{{ __('marketing.features') }}</a>
@@ -40,7 +40,7 @@
             <div class="container footer-grid">
                 <div class="footer-brand">
                     <a href="{{ url('/') }}" class="brand">
-                        <span class="brand-mark">{{ Str::substr(config('app.name', 'M'), 0, 1) }}</span>
+                        <x-brand-mark />
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </a>
                     <p class="text-muted footer-brand-copy">A Laravel Livewire starter for admin-heavy products.</p>

@@ -1,7 +1,10 @@
 .auth-split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
-.auth-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 48px; }
-.auth-hero-tint { position: absolute; inset: 0; background: var(--color-accent); mix-blend-mode: color; }
-.auth-hero-body { position: relative; color: var(--color-bg); max-width: 420px; }
+.auth-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 56px; background: var(--color-navy); }
+/* light diagonal panel echoing the marketing visual */
+.auth-hero::before { content: ""; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.06); clip-path: polygon(62% 0, 100% 0, 100% 100%, 82% 100%); }
+.auth-hero-tint { display: none; }
+.auth-hero-body { position: relative; color: #ffffff; max-width: 420px; }
+.auth-hero-body h2 { font-size: 34px; }
 .auth-form-side { display: flex; align-items: center; justify-content: center; padding: 48px; }
 @media (max-width: 767px) {
     .auth-split { grid-template-columns: 1fr; }
