@@ -65,7 +65,7 @@ class MakeCrudModuleCommand extends Command
 
         $this->newLine();
         $this->info("Scaffolded {$name}. Next steps:");
-        $this->line("  1. Review the migration columns and add any fields the model needs.");
+        $this->line('  1. Review the migration columns and add any fields the model needs.');
         $this->line("  2. Add '{$permission}' to database/seeders/RolesAndPermissionsSeeder.php and grant it to the admin role.");
         $this->line("  3. Register the policy's abilities in routes and screens with the '{$permission}' permission.");
         $this->line('  4. Run php artisan migrate and php artisan test.');

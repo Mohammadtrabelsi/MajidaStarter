@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\DomainActionException;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -90,7 +91,7 @@ class SoftDeleteTest extends TestCase
     {
         $admin = User::factory()->admin()->create();
 
-        $this->expectException(\App\Exceptions\DomainActionException::class);
+        $this->expectException(DomainActionException::class);
 
         app(UserService::class)->forceDelete($admin, $admin);
     }

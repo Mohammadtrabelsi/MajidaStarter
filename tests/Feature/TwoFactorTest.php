@@ -23,7 +23,7 @@ class TwoFactorTest extends TestCase
     /**
      * Turns two-factor on for a user through the real setup flow.
      *
-     * @return array<int, string>  Plain recovery codes.
+     * @return array<int, string> Plain recovery codes.
      */
     private function enableTwoFactor(User $user): array
     {

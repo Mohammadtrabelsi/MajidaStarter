@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\TwoFactorService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -93,7 +94,7 @@ class AuthController extends Controller
     /**
      * @param  array<string, mixed>  $validated
      */
-    private function authenticatedUser(array $validated): \App\Models\User
+    private function authenticatedUser(array $validated): User
     {
         $user = $this->users->authenticate($validated['email'], $validated['password']);
 

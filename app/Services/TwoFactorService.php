@@ -61,7 +61,7 @@ class TwoFactorService
     /**
      * Confirms setup with a code from the authenticator app.
      *
-     * @return array<int, string>|null  The plain recovery codes (shown once), or null when the code is wrong.
+     * @return array<int, string>|null The plain recovery codes (shown once), or null when the code is wrong.
      */
     public function confirm(User $user, string $code): ?array
     {

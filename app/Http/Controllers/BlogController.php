@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\PostService;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 /**
  * Public reader-facing blog: a listing of published posts and a detail page.
