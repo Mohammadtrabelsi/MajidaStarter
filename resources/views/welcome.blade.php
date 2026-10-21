@@ -4,6 +4,7 @@
             /* Navy hero with a light diagonal panel, as in the brand visual. */
             .hero-band { position: relative; overflow: hidden; background: var(--color-navy); color: #ffffff; }
             .hero-band::before { content: ""; position: absolute; inset: 0; background: #e9eef4; clip-path: polygon(64% 0, 100% 0, 100% 100%, 78% 100%); }
+            [dir="rtl"] .hero-band::before { clip-path: polygon(0 0, 36% 0, 22% 100%, 0 100%); }
             html.dark .hero-band { background: #1d3a5c; }
             html.dark .hero-band::before { background: #24303d; }
             .hero-band .tag { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
@@ -54,6 +55,7 @@
             @media (max-width: 900px) {
                 .hero-grid { grid-template-columns: 1fr; gap: 36px; padding: 56px 24px; }
                 .hero-band::before { clip-path: polygon(0 62%, 100% 48%, 100% 100%, 0 100%); }
+                [dir="rtl"] .hero-band::before { clip-path: polygon(0 48%, 100% 62%, 100% 100%, 0 100%); }
                 .feature-grid { grid-template-columns: 1fr; }
                 .stat-grid { grid-template-columns: 1fr; gap: 28px; }
             }

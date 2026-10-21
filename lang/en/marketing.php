@@ -3,6 +3,7 @@
 return [
     'blog' => 'Blog',
     'changelog' => 'Changelog',
+    'company' => 'Company',
     'dashboard' => 'Dashboard',
     'docs' => 'Docs',
     'features' => 'Features',
@@ -13,6 +14,8 @@ return [
     'hero_title' => 'Admin & auth scaffolding, done right.',
     'in_memory' => 'In memory',
     'license' => 'License',
+    'product' => 'Product',
     'sign_in' => 'Sign in',
+    'tagline' => 'A Laravel Livewire starter for admin-heavy products.',
     'view_on_github' => 'View on GitHub',
 ];

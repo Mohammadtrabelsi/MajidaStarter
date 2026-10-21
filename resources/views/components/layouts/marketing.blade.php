@@ -43,11 +43,11 @@
                         <x-brand-mark />
                         <span class="brand-name">{{ config('app.name') }}</span>
                     </a>
-                    <p class="text-muted footer-brand-copy">A Laravel Livewire starter for admin-heavy products.</p>
+                    <p class="text-muted footer-brand-copy">{{ __('marketing.tagline') }}</p>
                     <a href="{{ route('register') }}" class="btn btn-primary mb-4">{{ __('marketing.get_started') }}</a>
                 </div>
                 <nav aria-label="Product">
-                    <div class="footer-heading">Product</div>
+                    <div class="footer-heading">{{ __('marketing.product') }}</div>
                     <div class="footer-links">
                         <a href="{{ url('/') }}#features">{{ __('marketing.features') }}</a>
                         <a href="{{ route('docs') }}">{{ __('marketing.docs') }}</a>
@@ -55,11 +55,11 @@
                     </div>
                 </nav>
                 <nav aria-label="Company">
-                    <div class="footer-heading">Company</div>
+                    <div class="footer-heading">{{ __('marketing.company') }}</div>
                     <div class="footer-links">
                         <a href="{{ route('blog') }}">{{ __('marketing.blog') }}</a>
-                        <a href="#">{{ __('marketing.github') }}</a>
-                        <a href="#">{{ __('marketing.license') }}</a>
+                        <a href="https://github.com/Mohammadtrabelsi/MajidaStarter" target="_blank" rel="noopener">{{ __('marketing.github') }}</a>
+                        <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">{{ __('marketing.license') }}</a>
                     </div>
                 </nav>
             </div>
