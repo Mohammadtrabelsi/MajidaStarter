@@ -98,6 +98,7 @@ class VisitService
             ->groupBy('path')
             ->orderByDesc('total')
             ->limit($limit)
+            ->toBase()
             ->get()
             ->map(fn ($row) => ['path' => $row->path, 'count' => (int) $row->total])
             ->all();
