@@ -78,6 +78,8 @@ return [
     |
     */
 
+    'github_url' => env('GITHUB_URL', 'https://github.com/Mohammadtrabelsi/MajidaStarter'),
+
     'locale' => env('APP_LOCALE', 'en'),
 
     /*
