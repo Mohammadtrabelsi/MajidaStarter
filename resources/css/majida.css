@@ -10,6 +10,7 @@
 
     --color-bg: #f5f7f9;
     --color-surface: #ffffff;
+    --color-nav-bg: rgba(245, 247, 249, 0.9);
     --color-text: #1b2430;
     --color-accent: #1f7a7e;
     --color-accent-100: #dcefed;
@@ -121,13 +122,24 @@ a:hover { color: var(--color-accent-600); }
 
 /* — nav (marketing) — */
 .nav {
+    position: sticky; top: 0; z-index: 40;
     display: flex; align-items: center; gap: 32px;
     padding: 18px 48px; border-bottom: 1px solid var(--color-divider);
+    background: var(--color-nav-bg);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
 .nav .brand { margin-inline-end: auto; }
+.nav-panel { display: flex; align-items: center; gap: 32px; }
 .nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-actions { display: flex; align-items: center; gap: 12px; }
 .nav a.link { color: var(--color-text); font-size: 14px; }
 .nav a.link:hover { color: var(--color-accent); }
+.nav a.link[aria-current="page"] { color: var(--color-accent); font-weight: 500; }
+/* Specific selectors: `.icon-btn` (declared later) would otherwise win on display. */
+.nav .nav-toggle { display: none; }
+.nav-toggle .nav-icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-open { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-close { display: block; }
 
 /* — sidebar nav (admin) — */
 .side-nav { display: flex; flex-direction: column; gap: 4px; padding: 0 12px; }
@@ -275,15 +287,29 @@ a:hover { color: var(--color-accent-600); }
 .text-muted { color: rgba(var(--ink), 0.6); }
 .container { max-width: 1320px; margin: 0 auto; padding: 0 48px; }
 .hatch { background: var(--color-navy); }
+/* Keep in-page anchor targets clear of the sticky marketing navbar. */
+[id] { scroll-margin-top: 80px; }
 
 @media (max-width: 767px) {
     h1 { font-size: 34px; }
     h2 { font-size: 26px; }
     .container { padding: 0 24px; }
-    .nav { padding: 16px 24px; gap: 14px; flex-wrap: wrap; }
-    .nav-links { order: 1; flex-basis: 100%; flex-wrap: wrap; justify-content: space-between; gap: 14px 18px; }
-    .nav .brand { margin-inline-end: 0; }
-    .nav .locale-switcher { margin-inline-start: auto; }
+    /* Collapsed navbar: brand, language and menu toggle share the first row;
+       the menu panel drops to its own full-width row when opened. */
+    .nav { padding: 14px 24px; gap: 12px; flex-wrap: wrap; }
+    .nav .locale-switcher { order: 1; }
+    .nav .nav-toggle { display: inline-flex; order: 2; }
+    .nav-panel {
+        display: none; order: 3; flex: 0 0 100%;
+        flex-direction: column; align-items: stretch; gap: 8px;
+        max-height: calc(100vh - 72px); overflow-y: auto;
+        padding-top: 12px; border-top: 1px solid var(--color-divider);
+    }
+    .nav-panel.is-open { display: flex; }
+    .nav-links { flex-direction: column; align-items: stretch; gap: 0; }
+    .nav a.link { display: block; padding: 12px 0; border-bottom: 1px solid var(--color-divider); font-size: 15px; }
+    .nav-actions { flex-direction: column; align-items: stretch; padding-top: 12px; }
+    .nav-actions .btn { justify-content: center; }
     .stat-band { padding: 44px 24px; }
 }
 
@@ -296,6 +322,7 @@ html.dark {
 
     --color-bg: #13171c;
     --color-surface: #1b2128;
+    --color-nav-bg: rgba(19, 23, 28, 0.9);
     --color-text: #e4e9ef;
     --color-accent: #2a9a9e;
     --color-accent-100: rgba(69, 175, 166, 0.16);
@@ -567,3 +594,27 @@ html.dark .ov-bad { color: #f6b26b; }
 /* white-on-teal needs the deeper teal to stay above 4.5:1 in dark mode */
 html.dark .btn-primary, html.dark .side-nav a.active, html.dark .ms-logfilter.active { background: #1f7a7e; border-color: #1f7a7e; }
 html.dark .btn-primary:hover { background: #196a6e; }
+
+/* — guest layout (login, register, password flows) —
+   The brand panel keeps one dark palette in light and dark themes so its
+   light text always has contrast. Bundled with the app CSS, so it cannot go
+   missing or stale the way a separately linked stylesheet can. */
+.auth-split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
+.auth-hero { position: relative; overflow: hidden; display: flex; align-items: center; padding: 64px 56px; background: #1d2d3d; color: #f2f2f3; }
+.auth-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 10px, transparent 10px, transparent 20px); }
+.auth-hero-body { position: relative; max-width: 460px; }
+.auth-hero-tag { margin: 0 0 20px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #9cbfdd; }
+.auth-hero h2 { margin: 0 0 16px; color: #f2f2f3; }
+.auth-hero p { margin: 0; line-height: 1.6; color: rgba(242, 242, 243, 0.8); }
+.auth-hero-subtitle { margin: 40px 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9cbfdd; }
+.auth-hero-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.auth-hero-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; color: rgba(242, 242, 243, 0.92); }
+.auth-hero-list svg { width: 18px; height: 18px; flex: none; margin-top: 3px; color: #6cc8c0; }
+.auth-hero-link { display: inline-flex; margin-top: 32px; font-size: 14px; font-weight: 500; color: #9cbfdd; text-decoration: none; }
+.auth-hero-link:hover { color: #ffffff; }
+.auth-form-side { display: flex; align-items: center; justify-content: center; padding: 48px; }
+@media (max-width: 767px) {
+    .auth-split { grid-template-columns: 1fr; }
+    .auth-hero { display: none; }
+    .auth-form-side { padding: 40px 24px; align-items: flex-start; }
+}

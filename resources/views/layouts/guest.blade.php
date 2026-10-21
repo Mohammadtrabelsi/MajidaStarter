@@ -31,6 +31,20 @@
                     <p class="auth-hero-tag">{{ __('marketing.hero_tag') }}</p>
                     <h2>{{ __('app.welcome') }} {{ config('app.name') }}.</h2>
                     <p>{{ __('marketing.hero_description', ['name' => config('app.name')]) }}</p>
+
+                    <h3 class="auth-hero-subtitle">{{ __('marketing.auth_highlights_title') }}</h3>
+                    <ul class="auth-hero-list">
+                        @foreach (['roles', 'activity', 'security', 'i18n'] as $highlight)
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+                                <span>{{ __('marketing.auth_highlight_'.$highlight) }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    <a href="{{ config('app.github_url') }}" target="_blank" rel="noopener" class="auth-hero-link">
+                        {{ __('marketing.view_on_github') }}
+                    </a>
                 </div>
             </div>
 
@@ -45,9 +59,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Guest layout styles moved to public/css/guest.css -->
-        <link rel="stylesheet" href="{{ asset('css/guest.css') }}">
 
         @livewireScripts
     </body>

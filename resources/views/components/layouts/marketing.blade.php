@@ -17,24 +17,47 @@
         @stack('styles')
     </head>
     <body class="antialiased">
-        <div class="nav">
+        <header class="nav">
             <a href="{{ url('/') }}" class="brand">
                 <x-brand-mark />
                 <span class="brand-name">{{ config('app.name') }}</span>
             </a>
-            <div class="nav-links">
-                <a href="{{ url('/') }}#features" class="link">{{ __('marketing.features') }}</a>
-                <a href="{{ route('docs') }}" class="link">{{ __('marketing.docs') }}</a>
-                <a href="{{ route('blog') }}" class="link">{{ __('marketing.blog') }}</a>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('marketing.dashboard') }}</a>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('marketing.sign_in') }}</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
-                @endauth
+            <button
+                type="button"
+                class="icon-btn nav-toggle"
+                data-nav-toggle
+                aria-controls="site-nav"
+                aria-expanded="false"
+                aria-label="{{ __('marketing.menu') }}"
+            >
+                <svg class="nav-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path></svg>
+                <svg class="nav-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path></svg>
+            </button>
+            <div class="nav-panel" id="site-nav" data-nav-panel>
+                <nav class="nav-links" aria-label="{{ __('marketing.menu') }}">
+                    @foreach (config('navigation.marketing', []) as $item)
+                        @php
+                            $isRoute = isset($item['route']);
+                            $current = $isRoute && request()->routeIs($item['route'], $item['route'].'.*');
+                        @endphp
+                        <a
+                            href="{{ $isRoute ? route($item['route']) : url($item['url']) }}"
+                            class="link"
+                            @if ($current) aria-current="page" @endif
+                        >{{ __($item['label']) }}</a>
+                    @endforeach
+                </nav>
+                <div class="nav-actions">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('marketing.dashboard') }}</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-ghost">{{ __('marketing.sign_in') }}</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary">{{ __('marketing.get_started') }}</a>
+                    @endauth
+                </div>
             </div>
             @include('partials.locale-switcher-static')
-        </div>
+        </header>
 
         <main>
             {{ $slot }}
@@ -55,7 +78,6 @@
                     <div class="footer-links">
                         <a href="{{ url('/') }}#features">{{ __('marketing.features') }}</a>
                         <a href="{{ route('docs') }}">{{ __('marketing.docs') }}</a>
-                        <a href="#">{{ __('marketing.changelog') }}</a>
                     </div>
                 </nav>
                 <nav aria-label="Company">
