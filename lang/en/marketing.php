@@ -7,6 +7,7 @@ return [
     'auth_highlight_roles' => 'Roles and permissions for every admin area',
     'auth_highlight_security' => 'Two-factor authentication and email verification',
     'auth_highlights_title' => 'What you get',
+    'about' => 'About',
     'blog' => 'Blog',
     'changelog' => 'Changelog',
     'company' => 'Company',

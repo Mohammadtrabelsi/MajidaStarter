@@ -7,6 +7,7 @@ return [
     'auth_highlight_roles' => 'أدوار وصلاحيات لكل قسم في لوحة الإدارة',
     'auth_highlight_security' => 'المصادقة الثنائية والتحقق من البريد الإلكتروني',
     'auth_highlights_title' => 'ما ستحصل عليه',
+    'about' => 'حول',
     'blog' => 'المدونة',
     'changelog' => 'سجل التغييرات',
     'company' => 'الشركة',

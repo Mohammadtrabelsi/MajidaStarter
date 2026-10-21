@@ -21,6 +21,7 @@ return [
     'marketing' => [
         ['label' => 'marketing.features', 'url' => '/#features'],
         ['label' => 'marketing.docs', 'route' => 'docs'],
+        ['label' => 'marketing.about', 'route' => 'about'],
         ['label' => 'marketing.blog', 'route' => 'blog'],
     ],
 

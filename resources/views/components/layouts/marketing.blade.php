@@ -83,6 +83,7 @@
                 <nav aria-label="Company">
                     <div class="footer-heading">{{ __('marketing.company') }}</div>
                     <div class="footer-links">
+                        <a href="{{ route('about') }}">{{ __('marketing.about') }}</a>
                         <a href="{{ route('blog') }}">{{ __('marketing.blog') }}</a>
                         <a href="{{ config('app.github_url') }}" target="_blank" rel="noopener">{{ __('marketing.github') }}</a>
                         <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">{{ __('marketing.license') }}</a>
