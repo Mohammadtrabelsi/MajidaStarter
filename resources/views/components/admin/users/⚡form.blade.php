@@ -57,7 +57,7 @@ new class extends Component
 
         session()->flash('status', $message);
 
-        $this->redirect(route('admin.dashboard'), navigate: true);
+        $this->redirect(route('admin.users.index'), navigate: true);
     }
 
     protected function emailRules(): array
@@ -117,6 +117,6 @@ new class extends Component
         <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">
             {{ $user ? __('users.save_changes') : __('users.create') }}
         </button>
-        <a href="{{ route('admin.dashboard') }}" wire:navigate class="btn">Cancel</a>
+        <a href="{{ route('admin.users.index') }}" wire:navigate class="btn">Cancel</a>
     </div>
 </form>

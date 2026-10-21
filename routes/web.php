@@ -47,6 +47,9 @@ Route::middleware('auth')->group(function () {
                 ->middleware('can:view admin dashboard')
                 ->name('admin.dashboard');
 
+            Route::livewire('/admin/users', 'pages::admin.users.index')
+                ->middleware('can:manage users')
+                ->name('admin.users.index');
             Route::livewire('/admin/users/create', 'pages::admin.users.create')
                 ->middleware('can:manage users')
                 ->name('admin.users.create');
