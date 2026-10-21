@@ -1,49 +1,52 @@
 # MajidaStarter
 
-MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. It ships with everything you usually rebuild at the start of every project — authentication, an admin panel, role-based access control, activity logging, multilingual (LTR/RTL) support, light/dark theming, a content module (posts & categories), a matching REST API, and a clean service layer — so you can skip the boilerplate and start building features.
+MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. It ships with everything you usually rebuild at the start of every project — authentication with two-factor support, an admin panel, role-based access control, activity logging, multilingual (LTR/RTL) support, light/dark theming, a content module (posts & categories), a matching REST API, and a clean service layer — so you can skip the boilerplate and start building features.
 
 ## Highlights
 
-- **Full authentication flow** — registration, login, logout, password reset, and email verification, all built as single-file Livewire components.
+- **Full authentication flow** — registration, login, logout, password reset, and email verification, all built as single-file Livewire components. Login is rate-limited per email and IP.
+- **Two-factor authentication** — TOTP apps (RFC 6238) with single-use recovery codes, managed from **Settings → Two-factor** and enforced at web and API sign-in once confirmed. No extra dependency is needed.
 - **Admin panel** — a dedicated, permission-gated back office for managing users, posts, categories, reviewing activity, and editing site settings.
-- **Content module** — full CRUD for **posts** and **categories** in the admin panel, with a public `/blog` (listing, search, detail pages and cover images) and `/docs`. Deletes go to a **trash** and can be restored; bulk publish/delete and filters/sorting are built into the admin lists.
+- **Content module** — full CRUD for **posts** and **categories** in the admin panel. Published posts appear on a public `/blog` with search, detail pages and cover images; `/docs` is the in-app guide. Deletes go to a **trash** and can be restored; bulk publish/delete and filters/sorting are built into the admin lists.
 - **Role & permission based access control** — powered by [spatie/laravel-permission](https://spatie.be/docs/laravel-permission), with an `admin` role seeded out of the box.
 - **Activity logging** — every meaningful change to users, posts, categories, and settings is recorded with [spatie/laravel-activitylog](https://spatie.be/docs/laravel-activitylog) and browsable from the admin panel.
-- **REST API** — every service is exposed as JSON endpoints under `/api`, protected by the same authorization gates as the web UI (see [API](#api)).
+- **Activity log export & retention** — download the filtered activity log as CSV or JSON; `activitylog:clean` runs daily via the scheduler.
+- **CRUD notifications** — admins receive a stored notification when posts or categories are created, updated or deleted. The acting user is never notified about their own change. See [Feature notes](#feature-notes).
+- **Visit statistics** — page views on the public site are counted (bots, admin, API and asset requests are excluded) and shown on the dashboards.
+- **System health** — the admin dashboard checks the database, cache and queue, and `/up` exposes a liveness endpoint for uptime monitors.
+- **REST API** — every service is exposed as JSON endpoints under `/api`, protected by the same authorization gates as the web UI. Sessions and Sanctum personal access tokens are both accepted (see [API](#api)).
 - **Localization (i18n) with RTL support** — English, Arabic, and French ship by default, with a language switcher, per-session locale persistence, and automatic text-direction handling.
 - **Translatable settings** — site name and description are stored per-locale via [spatie/laravel-translatable](https://spatie.be/docs/laravel-translatable).
 - **Light / dark theme toggle** — a persistent, no-flash theme switcher.
-- **Two-factor authentication** — TOTP apps (RFC 6238) with single-use recovery codes, managed from **Settings → Two-factor**. No extra dependency is needed.
-- **API tokens** — Laravel Sanctum personal access tokens for bearer-token clients, alongside the session login the web UI uses.
-- **Maintenance mode** — toggle it in the admin settings; visitors get a 503 page (or JSON on `/api`), while administrators and sign-in keep working.
+- **Maintenance mode** — toggle it in the admin settings; visitors get a 503 page (or JSON on `/api`), while administrators, sign-in, language switching and `/up` keep working.
 - **Soft deletes & trash** — users, posts, and categories are soft-deleted, can be restored, and can be deleted permanently.
 - **Policies** — post and category access is enforced by `PostPolicy` / `CategoryPolicy` (post editors can only change their own posts unless they are admins).
 - **Queued mail** — verification and password-reset emails are sent on the queue.
-- **Activity log export & retention** — download the filtered activity log as CSV or JSON; `activitylog:clean` runs daily via the scheduler.
 - **CRUD scaffolding** — `php artisan starter:make-crud Article` generates the model, migration, factory, service, policy and a test for a new resource.
-- **Service-oriented architecture** — business logic lives in dedicated service classes (`UserService`, `PostService`, `CategoryService`, `SettingService`) instead of controllers or components.
+- **Service-oriented architecture** — business logic lives in dedicated service classes (`UserService`, `PostService`, `CategoryService`, `SettingService`, and others) instead of controllers or components.
 - **Modern front-end** — Tailwind CSS 4 and Vite 8, wired up and ready to go.
-- **Tested & analysed** — a PHPUnit feature/unit suite covering auth, profiles, admin pages, user/post/category management, the API, and localization, plus Pint (code style) and Larastan (static analysis), all run on CI.
+- **Tested & analysed** — a PHPUnit feature suite covering auth, two-factor, profiles, admin pages, user/post/category management, the API, notifications, maintenance mode and localization, plus Pint (code style) and Larastan (static analysis), all run on CI.
 
 ## Tech Stack
 
-| Layer            | Technology                                             |
-| ---------------- | ------------------------------------------------------ |
-| Framework        | Laravel 13 (PHP 8.3+)                                   |
-| UI / Interactivity | Livewire 4 (single-file components)                  |
-| Styling / Build  | Tailwind CSS 4, Vite 8                                  |
-| Auth & Access    | Laravel Auth + spatie/laravel-permission               |
-| Auditing         | spatie/laravel-activitylog                             |
-| i18n             | spatie/laravel-translatable + custom locale middleware |
-| Database         | SQLite by default (any Laravel-supported driver works) |
-| Testing          | PHPUnit 12                                              |
-| Code quality     | Laravel Pint + Larastan (PHPStan)                      |
+| Layer              | Technology                                                         |
+| ------------------ | ------------------------------------------------------------------ |
+| Framework          | Laravel 13 (PHP 8.3+)                                              |
+| UI / Interactivity | Livewire 4 (single-file components)                                |
+| Styling / Build    | Tailwind CSS 4, Vite 8                                             |
+| Auth & Access      | Laravel Auth, Sanctum (API tokens), spatie/laravel-permission      |
+| Auditing           | spatie/laravel-activitylog                                         |
+| i18n               | spatie/laravel-translatable + custom locale middleware             |
+| Database           | Any Laravel-supported driver. `config/database.php` falls back to SQLite; `.env.example` is preset to MySQL |
+| Cache / queue / session | `database` by default (Redis is supported through `.env`)     |
+| Testing            | PHPUnit 12                                                         |
+| Code quality       | Laravel Pint + Larastan (PHPStan)                                  |
 
 ## Requirements
 
-- PHP 8.3 or higher
+- PHP 8.3 or higher, with the `mbstring`, `pdo`, `intl` and `bcmath` extensions (CI also uses `pdo_sqlite` and `sqlite3` for the test suite)
 - Composer
-- Node.js & npm
+- Node.js 20 or newer & npm (CI builds with Node 20)
 
 ## Getting Started
 
@@ -60,79 +63,140 @@ php artisan db:seed
 composer dev
 ```
 
-The `composer setup` script runs `composer install`, copies `.env.example` to `.env`, generates the application key, runs migrations, and builds the front-end assets. The `composer dev` script uses [concurrently](https://www.npmjs.com/package/concurrently) to run the PHP server, queue listener, `pail` log viewer, and the Vite dev server together.
+The `composer setup` script runs `composer install`, copies `.env.example` to `.env` (if missing), generates the application key, runs migrations, and builds the front-end assets. The `composer dev` script uses [concurrently](https://www.npmjs.com/package/concurrently) to run the PHP server, queue listener, `pail` log viewer, and the Vite dev server together.
+
+`.env.example` is preset to MySQL on `127.0.0.1`, and `composer setup` runs migrations, so set the database first. For a quick local run with SQLite, edit `.env` before running setup:
+
+```dotenv
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
+
+Then create the file with `touch database/database.sqlite` and run `composer setup`.
 
 ### Production notes
 
 - **Cover images** are stored on the `public` disk. Run `php artisan storage:link` once per environment.
-- **Queues:** mail is queued (`QUEUE_CONNECTION=database` by default). Run `php artisan queue:work` as a long-running process; `composer dev` starts one for you locally.
+- **Queues:** mail is queued (`QUEUE_CONNECTION=database` by default). Run `php artisan queue:work` as a long-running process; `composer dev` starts one for you locally. Without a worker, verification and reset emails are not sent.
 - **Scheduler:** run `php artisan schedule:work` locally, or add `* * * * * php /path/to/artisan schedule:run` to cron in production. The scheduler prunes the activity log.
 - **Maintenance mode** is controlled from **Admin → Settings**; it does not need `php artisan down`.
+- **Health checks:** point uptime monitors at `/up`. The admin dashboard's system-health card shows the same probes in more detail.
+- **Passwords:** every password rule uses `Password::defaults()`. In production it also requires mixed case, numbers and a password that is not in a known breach list. Outside production the minimum is 8 characters.
+- **Rate limits:** the API's `auth/login`, `auth/register` and `auth/token` endpoints allow 6 requests per minute per email and IP.
+
+### Environment variables
+
+These are the keys that change the starter kit's own behaviour. Everything else is standard Laravel configuration.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `APP_LOCALE` / `APP_FALLBACK_LOCALE` | `en` | Default and fallback UI language |
+| `APP_MAINTENANCE_DRIVER` | `file` | Laravel maintenance driver (`php artisan down`); the admin toggle does not use it |
+| `GITHUB_URL` | the project repository | Links to GitHub in the navbar, the welcome page and the docs page |
+| `QUEUE_CONNECTION` | `database` | Where queued mail and notifications run |
+| `CACHE_STORE` | `database` | Cache store, used by the health probes and rate limiting |
+| `SESSION_DRIVER` | `database` | Session store behind the web login |
+| `MAIL_MAILER` | `log` in `.env.example` | Set to a real mailer before sending verification or reset emails |
+| `CRUD_NOTIFICATIONS_ENABLED` | `true` | Turns the post/category notification observers on or off |
+| `ADMIN_EMAIL` / `ADMIN_NAME` / `ADMIN_PASSWORD` | `admin@majidastarter.com` / `Admin User` / `password` | Read by `AdminUserSeeder` only |
 
 ### Default seeded accounts
 
-When you run `php artisan db:seed`, the following accounts are created:
+Seeding creates these accounts. All of them use the password `password` unless you override the admin with `ADMIN_PASSWORD`. Change it before using the app anywhere real.
 
-| Role  | Email               | Notes                          |
-| ----- | ------------------- | ------------------------------ |
-| Admin | `admin@example.com` | Has the `admin` role           |
-| User  | `test@example.com`  | Standard verified user         |
+| Role  | Email                        | Notes                                                     |
+| ----- | ---------------------------- | --------------------------------------------------------- |
+| Admin | `admin@majidastarter.com`    | Set by `ADMIN_EMAIL`. Has the `admin` role, verified      |
+| User  | `test@example.com`           | Standard verified user (`php artisan db:seed` only)       |
+| Users | random addresses (10)        | Generated by `UserFactory`, verified (`php artisan db:seed` only) |
 
-> Passwords are generated by the factory — check `database/factories/UserFactory.php` (the default is Laravel's usual `password`).
+Seeder modes:
+
+- `php artisan db:seed` — full demo data: admin, roles & permissions, test user, 10 factory users.
+- `php artisan db:seed --class=ConfigDatabaseSeeder` or `--class=MinimalDatabaseSeeder` — the admin user with roles and permissions only, no demo content.
 
 ## Project Structure
 
 ```
 app/
+├── Console/Commands/      # starter:make-crud, translations:sync
+├── Exceptions/            # DomainActionException (returns a 422 JSON response to JSON requests)
 ├── Http/
 │   ├── Controllers/
-│   │   ├── Api/           # JSON API controllers backing each service
+│   │   ├── Api/           # JSON API controllers, one per service
 │   │   ├── Auth/          # Logout
+│   │   ├── ActivityLogExportController.php
+│   │   ├── BlogController.php     # Public /blog listing and post detail
 │   │   └── LocaleController.php
 │   └── Middleware/
-│       ├── SetLocale.php          # Applies the session locale on every request
-│       └── EnsureUserIsAdmin.php  # Guards admin routes ('admin' alias)
-├── Models/
-│   ├── User.php           # Roles, activity logging, email verification
-│   ├── Post.php           # Blog/content posts
-│   ├── Category.php       # Post categories
-│   └── Setting.php        # Translatable, singleton-style site settings
-└── Services/
-    ├── UserService.php    # Registration, CRUD, role toggling, stats
-    ├── PostService.php    # Post CRUD, search, stats
-    ├── CategoryService.php# Category CRUD, options, stats
-    └── SettingService.php # Reads/updates the site settings record
+│       ├── EnforceMaintenanceMode.php  # 503 for non-admins while maintenance is on
+│       ├── EnsureUserIsAdmin.php       # Guards admin routes ('admin' alias)
+│       ├── SetLocale.php               # Applies the session locale on every request
+│       └── TrackVisit.php              # Records page views after the response is sent
+├── Models/                # User, Post, Category, Setting, Visit
+├── Notifications/         # Queued verify-email and reset-password mails, CRUD notifications
+├── Observers/             # CrudNotificationObserver (configured in config/crud_notifications.php)
+├── Policies/              # PostPolicy, CategoryPolicy
+├── Providers/             # AppServiceProvider: password rules, rate limiter, observers
+├── Services/              # All domain logic (see below)
+└── Support/               # Livewire toast helper, notification recipient resolution
+
+config/
+├── crud_notifications.php # Which models notify, on which events, and who receives it
+├── navigation.php         # Public navbar links
+└── ...                    # Standard Laravel config, plus activitylog, permission, livewire
+
+database/
+├── factories/             # User, Post, Category
+├── migrations/
+└── seeders/               # DatabaseSeeder, ConfigDatabaseSeeder, MinimalDatabaseSeeder, AdminUserSeeder, RolesAndPermissionsSeeder
 
 resources/views/
 ├── pages/                 # Livewire single-file page components (⚡ prefixed)
-│   ├── auth/              # login, register, forgot/reset password, verify email
-│   ├── admin/            # dashboard, users, posts, categories, activity log, settings
-│   ├── settings/profile   # self-service profile management
+│   ├── auth/              # login, register, forgot/reset password, verify email, two-factor challenge
+│   ├── admin/             # dashboard, users, posts, categories, activity log, settings
+│   ├── settings/          # profile, two-factor
 │   └── dashboard          # authenticated user dashboard
+├── components/            # Shared Blade components, including the marketing layout
+├── partials/              # Theme toggle, locale switcher, favicons
 ├── welcome.blade.php      # marketing landing page
-├── blog.blade.php         # public blog page
+├── blog.blade.php         # public blog listing (search)
+├── blog-post.blade.php    # public blog post
 └── docs.blade.php         # public documentation page
 
+app/Services/
+├── ActivityLogService.php # Activity log queries and export rows
+├── CategoryService.php    # Category CRUD, options, stats
+├── PostService.php        # Post CRUD, search, public listing, stats
+├── SettingService.php     # Reads/updates the site settings record
+├── SystemHealthService.php# Probes for the admin health card
+├── TwoFactorService.php   # TOTP setup, verification, recovery codes
+├── UserService.php        # Registration, CRUD, role toggling, stats
+└── VisitService.php       # Visit recording and dashboard statistics
+
 routes/
-├── web.php                # Guest, authenticated, verified, and admin route groups
+├── web.php                # Public, guest, authenticated, verified, and admin route groups
 ├── api.php                # JSON API endpoints (see below)
-└── console.php
+└── console.php            # Scheduled tasks (activitylog:clean)
 
 lang/
-├── en/  ar/  fr/          # PHP translation files per locale
-└── *.json                 # JSON translation strings per locale
+└── en/  ar/  fr/          # PHP translation files per locale
+
+docs/
+└── feature-audit-and-improvements.md  # Feature audit and improvement backlog
 ```
 
 ## Routing Overview
 
 ### Web
 
-- **Public** — `/` (landing), `/blog` (listing with search), `/blog/{slug}` (post), `/docs`
+- **Public** — `/` (landing), `/docs`, `/blog` (listing, `?q=` search), `/blog/{slug}` (published post), `/up` (health check)
 - **Guest routes** — `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`, `/two-factor-challenge` (second step of sign-in)
-- **Authenticated routes** — `/verify-email`, `/settings/profile`, `/settings/two-factor`, `/logout`
+- **Authenticated routes** — `/verify-email`, `/verify-email/{id}/{hash}` (signed link), `/settings/profile`, `/settings/two-factor`, `/logout`
 - **Verified routes** — `/dashboard`
 - **Admin routes** (`verified` + `admin` middleware) —
-  `/admin/dashboard`, `/admin/users/create`, `/admin/users/{user}/edit`,
+  `/admin/dashboard`,
+  `/admin/users`, `/admin/users/create`, `/admin/users/{user}/edit`,
   `/admin/categories`, `/admin/categories/create`, `/admin/categories/{category}/edit`,
   `/admin/posts`, `/admin/posts/create`, `/admin/posts/{post}/edit`,
   `/admin/activity-log`, `/admin/activity-log/export/{csv|json}`, `/admin/settings`
@@ -140,49 +204,67 @@ lang/
 
 ### API
 
-All endpoints are prefixed with `/api` and defined in `routes/api.php`. Each maps
-directly onto a service method and is protected by the same authorization gates
-(`can:manage users`, `can:manage posts`, etc.) as the web UI. Authentication is
-session/cookie based (`auth` middleware) — call `POST /api/auth/login` first to
-establish a session.
+All endpoints are prefixed with `/api` and defined in `routes/api.php`. Each maps onto a service method and is protected by the same authorization gates (`can:manage users`, `can:manage posts`, etc.) as the web UI.
 
-| Method & path                       | Guard                  | Backed by                       |
-| ----------------------------------- | ---------------------- | ------------------------------- |
-| `POST   /api/auth/register`         | guest                  | `UserService::register`         |
-| `POST   /api/auth/login`            | guest                  | `UserService::attempt`          |
-| `GET    /api/profile`               | auth                   | current user                    |
-| `PUT    /api/profile`               | auth                   | `UserService::updateProfile`    |
-| `PUT    /api/profile/password`      | auth                   | `UserService::updatePassword`   |
-| `DELETE /api/profile`               | auth                   | `UserService::deleteOwnAccount` |
-| `GET    /api/categories`            | `can:manage categories`| `CategoryService::searchPaginated` |
-| `POST   /api/categories`            | `can:manage categories`| `CategoryService::create`       |
-| `PUT    /api/categories/{category}` | `can:manage categories`| `CategoryService::update`       |
-| `DELETE /api/categories/{category}` | `can:manage categories`| `CategoryService::delete`       |
-| `GET    /api/posts`                 | `can:manage posts`     | `PostService::searchPaginated`  |
-| `POST   /api/posts`                 | `can:manage posts`     | `PostService::create`           |
-| `PUT    /api/posts/{post}`          | `can:manage posts`     | `PostService::update`           |
-| `DELETE /api/posts/{post}`          | `can:manage posts`     | `PostService::delete`           |
-| `GET    /api/users`                 | `can:manage users`     | `UserService::searchPaginated`  |
-| `POST   /api/users`                 | `can:manage users`     | `UserService::create`           |
-| `PUT    /api/users/{user}`          | `can:manage users`     | `UserService::updateUser`       |
-| `DELETE /api/users/{user}`          | `can:manage users`     | `UserService::delete`           |
-| `POST   /api/users/{user}/toggle-admin` | `can:manage users` | `UserService::toggleAdminRole`  |
-| `GET    /api/settings`              | `can:manage settings`  | `SettingService::current`       |
-| `PUT    /api/settings`              | `can:manage settings`  | `SettingService::update`        |
+**Authentication.** Authenticated endpoints accept either:
 
-#### Authentication, trash & restore
+- a bearer token: `Authorization: Bearer <token>`, issued by `POST /api/auth/token` with `email`, `password`, `device_name`, and `two_factor_code` when two-factor is on. Revoke it with `DELETE /api/auth/token`.
+- the session cookie, established by `POST /api/auth/login` with `email`, `password`, and `two_factor_code` when two-factor is on.
 
-| Method & path                          | Guard                   | Purpose                                              |
-| -------------------------------------- | ----------------------- | ---------------------------------------------------- |
-| `POST   /api/auth/token`               | throttled               | Issue a Sanctum token (`email`, `password`, `device_name`, and `two_factor_code` when 2FA is on) |
-| `DELETE /api/auth/token`               | bearer token or session | Revoke the token used for this request               |
-| `POST   /api/{posts,categories,users}/{id}/restore` | `can:manage …` | Restore a trashed record                             |
-| `DELETE /api/{posts,categories,users}/{id}/force`   | `can:manage …` | Permanently delete a trashed record                   |
+Registration, login and token issuance are throttled to 6 requests per minute per email and IP.
 
-Authenticated endpoints accept either `Authorization: Bearer <token>` or the session cookie. List endpoints accept `trashed=only|with`, plus `status`/`category_id`/`role` filters and `sort`/`direction`.
+| Method & path                                | Guard                   | Backed by                          |
+| -------------------------------------------- | ----------------------- | ---------------------------------- |
+| `POST   /api/auth/register`                  | throttled               | `UserService::register`            |
+| `POST   /api/auth/login`                     | throttled               | `UserService::attempt`             |
+| `POST   /api/auth/token`                     | throttled               | Sanctum token issuance             |
+| `DELETE /api/auth/token`                     | auth                    | Revokes the token used             |
+| `GET    /api/profile`                        | auth                    | current user                       |
+| `PUT    /api/profile`                        | auth                    | `UserService::updateProfile`       |
+| `PUT    /api/profile/password`               | auth                    | `UserService::updatePassword`      |
+| `DELETE /api/profile`                        | auth                    | `UserService::deleteOwnAccount`    |
+| `GET    /api/categories`                     | `can:manage categories` | `CategoryService::searchPaginated` |
+| `GET    /api/categories/options`             | `can:manage categories` | `CategoryService::options`         |
+| `GET    /api/categories/stats`               | `can:manage categories` | `CategoryService::stats`           |
+| `POST   /api/categories`                     | `can:manage categories` | `CategoryService::create`          |
+| `PUT    /api/categories/{category}`          | `can:manage categories` | `CategoryService::update`          |
+| `DELETE /api/categories/{category}`          | `can:manage categories` | `CategoryService::delete`          |
+| `POST   /api/categories/{category}/restore`  | `can:manage categories` | `CategoryService::restore`         |
+| `DELETE /api/categories/{category}/force`    | `can:manage categories` | `CategoryService::forceDelete`     |
+| `GET    /api/posts`                          | `can:manage posts`      | `PostService::searchPaginated`     |
+| `GET    /api/posts/stats`                    | `can:manage posts`      | `PostService::stats`               |
+| `POST   /api/posts`                          | `can:manage posts`      | `PostService::create`              |
+| `PUT    /api/posts/{post}`                   | `can:manage posts`      | `PostService::update`              |
+| `DELETE /api/posts/{post}`                   | `can:manage posts`      | `PostService::delete`              |
+| `POST   /api/posts/{post}/restore`           | `can:manage posts`      | `PostService::restore`             |
+| `DELETE /api/posts/{post}/force`             | `can:manage posts`      | `PostService::forceDelete`         |
+| `GET    /api/users`                          | `can:manage users`      | `UserService::searchPaginated`     |
+| `GET    /api/users/roles`                    | `can:manage users`      | `UserService::roleNames`           |
+| `GET    /api/users/stats`                    | `can:manage users`      | `UserService::stats`               |
+| `POST   /api/users`                          | `can:manage users`      | `UserService::create`              |
+| `PUT    /api/users/{user}`                   | `can:manage users`      | `UserService::updateUser`          |
+| `DELETE /api/users/{user}`                   | `can:manage users`      | `UserService::delete`              |
+| `POST   /api/users/{user}/restore`           | `can:manage users`      | `UserService::restore`             |
+| `DELETE /api/users/{user}/force`             | `can:manage users`      | `UserService::forceDelete`         |
+| `POST   /api/users/{user}/toggle-admin`      | `can:manage users`      | `UserService::toggleAdminRole`     |
+| `GET    /api/settings`                       | `can:manage settings`   | `SettingService::current`          |
+| `PUT    /api/settings`                       | `can:manage settings`   | `SettingService::update`           |
 
-> Several resources also expose helper endpoints — `.../options`, `.../stats`,
-> and `users/roles` — used to populate select boxes and dashboard widgets.
+List endpoints accept `trashed=only|with`, `sort` and `direction`. Posts also accept `status` and `category_id`; users accept `role=admin|member`. The `stats` and `options` endpoints feed select boxes and dashboard widgets.
+
+Errors on `/api` are always JSON. A site in maintenance mode returns `503` to everyone except administrators.
+
+## Feature notes
+
+These features work out of the box, but are easy to miss in the code.
+
+- **Visit statistics.** `TrackVisit` records successful `GET` page requests after the response is sent, so tracking never slows a page. It skips the admin area, `/api`, Livewire requests, language switches, logout, `/up` and common bots. Totals are shown on the admin and user dashboards.
+- **CRUD notifications.** `CrudNotificationObserver` watches the models listed in `config/crud_notifications.php` (posts and categories by default). On create, update or delete it stores a `CrudActionNotification` in the `notifications` table for every user with the `admin` role, except the person who made the change. To watch another model, add it to that config file. **There is no notification bell or list in the UI yet**, so the records can be read from the database or your own view.
+- **System health.** `SystemHealthService` runs independent probes for the database, cache and queue and shows them in the admin dashboard's system-health card. A failing probe does not break the page.
+- **Maintenance mode.** Toggled from **Admin → Settings**. `EnforceMaintenanceMode` serves a 503 page to visitors and JSON on `/api`. Administrators, the login and two-factor pages, language switching and `/up` stay reachable.
+- **Date format.** The admin settings choose one format for dates shown in the activity log and the users list. The choices are defined in `Setting::DATE_FORMATS`.
+- **Cover images.** Posts can have a cover image, uploaded in the post form and stored on the `public` disk. It is shown on `/blog` and on the post page. Run `php artisan storage:link` first.
+- **Support email.** Set in admin settings and stored with the site settings.
 
 ## Localization
 
@@ -196,9 +278,14 @@ Available locales are configured in `config/app.php` under `available_locales`:
 ],
 ```
 
-The `SetLocale` middleware applies the session's chosen locale on every request, the `LocaleController` handles switching, and text direction (`ltr`/`rtl`) is derived automatically for correct RTL rendering. Add a new language by adding an entry here and a matching `lang/{locale}` directory (and/or `lang/{locale}.json` file).
+The `SetLocale` middleware applies the session's chosen locale on every request, the `LocaleController` handles switching, and text direction (`ltr`/`rtl`) is derived automatically for correct RTL rendering. To add a language, add an entry here and a matching `lang/{locale}` directory with the same files as `lang/en`.
 
-The `php artisan translations:sync` command (`app/console/Commands/SyncTranslationKeys.php`) scaffolds missing keys for non-base locales, prefixing untranslated values with `[TODO]` so they are easy to find and complete.
+`php artisan translations:sync` (`app/Console/Commands/SyncTranslationKeys.php`) scans `resources/` for translation keys, creates missing lang files, and fills in keys missing from other locales. Options:
+
+- `--locales=en,fr,ar` — which locales to sync (default: all)
+- `--base=en` — the reference locale
+
+Untranslated values are prefixed with `[TODO]` so they are easy to find and complete.
 
 ## Roles & Permissions
 
@@ -213,7 +300,7 @@ Roles and permissions are seeded by `RolesAndPermissionsSeeder`. The `admin` rol
 
 Check for admin access in code via `$user->isAdmin()` or the `admin` route middleware alias.
 
-Post and category actions additionally go through `App\Policies\PostPolicy` and `App\Policies\CategoryPolicy`. Editing or trashing a post requires `manage posts` and, unless the user is an admin, that they are the post's author.
+Post and category actions additionally go through `App\Policies\PostPolicy` and `App\Policies\CategoryPolicy`. Viewing and creating posts requires `manage posts`. Editing, trashing, restoring or permanently deleting a post also requires that the user is the post's author, unless they are an admin. Categories are shared, so every category action requires only `manage categories`.
 
 ## Scaffolding a New Resource
 
@@ -221,7 +308,7 @@ Post and category actions additionally go through `App\Policies\PostPolicy` and 
 php artisan starter:make-crud Article
 ```
 
-This creates `Article` model, migration, factory, `ArticleService`, `ArticlePolicy` and `ArticleModuleTest`, using soft deletes and activity logging. It never overwrites existing files. Afterwards add the `manage articles` permission to `RolesAndPermissionsSeeder`, then add the routes and screens you need.
+This creates an `Article` model, migration, factory, `ArticleService`, `ArticlePolicy` and `ArticleModuleTest`, using soft deletes and activity logging. It never overwrites existing files. Afterwards add the `manage articles` permission to `RolesAndPermissionsSeeder`, then add the routes, API controller and screens you need.
 
 ## Testing & Code Quality
 
@@ -236,17 +323,15 @@ vendor/bin/pint --test # add --dirty to only check changed files, drop --test to
 composer analyse
 ```
 
-The suite (in `tests/Feature` and `tests/Unit`) covers authentication, email verification, profile management, user/post/category management, admin pages, the REST API, and localization. Tests run against an in-memory SQLite database (see `phpunit.xml`).
+The suite lives in `tests/Feature` and covers authentication and two-factor, email verification, profile management, user/post/category management, admin pages, the REST API, CRUD notifications, maintenance mode, search, soft deletes and localization. Tests run against an in-memory SQLite database with the array cache, array mail and synchronous queue (see `phpunit.xml`).
 
 ## Continuous Integration
 
 A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `develop`/`main` and on every pull request. It:
 
-- runs the test suite on PHP 8.3 and 8.4 (building front-end assets first), and
-- checks code style with Pint and runs Larastan static analysis.
+- runs the test suite on PHP 8.3 and 8.4 (building front-end assets first with Node 20), and
+- checks code style with Pint and runs Larastan static analysis on PHP 8.3.
 
 ## License
 
 MajidaStarter is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). It is built on the [Laravel framework](https://laravel.com), which is also MIT licensed.
-</content>
-</invoke>
