@@ -29,6 +29,7 @@ class SettingServiceTest extends TestCase
         $this->assertSame(1, Setting::count());
         $this->assertSame(config('app.name'), $setting->getTranslation('site_name', 'en'));
         $this->assertSame('', $setting->getTranslation('site_description', 'en'));
+        $this->assertSame('M j, Y', $setting->date_format);
     }
 
     public function test_current_reuses_the_existing_row(): void

@@ -92,4 +92,28 @@ class AdminPagesTest extends TestCase
             'log_name' => 'settings',
         ]);
     }
+
+    public function test_admin_can_save_date_format(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        Livewire::actingAs($admin)
+            ->test('pages::admin.settings')
+            ->set('dateFormat', 'd/m/Y')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertSame('d/m/Y', Setting::first()->date_format);
+    }
+
+    public function test_settings_rejects_unknown_date_format(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        Livewire::actingAs($admin)
+            ->test('pages::admin.settings')
+            ->set('dateFormat', 'nonsense')
+            ->call('save')
+            ->assertHasErrors(['dateFormat']);
+    }
 }

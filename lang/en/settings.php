@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'date_format' => 'Date format',
     'description' => 'Manage your website settings.',
     'maintenance_description' => 'Maintenance description',
     'maintenance_mode' => 'Maintenance mode',

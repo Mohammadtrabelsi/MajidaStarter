@@ -62,4 +62,24 @@ class SettingApiTest extends TestCase
             'support_email' => 'not-an-email',
         ])->assertUnprocessable()->assertJsonValidationErrors('support_email');
     }
+
+    public function test_admin_can_update_date_format(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)->putJson('/api/settings', [
+            'date_format' => 'Y-m-d',
+        ])->assertOk();
+
+        $this->assertSame('Y-m-d', Setting::first()->date_format);
+    }
+
+    public function test_settings_update_rejects_unknown_date_format(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)->putJson('/api/settings', [
+            'date_format' => 'not-a-format',
+        ])->assertUnprocessable()->assertJsonValidationErrors('date_format');
+    }
 }
