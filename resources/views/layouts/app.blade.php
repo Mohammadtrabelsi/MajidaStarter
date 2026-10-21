@@ -89,7 +89,7 @@
                     @else
                         <a href="{{ route('dashboard') }}" wire:navigate class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 17v-5M12 17V8M16 17v-3"></path></svg>
-                            {{ __('app.dashboard') }}
+                            {{ __('app.my_space') }}
                         </a>
                         <a href="{{ route('profile.edit') }}" wire:navigate class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c0-3.3 3-5 7-5s7 1.7 7 5"></path></svg>

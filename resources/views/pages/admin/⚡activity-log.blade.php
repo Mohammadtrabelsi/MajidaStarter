@@ -1,6 +1,8 @@
 <?php
 
 use App\Services\ActivityLogService;
+use App\Services\SettingService;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -30,6 +32,12 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
     public function updatedLogName(): void
     {
         $this->resetPage();
+    }
+
+    #[Computed]
+    public function dateFormat(): string
+    {
+        return app(SettingService::class)->dateFormat();
     }
 
     public function logNames()
@@ -104,7 +112,7 @@ new #[Layout('layouts::app')] #[Title('Activity Log')] class extends Component
                                 @endif
                             </div>
                             <div class="text-muted ms-fs-11-mt2">
-                                {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format('M j, Y H:i') }}
+                                {{ $activity->created_at->diffForHumans() }} · {{ $activity->created_at->format($this->dateFormat.' H:i') }}
                                 @if ($activity->log_name)
                                     · <span class="ms-capitalize">{{ $activity->log_name }}</span>
                                 @endif

@@ -14,6 +14,7 @@ return [
     'welcome' => 'Bienvenue',
     'marketing_site' => 'Site vitrine',
     'my_dashboard' => 'Mon tableau de bord',
+    'my_space' => 'Mon espace',
     'view_site' => 'Voir le site',
     'welcome_back' => 'Bienvenue,',
 ];

@@ -11,7 +11,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
-new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
+new #[Layout('layouts::app')] #[Title('My space')] class extends Component
 {
     #[Computed]
     public function isAdmin(): bool
@@ -85,9 +85,9 @@ new #[Layout('layouts::app')] #[Title('Dashboard')] class extends Component
 };
 ?>
 
-<div class="ms-mw-960">
+<div>
     <div class="ms-mb-24">
-        <div class="card-kicker">{{ __('dashboard.title') }}</div>
+        <div class="card-kicker">{{ __('app.my_space') }}</div>
         <h2>{{ __('dashboard.welcome', ['name' => Str::of(auth()->user()->name)->before(' ')]) }}</h2>
         <p class="text-muted ms-fs-14-m0">
             {{ __('dashboard.logged_in_as', ['email' => auth()->user()->email]) }}

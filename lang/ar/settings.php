@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'date_format' => 'تنسيق التاريخ',
     'description' => 'إدارة إعدادات موقعك الإلكتروني.',
     'maintenance_description' => 'وصف وضع الصيانة',
     'maintenance_mode' => 'وضع الصيانة',

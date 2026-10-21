@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
@@ -31,6 +33,7 @@ class SettingController extends Controller
             'site_description.*' => ['nullable', 'string'],
             'support_email' => ['nullable', 'email'],
             'maintenance_mode' => ['boolean'],
+            'date_format' => ['string', Rule::in(Setting::DATE_FORMATS)],
         ]);
 
         $setting = $this->settings->current();
@@ -51,6 +54,10 @@ class SettingController extends Controller
 
         if (array_key_exists('maintenance_mode', $validated)) {
             $data['maintenance_mode'] = $validated['maintenance_mode'];
+        }
+
+        if (array_key_exists('date_format', $validated)) {
+            $data['date_format'] = $validated['date_format'];
         }
 
         return response()->json($this->settings->update($setting, $data));
