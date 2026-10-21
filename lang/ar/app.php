@@ -14,6 +14,7 @@ return [
     'welcome' => 'مرحباً',
     'marketing_site' => 'الموقع التسويقي',
     'my_dashboard' => 'لوحتي',
+    'my_space' => 'مساحتي',
     'view_site' => 'عرض الموقع',
     'welcome_back' => 'مرحباً،',
 ];
