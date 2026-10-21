@@ -36,7 +36,7 @@
             {{ $slot }}
         </main>
 
-        <footer class="site-footer">
+        <footer class="site-footer pt-5 mt-5">
             <div class="container footer-grid">
                 <div class="footer-brand">
                     <a href="{{ url('/') }}" class="brand">
