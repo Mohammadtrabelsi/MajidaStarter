@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "674e3f09a04595edf2c06a1057eb63cf",
+    "content-hash": "54b6f49e4a29869f64d18bb40ee196e1",
     "packages": [
         {
             "name": "brick/math",
@@ -2176,6 +2176,64 @@
                 }
             ],
             "time": "2026-09-28T18:12:51+00:00"
+        },
+        {
+            "name": "mohammadtrabelsi/laravel-translation-sync",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mohammadtrabelsi/laravel-translations-sync.git",
+                "reference": "070f0d66633b1b60b46f31a6b6c85111f491f634"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mohammadtrabelsi/laravel-translations-sync/zipball/070f0d66633b1b60b46f31a6b6c85111f491f634",
+                "reference": "070f0d66633b1b60b46f31a6b6c85111f491f634",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^11.0||^12.0||^13.0",
+                "illuminate/support": "^11.0||^12.0||^13.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mohammadtrabelsi\\TranslationSync\\TranslationSyncServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mohammadtrabelsi\\TranslationSync\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohammadtrabelsi"
+                }
+            ],
+            "description": "Scan your Laravel app (views, Livewire components, services and laravel-modules) for translation keys and sync them across every locale with a single artisan command.",
+            "keywords": [
+                "artisan",
+                "i18n",
+                "lang",
+                "laravel",
+                "laravel-modules",
+                "livewire",
+                "localization",
+                "translations"
+            ],
+            "support": {
+                "issues": "https://github.com/Mohammadtrabelsi/laravel-translations-sync/issues",
+                "source": "https://github.com/Mohammadtrabelsi/laravel-translations-sync/tree/1.2.1"
+            },
+            "time": "2026-10-26T10:38:41+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -9122,5 +9180,5 @@
         "php": "^8.3"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
