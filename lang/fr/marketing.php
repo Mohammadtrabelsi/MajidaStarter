@@ -1,12 +1,14 @@
 <?php
 
 return [
+    'home' => 'Accueil',
     'auth_highlight_' => 'Journal d\'activité avec export CSV et JSON',
     'auth_highlight_activity' => 'Journal d\'activité avec export CSV et JSON',
     'auth_highlight_i18n' => 'Anglais, arabe et français, avec mise en page de droite à gauche',
     'auth_highlight_roles' => 'Rôles et permissions pour chaque section d\'administration',
     'auth_highlight_security' => 'Authentification à deux facteurs et vérification de l\'e-mail',
     'auth_highlights_title' => 'Ce que vous obtenez',
+    'about' => 'À propos',
     'blog' => 'Blog',
     'changelog' => 'Journal des modifications',
     'company' => 'Entreprise',

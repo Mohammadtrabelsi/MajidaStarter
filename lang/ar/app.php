@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'هيكلية المصادقة',
     'categories' => 'التصنيفات',
     'dashboard' => 'لوحة التحكم',
+    'notifications' => 'الإشعارات',
     'logout' => 'تسجيل الخروج',
     'posts' => 'المنشورات',
     'profile' => 'الملف الشخصي',
@@ -17,4 +18,7 @@ return [
     'my_space' => 'مساحتي',
     'view_site' => 'عرض الموقع',
     'welcome_back' => 'مرحباً،',
+    'tags' => 'الوسوم',
+    'health' => 'الصحة',
+    'backups' => 'النسخ الاحتياطية',
 ];

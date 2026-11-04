@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'Auth scaffolding',
     'categories' => 'Categories',
     'dashboard' => 'Dashboard',
+    'notifications' => 'Notifications',
     'logout' => 'Logout',
     'posts' => 'Posts',
     'profile' => 'Profile',
@@ -17,4 +18,7 @@ return [
     'my_space' => 'My space',
     'view_site' => 'View site',
     'welcome_back' => 'Welcome,',
+    'tags' => 'Tags',
+    'health' => 'Health',
+    'backups' => 'Backups',
 ];

@@ -6,6 +6,7 @@ return [
     'auth_scaffolding' => 'Structure d\'authentification',
     'categories' => 'Catégories',
     'dashboard' => 'Tableau de bord',
+    'notifications' => 'Notifications',
     'logout' => 'Déconnexion',
     'posts' => 'Articles',
     'profile' => 'Profil',
@@ -17,4 +18,7 @@ return [
     'my_space' => 'Mon espace',
     'view_site' => 'Voir le site',
     'welcome_back' => 'Bienvenue,',
+    'tags' => 'Étiquettes',
+    'health' => 'Santé',
+    'backups' => 'Sauvegardes',
 ];
