@@ -2,6 +2,8 @@
 
 A containerised local development stack for the MajidaStarter Laravel application. The Laravel project lives in `src/`, and Docker provides everything around it: PHP-FPM, Nginx, MySQL, phpMyAdmin, and Redis. Nothing needs to be installed on your host except Docker and Docker Compose.
 
+> 🌐 Other languages: [Français](../fr/README.docker.md) · [العربية](../ar/README.docker.md)
+
 > **Heads-up:** the Docker stack mounts `./src` as the application root. In this repository the Laravel app sits at the top level, so the first-time setup below copies it into `src/`. Node.js is not in the PHP image, so front-end assets are built in a separate Node container.
 
 ---
@@ -13,7 +15,10 @@ A containerised local development stack for the MajidaStarter Laravel applicatio
 ├── docker-compose.yml        # Defines all services (app, web, db, phpmyadmin, redis)
 ├── .env.docker.example       # Sample env for the Docker stack -> copy to .env
 ├── .env                      # Your local Docker settings (git-ignored, you create it)
-├── README.docker.md          # This file
+├── docs/
+│   ├── en/README.docker.md   # This file
+│   ├── fr/README.docker.md   # French
+│   └── ar/README.docker.md   # Arabic
 ├── docker/
 │   ├── php/
 │   │   ├── Dockerfile        # PHP-FPM image with Laravel extensions + Composer (see the PHP version note below)
@@ -111,7 +116,7 @@ docker compose exec app php artisan migrate
 docker compose exec app php artisan storage:link
 ```
 
-`storage:link` is needed for post cover images. Add `--seed` to `migrate` if you want the demo accounts (see the root README for the list).
+`storage:link` is needed for post cover images. Add `--seed` to `migrate` if you want the demo accounts (see the [README](README.md) for the list).
 
 ### 8. Start the background workers
 
