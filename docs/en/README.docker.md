@@ -2,6 +2,8 @@
 
 A containerised local development stack for the MajidaStarter Laravel application. The Laravel project lives in `src/`, and Docker provides everything around it: PHP-FPM, Nginx, MySQL, phpMyAdmin, and Redis. Nothing needs to be installed on your host except Docker and Docker Compose.
 
+> 🌐 Other languages: [Français](../fr/README.docker.md) · [العربية](../ar/README.docker.md)
+
 > **Heads-up:** the Docker stack mounts `./src` as the application root. In this repository the Laravel app sits at the top level, so the first-time setup below copies it into `src/`. Node.js is not in the PHP image, so front-end assets are built in a separate Node container.
 
 ---
@@ -13,10 +15,13 @@ A containerised local development stack for the MajidaStarter Laravel applicatio
 ├── docker-compose.yml        # Defines all services (app, web, db, phpmyadmin, redis)
 ├── .env.docker.example       # Sample env for the Docker stack -> copy to .env
 ├── .env                      # Your local Docker settings (git-ignored, you create it)
-├── README.docker.md          # This file
+├── docs/
+│   ├── en/README.docker.md   # This file
+│   ├── fr/README.docker.md   # French
+│   └── ar/README.docker.md   # Arabic
 ├── docker/
 │   ├── php/
-│   │   ├── Dockerfile        # PHP 8.3-FPM image with Laravel extensions + Composer
+│   │   ├── Dockerfile        # PHP-FPM image with Laravel extensions + Composer (see the PHP version note below)
 │   │   └── php.ini           # Custom PHP settings for development
 │   └── nginx/
 │       └── default.conf      # Nginx vhost pointing at src/public
@@ -94,6 +99,8 @@ docker compose up -d --build
 docker compose exec app composer install
 ```
 
+> **PHP version note:** `composer.lock` requires PHP 8.4, but `docker/php/Dockerfile` builds from `php:8.3-fpm-alpine`. Until the base image is changed to `php:8.4-fpm-alpine`, this step fails with a platform error. Change the `FROM` line and run `docker compose build app` before installing.
+
 ### 6. Build the front-end assets
 
 The `app` container has no Node.js, so build assets in a throwaway Node container. Node 20 matches CI:
@@ -109,7 +116,7 @@ docker compose exec app php artisan migrate
 docker compose exec app php artisan storage:link
 ```
 
-`storage:link` is needed for post cover images. Add `--seed` to `migrate` if you want the demo accounts (see the root README for the list).
+`storage:link` is needed for post cover images. Add `--seed` to `migrate` if you want the demo accounts (see the [README](README.md) for the list).
 
 ### 8. Start the background workers
 
@@ -184,7 +191,7 @@ docker compose restart web
 
 | Service      | Image                | Purpose                                  |
 |--------------|----------------------|------------------------------------------|
-| `app`        | custom PHP 8.3-FPM   | Runs Laravel (PHP + Composer)            |
+| `app`        | custom PHP-FPM (8.3 today, see note) | Runs Laravel (PHP + Composer)  |
 | `web`        | nginx:1.27-alpine    | Web server, proxies PHP to `app`         |
 | `db`         | mysql:8.0            | Database (Laravel connects via `db`)     |
 | `phpmyadmin` | phpmyadmin:5         | Database web UI                          |
