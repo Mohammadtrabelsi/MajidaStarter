@@ -16,7 +16,7 @@ A containerised local development stack for the MajidaStarter Laravel applicatio
 ├── README.docker.md          # This file
 ├── docker/
 │   ├── php/
-│   │   ├── Dockerfile        # PHP 8.3-FPM image with Laravel extensions + Composer
+│   │   ├── Dockerfile        # PHP-FPM image with Laravel extensions + Composer (see the PHP version note below)
 │   │   └── php.ini           # Custom PHP settings for development
 │   └── nginx/
 │       └── default.conf      # Nginx vhost pointing at src/public
@@ -93,6 +93,8 @@ docker compose up -d --build
 ```bash
 docker compose exec app composer install
 ```
+
+> **PHP version note:** `composer.lock` requires PHP 8.4, but `docker/php/Dockerfile` builds from `php:8.3-fpm-alpine`. Until the base image is changed to `php:8.4-fpm-alpine`, this step fails with a platform error. Change the `FROM` line and run `docker compose build app` before installing.
 
 ### 6. Build the front-end assets
 
@@ -184,7 +186,7 @@ docker compose restart web
 
 | Service      | Image                | Purpose                                  |
 |--------------|----------------------|------------------------------------------|
-| `app`        | custom PHP 8.3-FPM   | Runs Laravel (PHP + Composer)            |
+| `app`        | custom PHP-FPM (8.3 today, see note) | Runs Laravel (PHP + Composer)  |
 | `web`        | nginx:1.27-alpine    | Web server, proxies PHP to `app`         |
 | `db`         | mysql:8.0            | Database (Laravel connects via `db`)     |
 | `phpmyadmin` | phpmyadmin:5         | Database web UI                          |

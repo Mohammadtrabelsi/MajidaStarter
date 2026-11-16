@@ -37,7 +37,7 @@ MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. I
 
 | Layer              | Technology                                                         |
 | ------------------ | ------------------------------------------------------------------ |
-| Framework          | Laravel 13 (PHP 8.3+)                                              |
+| Framework          | Laravel 13 (PHP 8.4, see [Requirements](#requirements))            |
 | UI / Interactivity | Livewire 4 (single-file components)                                |
 | Styling / Build    | Tailwind CSS 4, Vite 8                                             |
 | Auth & Access      | Laravel Auth, Sanctum (API tokens), spatie/laravel-permission      |
@@ -50,7 +50,8 @@ MajidaStarter is a batteries-included **Laravel 13 + Livewire 4** starter kit. I
 
 ## Requirements
 
-- PHP 8.3 or higher (note: the current `composer.lock` resolves Symfony 8.1, `spatie/laravel-activitylog` 5 and `spatie/laravel-sitemap` 8.2, which require **PHP 8.4**; `composer update` on PHP 8.3 resolves 8.3-compatible versions of everything except activitylog 5), with the `mbstring`, `pdo`, `intl` and `bcmath` extensions (CI also uses `pdo_sqlite` and `sqlite3` for the test suite)
+- **PHP 8.4** to match `composer.lock`. The locked Symfony 8.1, `spatie/laravel-activitylog` 5 and `spatie/laravel-sitemap` 8.2 require PHP 8.4, so `composer install` fails on PHP 8.3. `composer.json` still accepts `^8.3`; on PHP 8.3, run `composer update` to resolve compatible versions. CI runs on PHP 8.4.
+- Extensions: `mbstring`, `pdo`, `intl` and `bcmath`. The test suite also needs `pdo_sqlite` and `sqlite3`.
 - Composer
 - Node.js 20 or newer & npm (CI builds with Node 20)
 
@@ -80,6 +81,8 @@ DB_DATABASE=database/database.sqlite
 ```
 
 Then create the file with `touch database/database.sqlite` and run `composer setup`.
+
+Prefer containers? The Docker stack (PHP-FPM, Nginx, MySQL, phpMyAdmin, Redis) is documented in [README.docker.md](README.docker.md).
 
 ### Production notes
 
@@ -165,15 +168,19 @@ app/
 │   ├── Controllers/
 │   │   ├── Api/           # JSON API controllers, one per service
 │   │   ├── Auth/          # Logout
-│   │   ├── ActivityLogExportController.php
+│   │   ├── ActivityLogExportController.php  # CSV/JSON activity log download
 │   │   ├── BlogController.php     # Public /blog listing and post detail
-│   │   └── LocaleController.php
+│   │   ├── ExportController.php   # CSV/XLSX export for posts and categories
+│   │   ├── LocaleController.php   # /language/{locale}
+│   │   ├── PostPdfController.php  # Admin PDF for a post
+│   │   └── RobotsController.php   # Dynamic /robots.txt
 │   └── Middleware/
 │       ├── EnforceMaintenanceMode.php  # 503 for non-admins while maintenance is on
 │       ├── EnsureUserIsAdmin.php       # Guards admin routes ('admin' alias)
+│       ├── RequireHealthToken.php      # Guards /health.json with HEALTH_SECRET_TOKEN
 │       ├── SetLocale.php               # Applies the session locale on every request
 │       └── TrackVisit.php              # Records page views after the response is sent
-├── Models/                # User, Post, Category, Setting, Visit
+├── Models/                # User, Post, Category, Tag, Setting, Visit, plus Concerns/
 ├── Notifications/         # Queued verify-email and reset-password mails, CRUD notifications
 ├── Observers/             # CrudNotificationObserver (configured in config/crud_notifications.php)
 ├── Policies/              # PostPolicy, CategoryPolicy
@@ -224,7 +231,7 @@ app/Services/
 routes/
 ├── web.php                # Public, guest, authenticated, verified, and admin route groups
 ├── api.php                # JSON API endpoints (see below)
-└── console.php            # Scheduled tasks (activitylog:clean, sitemap:generate)
+└── console.php            # Scheduled tasks: activitylog:clean, sitemap:generate, health checks, daily backups
 
 lang/
 └── en/  ar/  fr/          # PHP translation files per locale
@@ -382,10 +389,10 @@ The suite lives in `tests/Feature` and covers authentication and two-factor, ema
 
 ## Continuous Integration
 
-A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `develop`/`main` and on every pull request. It:
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on pushes to `develop` and `main` and on every pull request. It uses PHP 8.4 and:
 
-- runs the test suite on PHP 8.3 and 8.4 (building front-end assets first with Node 20), and
-- checks code style with Pint and runs Larastan static analysis on PHP 8.3.
+- runs the test suite (building front-end assets first with Node 20), and
+- checks code style with Pint and runs Larastan static analysis.
 
 ## License
 
