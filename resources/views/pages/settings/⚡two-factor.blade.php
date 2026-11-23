@@ -147,7 +147,7 @@ new #[Layout('layouts::app')] #[Title('Two-factor authentication')] class extend
 
             <div class="field ms-mb-0">
                 <x-input-label :value="__('two_factor.secret_label')" />
-                <input type="text" readonly value="{{ $pendingSecret }}" class="input" style="font-family:monospace" onclick="this.select()">
+                <input type="text" readonly value="{{ $pendingSecret }}" class="input font-mono" x-on:click="$el.select()">
                 <p class="text-muted ms-fs-12 ms-mt-8" style="word-break:break-all">{{ $otpauthUri }}</p>
             </div>
 
